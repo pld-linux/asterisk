@@ -24,6 +24,8 @@ Patch0:		%{name}-openh323-makefile.patch
 Patch1:		%{name}-Makefile_fix_gcc33.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
+Patch4:		%{name}-openh323-formats.patch
+Patch5:		%{name}-openh323-rtti.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
@@ -108,21 +110,20 @@ Pliki przyk³adowe dla centralki Asterisk.
 %patch1 -p0
 %patch2
 %patch3 -p1
-#%patch0 -p1
-#%patch1 -p1
-#%patch2 -p1
+%patch4 -p1
+%patch5 -p1
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
 %build
 rm -f pbx/.depend
-%{__make} \
+%{__make} -j1 \
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}"
 
 %if %{with openh323}
 # H323 plugin:
-%{__make} -C channels/h323 \
+%{__make} -j1 -C channels/h323 \
 	PWLIBDIR="%{_prefix}" \
 	OPENH323DIR="%{_prefix}" \
 	CC="%{__cc}" \
@@ -137,9 +138,9 @@ rm -f pbx/.depend
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
 
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT 
-%{__make} samples \
+%{__make} -j1 samples \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
