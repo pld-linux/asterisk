@@ -2,6 +2,8 @@
 # - cgi-bin package - separate, because of suid-root
 # - separate plugins into packages
 # - use shared versions of lpc10, gsm,...
+# - put chan_h323 into separate package and make obsoletes to chan_oh323 from external spec
+#   These two h323 plugin are conflicting...
 
 %define		_snap	20030520
 
