@@ -149,7 +149,7 @@ fi
 %doc BUGS ChangeLog CREDITS HARDWARE README* SECURITY configs doc/{*.txt,linkedlists.README}
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
-%attr(750,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
+%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.conf
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.adsi
@@ -176,7 +176,7 @@ fi
 %dir /var/log/asterisk/cdr-csv
 
 # RedHat specific init script file
-#%attr(754,root,root)       /etc/rc.d/init.d/asterisk
+#%attr(754,root,root) /etc/rc.d/init.d/asterisk
 #%dir /var/lib/asterisk/agi-bin/*
 
 %files devel
