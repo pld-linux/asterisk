@@ -35,6 +35,7 @@ BuildRequires:	libpri-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel
 BuildRequires:	zaptel-devel
 BuildRequires:	zlib-devel
@@ -196,7 +197,7 @@ fi
 %dir /var/spool/asterisk/voicemail/default
 %dir /var/log/asterisk
 %dir /var/log/asterisk/cdr-csv
-%{_mandir}/man8/asterisk.8.gz
+%{_mandir}/man8/asterisk.8*
 %dir /var/lib/asterisk/firmware
 %dir /var/lib/asterisk/firmware/iax
 /var/lib/asterisk/firmware/iax/iaxy.bin
