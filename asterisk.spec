@@ -4,7 +4,7 @@
 Summary:	Asterisk PBX
 Name:		asterisk
 Version:	0.4.0
-Release:	0.2
+Release:	0.3
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
@@ -54,6 +54,8 @@ Pakiet ten zawiera pliki nag³ówkowe do Asterisk.
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/var/log/asterisk
+
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 %{__make} samples \
@@ -79,12 +81,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0644,root,root) /var/lib/asterisk/keys/*.pub
 %dir /var/lib/asterisk/sounds
 %attr(0644,root,root) /var/lib/asterisk/sounds/*.gsm
-%dir /var/lib/asterisk/mohmp3
-%attr(0644,root,root) /var/lib/asterisk/mohmp3/*.mp3
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/vm
-%dir /var/spool/asterisk/vm/1234/
-%attr(0644,root,root) /var/spool/asterisk/vm/1234/*.gsm
+%dir /var/log/asterisk
 
 # RedHat specific init script file
 #%attr(0755,root,root)       /etc/rc.d/init.d/asterisk
