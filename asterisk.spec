@@ -40,16 +40,17 @@ BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel
 BuildRequires:	zaptel-devel
 BuildRequires:	zlib-devel
+#BuildRequires:	mpg123
 # These libraries are crazy...
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
 #BuildRequires:	openh323-devel = 1.10.4
 #BuildRequires:	pwlib-devel = 1.4.4
-%{?with_h323:BuildRequires:	openh323-devel}
-%{?with_h323:BuildRequires:	pwlib-devel}
+%{!?without_h323:BuildRequires:	openh323-devel}
+%{!?without_h323:BuildRequires:	pwlib-devel}
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
-%{?with_h323:%requires_eq	openh323}
-%{?with_h323:%requires_eq	pwlib}
+%{?without_h323:%requires_eq	openh323}
+%{?without_h323:%requires_eq	pwlib}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -117,14 +118,14 @@ rm -f pbx/.depend
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}"
 
-%if %{with h323}
+%if %{!without h323}
 # H323 plugin:
 cd channels/h323/
 %{__make} \
 	PWLIBDIR="%{_prefix}" \
 	OPENH323DIR="%{_prefix}" \
 	CC="%{__cc}" \
-	OPTIMIZE="%{rpmcflags}"
+	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -fpic"
 cd ../../
 %endif
 
