@@ -1,0 +1,19 @@
+--- asterisk-1.0.6/channels/h323/Makefile~	2004-11-15 03:35:35.000000000 +0100
++++ asterisk-1.0.6/channels/h323/Makefile	2005-03-01 17:04:12.200095264 +0100
+@@ -84,13 +84,13 @@
+ endif
+ 
+ chan_h323.so:	
+-	$(CXX)  -g -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt_linux_x86_r -L$(OPENH323DIR)/lib -lh323_linux_x86_r -L/usr/lib $(CHANH323LIB)
++	$(CXX)  -g -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -L$(OPENH323DIR)/lib -lh323_linux_x86_r -L/usr/lib $(CHANH323LIB)
+ 
+ chan_h323_d.so:	chan_h323.o ast_h323.o
+-	$(CXX)     -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt_linux_x86_d -L$(OPENH323DIR)/lib -lh323_linux_x86_d -L/usr/lib $(CHANH323LIB)
++	$(CXX)     -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -L$(OPENH323DIR)/lib -lh323_linux_x86_d -L/usr/lib $(CHANH323LIB)
+ 
+ chan_h323_s.so:	chan_h323.o ast_h323.o
+-	$(CXX)  -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt_linux_x86_r_s -L$(OPENH323DIR)/lib -lh323_linux_x86_r_s -L/usr/lib $(CHANH323LIB)
++	$(CXX)  -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -L$(OPENH323DIR)/lib -lh323_linux_x86_r_s -L/usr/lib $(CHANH323LIB)
+ clean:
+ 	rm -f *.o *.so core.* libchanh323.a .depend
+ 
