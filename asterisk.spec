@@ -30,7 +30,7 @@ BuildRequires:	gawk
 #BuildRequires:	gtk+-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
-BuildRequires:	openssl-devel
+BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	speex-devel
 BuildRequires:	zlib-devel
 # These libraries are crazy...
