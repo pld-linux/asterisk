@@ -21,6 +21,7 @@ Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-openh323-makefile.patch
+Patch1:		%{name}-Makefile_fix_gcc33.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
@@ -100,20 +101,27 @@ Pliki przyk³adowe dla centralki Asterisk.
 
 %prep
 %setup -q
+%patch1 -p0
 #%patch0 -p1
 #%patch1 -p1
 #%patch2 -p1
 
 %build
 rm -f pbx/.depend
-%{__make}
+%{__make} \
+	CC="%{__cc}" \
+	CFLAGS="%{rpmcflags}" \
+	OPTIMIZE=""
 
 %if %{with h323}
 # H323 plugin:
 cd channels/h323/
 %{__make} \
 	PWLIBDIR="/usr" \
-	OPENH323DIR="/usr"
+	OPENH323DIR="/usr" \
+	CC="%{__cc}" \
+	CFLAGS="%{rpmcflags}" \
+	OPTIMIZE=""
 cd ../../
 %endif
 
