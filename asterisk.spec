@@ -5,7 +5,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	0.4.0
-Release:	0.3
+Release:	0.4
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
@@ -14,8 +14,10 @@ URL:		http://www.asteriskpbx.com/
 BuildRequires:	glib-devel
 BuildRequires:	gtk+-devel
 BuildRequires:	mysql-devel
+BuildRequires:	openh323-devel >= 1.11.8
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
+BuildRequires:	pwlib >= 1.4.12
 BuildRequires:	speex-devel
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -64,6 +66,13 @@ Pliki nag³ówkowe platformy programistycznej Asterisk.
 %build
 %{__make}
 
+# H323 plugin:
+cd channels/h323/
+%{__make} \
+	PWLIBDIR="/usr" \
+	OPENH323DIR="/usr"
+cd ../../
+
 # it requires doxygen - I don't know if we should do this...
 #%{__make} progdocs
 
@@ -75,6 +84,13 @@ install -d $RPM_BUILD_ROOT/var/log/asterisk
 	DESTDIR=$RPM_BUILD_ROOT
 %{__make} samples \
 	DESTDIR=$RPM_BUILD_ROOT
+
+cd channels/h323/
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+%{__make} samples \
+	DESTDIR=$RPM_BUILD_ROOT
+cd ../../
 
 %clean
 rm -rf $RPM_BUILD_ROOT
