@@ -7,7 +7,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	0.4.0
-Release:	0.7
+Release:	0.8
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
@@ -88,7 +88,7 @@ cd ../../
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/log/asterisk,/etc/{rc.d/init.d,sysconfig}}
+install -d $RPM_BUILD_ROOT{/var/{log/asterisk,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -147,6 +147,7 @@ fi
 /var/lib/asterisk/sounds/*.gsm
 /var/lib/asterisk/sounds/digits/*.gsm
 %dir /var/spool/asterisk
+%dir /var/spool/asterisk/monitor
 %dir /var/spool/asterisk/vm
 %dir /var/log/asterisk
 
