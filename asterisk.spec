@@ -12,12 +12,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.0.0
+Version:	1.0.2
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
-# Source0-md5:	7d14fb592d3922b5c16bb0423467a165
+# Source0-md5:	58b2c912b4e7c1f0438f06eb26c4b369
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-openh323-makefile.patch
@@ -110,18 +110,16 @@ Pliki przyk³adowe dla centralki Asterisk.
 rm -f pbx/.depend
 %{__make} \
 	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags}" \
-	OPTIMIZE=""
+	OPTIMIZE="%{rpmcflags}"
 
 %if %{with h323}
 # H323 plugin:
 cd channels/h323/
 %{__make} \
-	PWLIBDIR="/usr" \
-	OPENH323DIR="/usr" \
+	PWLIBDIR="%{_prefix}" \
+	OPENH323DIR="%{_prefix}" \
 	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags}" \
-	OPTIMIZE=""
+	OPTIMIZE="%{rpmcflags}"
 cd ../../
 %endif
 
