@@ -1,0 +1,80 @@
+diff -ur asterisk-0.7.2-orig/channels/h323/Makefile asterisk-0.7.2/channels/h323/Makefile
+--- asterisk-0.7.2-orig/channels/h323/Makefile	2004-01-10 19:22:32.000000000 -0700
++++ asterisk-0.7.2/channels/h323/Makefile	2004-02-21 15:08:50.624527898 -0700
+@@ -1,11 +1,11 @@
+ # include the Makefile of OpenH323 
+ 
+ ifndef OPENH323DIR
+-OPENH323DIR=$(HOME)/openh323
++OPENH323DIR=/usr
+ endif
+ 
+ ifndef PWLIBDIR
+-PWLIBDIR=$(HOME)/pwlib
++PWLIBDIR=/usr
+ endif
+ 
+ ifndef ASTERISKDIR
+@@ -32,8 +32,8 @@
+ CFLAGS += -DP_HAS_SEMAPHORES -DP_SSL -DP_PTHREADS
+ CFLAGS += -DPHAS_TEMPLATES -DPTRACING -DP_USE_PRAGMA
+ CFLAGS += -I../../include
+-CFLAGS += -I$(PWLIBDIR)/include/ptlib/unix -I$(PWLIBDIR)/include 
+-CFLAGS += -I$(OPENH323DIR)/include -Wno-missing-prototypes -Wno-missing-declarations
++CFLAGS += -I$(PWLIBDIR)/include/ptlib/unix -I$(PWLIBDIR)/include/ptlib
++CFLAGS += -I$(OPENH323DIR)/include/openh323
+ 
+ 
+ all:   	libchanh323.a
+@@ -52,13 +52,13 @@
+ 	ar cr libchanh323.a ast_h323.o
+ 
+ chan_h323.so:	
+-	g++  -g -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt_linux_x86_r -L$(OPENH323DIR)/lib -lh323_linux_x86_r -L/usr/lib -lpthread -ldl -lcrypto -lssl -lexpat
++	g++  -g -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt -L$(OPENH323DIR)/lib -lh323 -L/usr/lib -lpthread -ldl -lcrypto -lssl -lexpat
+ 
+ chan_h323_d.so:	chan_h323.o ast_h323.o
+-	g++  -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt_linux_x86_d -L$(OPENH323DIR)/lib -lh323_linux_x86_d -L/usr/lib -lpthread -ldl -lcrypto -lssl -lexpat
++	g++  -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt -L$(OPENH323DIR)/lib -lh323 -L/usr/lib -lpthread -ldl -lcrypto -lssl -lexpat
+ 
+ chan_h323_s.so:	chan_h323.o ast_h323.o
+-	g++  -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt_linux_x86_r_s -L$(OPENH323DIR)/lib -lh323_linux_x86_r_s -L/usr/lib -lpthread -ldl -lcrypto -lssl -lexpat
++	g++  -shared -Xlinker -x -o chan_h323.so chan_h323.o ast_h323.o -L$(PWLIBDIR)/lib  -lpt -L$(OPENH323DIR)/lib -lh323 -L/usr/lib -lpthread -ldl -lcrypto -lssl -lexpat
+ clean:
+ 	rm -f *.o *.so core.* libchanh323.a
+ 
+diff -ur asterisk-0.7.2-orig/channels/Makefile asterisk-0.7.2/channels/Makefile
+--- asterisk-0.7.2-orig/channels/Makefile	2004-01-23 13:57:48.000000000 -0700
++++ asterisk-0.7.2/channels/Makefile	2004-02-21 15:08:50.624527898 -0700
+@@ -147,7 +147,7 @@
+ 	 $(CXX) $(SOLINK) -o $@ $< -lvpb -lpthread -lm -ldl
+ 
+ chan_h323.so: chan_h323.o h323/libchanh323.a
+-	$(CC) $(SOLINK) -o $@ $< h323/libchanh323.a -L$(PWLIBDIR)/lib  -lpt_linux_x86_r -L$(OPENH323DIR)/lib -lh323_linux_x86_r -L/usr/lib -lpthread -ldl -lcrypto -lssl -lexpat
++	$(CC) $(SOLINK) -o $@ $< h323/libchanh323.a -lpt -lopenh323 -L/usr/lib -lpthread -ldl -lcrypto -lssl -lexpat
+ 
+ 
+ #chan_modem.so : chan_modem.o
+diff -ur asterisk-0.7.2-orig/Makefile asterisk-0.7.2/Makefile
+--- asterisk-0.7.2-orig/Makefile	2004-01-13 23:48:38.000000000 -0700
++++ asterisk-0.7.2/Makefile	2004-02-21 15:08:56.808366286 -0700
+@@ -317,7 +317,7 @@
+ 		mkdir -p $(DESTDIR)$(ASTSPOOLDIR)/voicemail/default; \
+ 		rm -f $(DESTDIR)$(ASTSPOOLDIR)/vm; \
+ 	fi
+-	ln -s $(ASTSPOOLDIR)/voicemail/default $(DESTDIR)$(ASTSPOOLDIR)/vm
++	ln -s ../../../spool/asterisk/voicemail/default $(DESTDIR)$(ASTSPOOLDIR)/vm
+ 	rm -f $(DESTDIR)$(MODULES_DIR)/chan_ixj.so
+ 	rm -f $(DESTDIR)$(MODULES_DIR)/chan_tor.so
+ 	rm -f $(DESTDIR)$(MODULES_DIR)/cdr_mysql.so
+@@ -329,8 +329,8 @@
+ 	mkdir -p $(DESTDIR)$(ASTLOGDIR)/cdr-csv
+ 	mkdir -p $(DESTDIR)$(ASTVARLIBDIR)/keys
+ 	install -m 644 keys/iaxtel.pub $(DESTDIR)$(ASTVARLIBDIR)/keys
+-	( cd $(DESTDIR)$(ASTVARLIBDIR)/sounds  ; ln -s $(ASTSPOOLDIR)/vm . )
+-	( cd $(DESTDIR)$(ASTVARLIBDIR)/sounds  ; ln -s $(ASTSPOOLDIR)/voicemail . )
++	( cd $(DESTDIR)$(ASTVARLIBDIR)/sounds  ; ln -s ../../../spool/asterisk/vm . )
++	( cd $(DESTDIR)$(ASTVARLIBDIR)/sounds  ; ln -s ../../../spool/asterisk/voicemail . )
+ 	@echo " +---- Asterisk Installation Complete -------+"  
+ 	@echo " +                                           +"
+ 	@echo " +    YOU MUST READ THE SECURITY DOCUMENT    +"
