@@ -4,6 +4,7 @@
 # - use shared versions of lpc10, gsm,...
 # - put chan_h323 into separate package and make obsoletes to chan_oh323 from external spec
 #   These two h323 plugin are conflicting...
+# - CFLAGS passing
 
 %define		_snap	20030520
 
@@ -11,7 +12,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	0.4.0.%{_snap}
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		Applications/System
 #Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
@@ -23,6 +24,7 @@ Patch0:		%{name}-Makefile.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
+Patch2:		%{name}-Makefile2.patch
 URL:		http://www.asteriskpbx.com/
 BuildRequires:	bison
 BuildRequires:	gawk
@@ -84,8 +86,10 @@ Pliki nag³ówkowe platformy programistycznej Asterisk.
 %setup -q -n %{name}
 %patch0 -p1
 #%patch1 -p1
+%patch2 -p1
 
 %build
+rm -f pbx/.depend
 %{__make}
 
 # H323 plugin:
