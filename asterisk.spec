@@ -13,7 +13,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.0.6
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
@@ -23,7 +23,7 @@ Source2:	%{name}.sysconfig
 Patch0:		%{name}-openh323-makefile.patch
 Patch1:		%{name}-Makefile_fix_gcc33.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
-Patch3:		%{name}-h323.patch
+Patch3:		%{name}-lib.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
