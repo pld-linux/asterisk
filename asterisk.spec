@@ -3,18 +3,23 @@
 # - separate plugins into packages
 # - use shared versions of lpc10, gsm,...
 
+%define		_snap	20030520
+
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	0.4.0
-Release:	0.8
+Version:	0.4.0.%{_snap}
+Release:	0.1
 License:	GPL v2
 Group:		Applications/System
-Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
+#Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
+Source0:	%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Patch0:		%{name}-destdir.patch
-Patch1:		%{name}-Makefile.patch
+Patch0:		%{name}-Makefile.patch
+# It's included, but these sources are broken by me :)
+# will fit on clean cvs source
+#Patch1:		%{name}-DESTDIR.patch
 URL:		http://www.asteriskpbx.com/
 BuildRequires:	glib-devel
 BuildRequires:	gtk+-devel
@@ -25,7 +30,7 @@ BuildRequires:	speex-devel
 BuildRequires:	zlib-devel
 # These libraries are crazy...
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
-BuildRequires:	openh323-devel = 1.11.4
+BuildRequires:	openh323-devel = 1.10.4
 BuildRequires:	pwlib-devel = 1.4.4
 %requires_eq	openh323
 %requires_eq	pwlib
@@ -69,9 +74,9 @@ Header files for Asterisk development platform.
 Pliki nag³ówkowe platformy programistycznej Asterisk.
 
 %prep
-%setup -q
+%setup -q -n %{name}
 %patch0 -p1
-%patch1 -p1
+#%patch1 -p1
 
 %build
 %{__make}
@@ -91,15 +96,19 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	INSTALL_PREFIX=$RPM_BUILD_ROOT
 %{__make} samples \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	INSTALL_PREFIX=$RPM_BUILD_ROOT
 
 cd channels/h323/
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	INSTALL_PREFIX=$RPM_BUILD_ROOT
 %{__make} samples \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	INSTALL_PREFIX=$RPM_BUILD_ROOT
 cd ../../
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
@@ -140,6 +149,7 @@ fi
 %dir /var/lib/asterisk/agi-bin
 %dir /var/lib/asterisk/images
 %dir /var/lib/asterisk/keys
+%dir /var/lib/asterisk/mohmp3
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
 /var/lib/asterisk/images/*.jpg
@@ -149,6 +159,8 @@ fi
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
 %dir /var/spool/asterisk/vm
+%dir /var/spool/asterisk/voicemail
+%dir /var/spool/asterisk/voicemail/default
 %dir /var/log/asterisk
 
 # RedHat specific init script file
