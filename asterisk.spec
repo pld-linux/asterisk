@@ -11,12 +11,14 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	0.7.2
-Release:	0.1
+Version:	1.0
+%define snap 20040407
+Release:	0.%{snap}.1
 License:	GPL v2
 Group:		Applications/System
-Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	a1f9485f5f85a4e4129782b6e642e236
+#Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
+Source0:	%{name}-%{snap}.tar.gz
+# Source0-md5:	aea58515001f23c86dffa623b38253ab
 #Source0:	%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -30,10 +32,12 @@ BuildRequires:	bison
 BuildRequires:	gawk
 #BuildRequires:	glib-devel
 #BuildRequires:	gtk+-devel
+BuildRequires:	libpri-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	speex-devel
+BuildRequires:	zaptel-devel
 BuildRequires:	zlib-devel
 # These libraries are crazy...
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
@@ -94,7 +98,7 @@ Example files for the Asterisk PBX
 
 
 %prep
-%setup -q
+%setup -q -n %{name}
 %patch0 -p1
 #%patch1 -p1
 #%patch2 -p1
