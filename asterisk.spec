@@ -11,15 +11,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.0
-%define snap 20040828
-Release:	0.%{snap}.1
+Version:	1.0.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
-#Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
-Source0:	%{name}-%{snap}.tar.gz
-# Source0-md5:	a9b7841b26dea4d92530a46956399da7
-#Source0:	%{name}-%{version}.tar.bz2
+Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
+# Source0-md5:	7d14fb592d3922b5c16bb0423467a165
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-openh323-makefile.patch
@@ -27,7 +24,7 @@ Patch0:		%{name}-openh323-makefile.patch
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
 #Patch2:		%{name}-Makefile2.patch
-URL:		http://www.asteriskpbx.com/
+URL:		http://www.asterisk.org/
 BuildRequires:	bison
 BuildRequires:	gawk
 #BuildRequires:	glib-devel
@@ -61,7 +58,7 @@ content through a web browser using CGI and a web server.
 Asterisk talks to a variety of telephony hardware including BRI, PRI,
 POTS, and IP telephony clients using the Inter-Asterisk eXchange
 protocol (e.g. gnophone or miniphone). For more information and a
-current list of supported hardware, see http://www.asteriskpbx.com/.
+current list of supported hardware, see http://www.asterisk.org/.
 
 %description -l pl
 Asterisk to wolnodostêpna centralka (PBX) i platforma programistyczna
@@ -74,7 +71,7 @@ serwera WWW.
 Asterisk wspó³pracuje z wielorakim sprzêtem telefonicznym, w tym BRI,
 PRI, POTS oraz klienty telefonii IP u¿ywaj±ce protoko³u Inter-Asterisk
 eXchange (np. gnophone lub miniphone). Wiêcej informacji i listê
-obs³ugiwanego sprzêtu mo¿na znale¼æ pod http://www.asteriskpbx.com/.
+obs³ugiwanego sprzêtu mo¿na znale¼æ pod http://www.asterisk.org/.
 
 %package devel
 Summary:	Header files for Asterisk platform
@@ -98,7 +95,7 @@ Example files for the Asterisk PBX
 
 
 %prep
-%setup -q -n %{name}
+%setup -q -n %{name}-%{version}
 #%patch0 -p1
 #%patch1 -p1
 #%patch2 -p1
@@ -166,13 +163,17 @@ fi
 %dir /var/lib/asterisk/agi-bin
 %dir /var/lib/asterisk/images
 %dir /var/lib/asterisk/keys
-%dir /var/lib/asterisk/mohmp3
+# %dir /var/lib/asterisk/mohmp3
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
+%dir /var/lib/asterisk/sounds/letters
+%dir /var/lib/asterisk/sounds/phonetic
 /var/lib/asterisk/images/*.jpg
 /var/lib/asterisk/keys/*.pub
 /var/lib/asterisk/sounds/*.gsm
 /var/lib/asterisk/sounds/digits/*.gsm
+/var/lib/asterisk/sounds/letters/*.gsm
+/var/lib/asterisk/sounds/phonetic/*.gsm
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
 %dir /var/spool/asterisk/vm
@@ -186,7 +187,7 @@ fi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/agi-test.agi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-sphinx-test
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-test
-/var/lib/asterisk/mohmp3/sample-hold.mp3
+# /var/lib/asterisk/mohmp3/sample-hold.mp3
 /var/spool/asterisk/voicemail/default/1234/busy.gsm
 /var/spool/asterisk/voicemail/default/1234/unavail.gsm
 
