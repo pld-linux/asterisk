@@ -19,9 +19,11 @@ BuildRequires:	mysql-devel
 BuildRequires:	openh323-devel >= 1.11.7
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
-BuildRequires:	pwlib >= 1.4.11
+BuildRequires:	pwlib-devel >= 1.4.11
 BuildRequires:	speex-devel
 BuildRequires:	zlib-devel
+%requires_eq	openh323
+%requires_eq	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
