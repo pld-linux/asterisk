@@ -163,7 +163,10 @@ fi
 %dir /var/lib/asterisk/agi-bin
 %dir /var/lib/asterisk/images
 %dir /var/lib/asterisk/keys
-# %dir /var/lib/asterisk/mohmp3
+%dir /var/lib/asterisk/mohmp3
+/var/lib/asterisk/mohmp3/fpm-calm-river.mp3
+/var/lib/asterisk/mohmp3/fpm-sunshine.mp3
+/var/lib/asterisk/mohmp3/fpm-world-mix.mp3
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
 %dir /var/lib/asterisk/sounds/letters
@@ -181,13 +184,16 @@ fi
 %dir /var/spool/asterisk/voicemail/default
 %dir /var/log/asterisk
 %dir /var/log/asterisk/cdr-csv
+%{_mandir}/man8/asterisk.8.gz
+%dir /var/lib/asterisk/firmware
+%dir /var/lib/asterisk/firmware/iax
+/var/lib/asterisk/firmware/iax/iaxy.bin
 
 %files examples
 %defattr(644,root,root,755)
 %attr(755,root,root) /var/lib/asterisk/agi-bin/agi-test.agi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-sphinx-test
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-test
-# /var/lib/asterisk/mohmp3/sample-hold.mp3
 /var/spool/asterisk/voicemail/default/1234/busy.gsm
 /var/spool/asterisk/voicemail/default/1234/unavail.gsm
 
