@@ -7,7 +7,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	0.4.0
-Release:	0.6
+Release:	0.7
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
@@ -19,12 +19,14 @@ URL:		http://www.asteriskpbx.com/
 BuildRequires:	glib-devel
 BuildRequires:	gtk+-devel
 BuildRequires:	mysql-devel
-BuildRequires:	openh323-devel >= 1.11.7
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
-BuildRequires:	pwlib-devel >= 1.4.11
 BuildRequires:	speex-devel
 BuildRequires:	zlib-devel
+# These libraries are crazy...
+# With openh323 1.11.7 and pwlib 1.4.11 i had sig11
+BuildRequires:	openh323-devel = 1.11.4
+BuildRequires:	pwlib-devel = 1.4.4
 %requires_eq	openh323
 %requires_eq	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
