@@ -1,15 +1,5 @@
 --- ./channels/h323/Makefile.org	Tue May 13 09:53:16 2003
 +++ ./channels/h323/Makefile	Tue May 13 09:55:26 2003
-@@ -24,7 +24,8 @@
- CFLAGS += -DP_HAS_SEMAPHORES -DP_SSL -DP_PTHREADS
- CFLAGS += -DPHAS_TEMPLATES -DPTRACING -DP_USE_PRAGMA 
- CFLAGS += -I$(PWLIBDIR)/include/ptlib/unix -I$(PWLIBDIR)/include 
--CFLAGS += -I$(OPENH323DIR)/include -Wno-missing-prototypes -Wno-missing-declarations
-+CFLAGS += -I$(OPENH323DIR)/include -I/usr/include/openh323
-+CFLAGS += -Wno-missing-prototypes -Wno-missing-declarations
- 
- 
- all: chan_h323.so
 @@ -61,13 +62,13 @@
  	g++ -g -c -o $@ $(CFLAGS) $<
  
