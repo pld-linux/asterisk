@@ -127,7 +127,7 @@ cd channels/h323/
 	PWLIBDIR="%{_prefix}" \
 	OPENH323DIR="%{_prefix}" \
 	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -fpic"
+	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -fpic -I../../include"
 cd ../../
 %endif
 
