@@ -22,6 +22,8 @@ Patch0:		%{name}-Makefile.patch
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
 URL:		http://www.asteriskpbx.com/
+BuildRequires:	bison
+BuildRequires:	gawk
 BuildRequires:	glib-devel
 BuildRequires:	gtk+-devel
 BuildRequires:	mysql-devel
