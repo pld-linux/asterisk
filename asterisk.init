@@ -66,18 +66,19 @@ case "$1" in
 	$0 start
 	exit $?
 	;;
-#  reload)
-	# Should be some better way...
-#	$0 restart
-#	if [ -f /var/lock/subsys/ ]; then
-#		msg_reloading Asterisk
-#		busy
-#		ok
-#	else
-#		msg_not_running Asterisk
-#		exit 1
-#	fi
-#	;;
+  reload)
+	if [ -f /var/lock/subsys/asterisk ]; then
+		msg_reloading Asterisk
+		busy
+		asterisk -rx reload > /dev/null 2>&1
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
+		ok
+	else
+		msg_not_running Asterisk
+		exit 1
+	fi
+	;;
   status)
 	status asterisk
 	exit $?
