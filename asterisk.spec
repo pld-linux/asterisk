@@ -14,6 +14,7 @@ License:	GPL v2
 Group:		Applications/System
 #Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
 Source0:	%{name}-%{version}.tar.bz2
+# Source0-md5:	a6cdb08e4201bed9457053d20f6923da
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-Makefile.patch
