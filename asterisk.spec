@@ -10,6 +10,8 @@ Release:	0.5
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
+Source1:	%{name}.init
+Source2:	%{name}.sysconfig
 Patch0:		%{name}-destdir.patch
 Patch1:		%{name}-Makefile.patch
 URL:		http://www.asteriskpbx.com/
@@ -83,7 +85,7 @@ cd ../../
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/var/log/asterisk
+install -d $RPM_BUILD_ROOT{/var/log/asterisk,/etc/{rc.d/init.d,sysconfig}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -97,6 +99,9 @@ cd channels/h323/
 	DESTDIR=$RPM_BUILD_ROOT
 cd ../../
 
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -105,6 +110,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc BUGS ChangeLog CREDITS HARDWARE README* SECURITY configs doc/{*.txt,linkedlists.README}
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
+%attr(750,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.conf
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.adsi
 %dir %{_libdir}/asterisk
