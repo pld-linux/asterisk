@@ -4,10 +4,11 @@
 Summary:	Asterisk PBX
 Name:		asterisk
 Version:	0.4.0
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
+Patch0:		asterisk-destdir.patch
 BuildRequires:	glib-devel
 BuildRequires:	gtk+-devel
 BuildRequires:	mysql-devel
@@ -43,6 +44,7 @@ Pakiet ten zawiera pliki nag³ówkowe do Asterisk.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__make}
@@ -53,9 +55,9 @@ Pakiet ten zawiera pliki nag³ówkowe do Asterisk.
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install \
-	INSTALL_PREFIX=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT
 %{__make} samples \
-	INSTALL_PREFIX=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
@@ -77,9 +79,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0644,root,root) /var/lib/asterisk/keys/*.pub
 %dir /var/lib/asterisk/sounds
 %attr(0644,root,root) /var/lib/asterisk/sounds/*.gsm
-
+%dir /var/lib/asterisk/mohmp3
+%attr(0644,root,root) /var/lib/asterisk/mohmp3/*.mp3
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/vm
+%dir /var/spool/asterisk/vm/1234/
+%attr(0644,root,root) /var/spool/asterisk/vm/1234/*.gsm
 
 # RedHat specific init script file
 #%attr(0755,root,root)       /etc/rc.d/init.d/asterisk
