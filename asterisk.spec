@@ -8,6 +8,13 @@ Release:	0.1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
+BuildRequires:	glib-devel
+BuildRequires:	gtk+-devel
+BuildRequires:	mysql-devel
+BuildRequires:	ncurses-devel
+BuildRequires:	openssl-devel
+BuildRequires:	speex-devel
+BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
