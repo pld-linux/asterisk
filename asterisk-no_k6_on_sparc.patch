@@ -1,0 +1,65 @@
+--- codecs/gsm/Makefile~	2004-08-31 18:33:00.000000000 +0200
++++ codecs/gsm/Makefile	2004-12-11 01:18:42.000000000 +0100
+@@ -42,12 +42,14 @@
+ ifneq (${PROC},ultrasparc)
+ ifneq ($(shell uname -m),ppc)
+ ifneq ($(shell uname -m),alpha)
++ifneq ($(shell uname -m),sparc)
+ OPTIMIZE+=-march=$(PROC)
+ endif
+ endif
+ endif
+ endif
+ endif
++endif
+ 
+ #The problem with sparc is the best stuff is in newer versions of gcc (post 3.0) only.
+ #This works for even old (2.96) versions of gcc and provides a small boost either way.
+@@ -215,12 +215,14 @@
+ ifneq ($(shell uname -m),ppc)
+ ifneq ($(shell uname -m),alpha)
+ ifneq ($(shell uname -m),sparc64)
++ifneq ($(shell uname -m),sparc)
+ GSM_SOURCES+= $(SRC)/k6opt.s
+ endif
+ endif
+ endif
+ endif
+ endif
++endif
+ 
+ TOAST_SOURCES = $(SRC)/toast.c 		\
+ 		$(SRC)/toast_lin.c	\
+@@ -273,12 +273,14 @@
+ ifneq ($(shell uname -m), ppc)
+ ifneq ($(shell uname -m), alpha)
+ ifneq ($(shell uname -m), sparc64)
++ifneq ($(shell uname -m), sparc)
+ GSM_OBJECTS+= $(SRC)/k6opt.o
+ endif
+ endif
+ endif
+ endif
+ endif
++endif
+ 
+ TOAST_OBJECTS =	$(SRC)/toast.o 		\
+ 		$(SRC)/toast_lin.o	\
+--- codecs/lpc10/Makefile~	2004-08-31 18:33:00.000000000 +0200
++++ codecs/lpc10/Makefile	2004-12-11 08:13:19.000000000 +0100
+@@ -31,6 +31,7 @@
+ ifneq ($(PROC),ppc)
+ ifneq ($(PROC),x86_64)
+ ifneq ($(PROC),alpha)
++ifneq ($(shell uname -m),sparc)
+ #The problem with sparc is the best stuff is in newer versions of gcc (post 3.0) only.
+ #This works for even old (2.96) versions of gcc and provides a small boost either way.
+ #A ultrasparc cpu is really v9 but the stock debian stable 3.0 gcc doesn.t support it.
+@@ -46,6 +47,7 @@
+ endif
+ endif
+ endif
++endif
+ 
+ LIB = $(LIB_TARGET_DIR)/liblpc10.a
+ 
