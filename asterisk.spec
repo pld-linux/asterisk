@@ -6,6 +6,8 @@
 #   These two h323 plugin are conflicting...
 # - CFLAGS passing
 
+%bcond_without openh323
+
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -37,12 +39,12 @@ BuildRequires:	zlib-devel
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
 #BuildRequires:	openh323-devel = 1.10.4
 #BuildRequires:	pwlib-devel = 1.4.4
-BuildRequires:	openh323-devel
-BuildRequires:	pwlib-devel
+%{?with_h323:BuildRequires:	openh323-devel}
+%{?with_h323:BuildRequires:	pwlib-devel}
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
-%requires_eq	openh323
-%requires_eq	pwlib
+%{?with_h323:%requires_eq	openh323}
+%{?with_h323:%requires_eq	pwlib}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -101,12 +103,14 @@ Example files for the Asterisk PBX
 rm -f pbx/.depend
 %{__make}
 
+%if %{with h323}
 # H323 plugin:
 cd channels/h323/
 %{__make} \
 	PWLIBDIR="/usr" \
 	OPENH323DIR="/usr"
 cd ../../
+%endif
 
 # it requires doxygen - I don't know if we should do this...
 #%{__make} progdocs
