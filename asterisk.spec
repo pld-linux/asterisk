@@ -2,6 +2,7 @@
 # - cgi-bin package - separate, because of suid-root
 
 Summary:	Asterisk PBX
+Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	0.4.0
 Release:	0.3
@@ -9,6 +10,7 @@ License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
 Patch0:		asterisk-destdir.patch
+URL:		http://www.asteriskpbx.com/
 BuildRequires:	glib-devel
 BuildRequires:	gtk+-devel
 BuildRequires:	mysql-devel
@@ -28,19 +30,32 @@ content through a web browser using CGI and a web server.
 Asterisk talks to a variety of telephony hardware including BRI, PRI,
 POTS, and IP telephony clients using the Inter-Asterisk eXchange
 protocol (e.g. gnophone or miniphone). For more information and a
-current list of supported hardware, see www.asteriskpbx.com.
+current list of supported hardware, see http://www.asteriskpbx.com/.
+
+%description -l pl
+Asterisk to wolnodostêpna centralka (PBX) i platforma programistyczna
+dla telefonii, mog±ca zast±piæ konwencjonalne PBX-y oraz s³u¿yæ jako
+platforma do rozwijania w³asnych aplikacji telefonicznych do
+przekazywania dynamicznej tre¶ci przez telefon, podobnie jak mo¿na
+przekazywaæ dynamiczn± tre¶æ przez przegl±darkê WWW przy u¿yciu CGI i
+serwera WWW.
+
+Asterisk wspó³pracuje z wielorakim sprzêtem telefonicznym, w tym BRI,
+PRI, POTS oraz klienty telefonii IP u¿ywaj±ce protoko³u Inter-Asterisk
+eXchange (np. gnophone lub miniphone). Wiêcej informacji i listê
+obs³ugiwanego sprzêtu mo¿na znale¼æ pod http://www.asteriskpbx.com/.
 
 %package devel
-Summary:	Header files for Asterisk
-Summary(pl):	Pliki nag³ówkowe do Asterisk
+Summary:	Header files for Asterisk platform
+Summary(pl):	Pliki nag³ówkowe platformy Asterisk
 Group:		Development
 Requires:	%{name} = %{version}
 
 %description devel
-Header files for Asterisk.
+Header files for Asterisk development platform.
 
 %description devel -l pl
-Pakiet ten zawiera pliki nag³ówkowe do Asterisk.
+Pliki nag³ówkowe platformy programistycznej Asterisk.
 
 %prep
 %setup -q
@@ -61,38 +76,39 @@ install -d $RPM_BUILD_ROOT/var/log/asterisk
 %{__make} samples \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %files
 %defattr(644,root,root,755)
 %doc BUGS ChangeLog CREDITS HARDWARE README* SECURITY configs doc/{*.txt,linkedlists.README}
-%attr(0755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
-%attr(0640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.conf
-%attr(0640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.adsi
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.conf
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.adsi
 %dir %{_libdir}/asterisk
 %dir %{_libdir}/asterisk/modules
-%attr(0755,root,root) %{_libdir}/asterisk/modules/*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/*.so
 %dir /var/lib/asterisk
 %dir /var/lib/asterisk/agi-bin
-%dir /var/lib/asterisk/sounds/digits
-%attr(0644,root,root) /var/lib/asterisk/sounds/digits/*.gsm
-%dir /var/lib/asterisk/images
-%attr(0644,root,root) /var/lib/asterisk/images/*.jpg
-%dir /var/lib/asterisk/keys
-%attr(0644,root,root) /var/lib/asterisk/keys/*.pub
 %dir /var/lib/asterisk/sounds
-%attr(0644,root,root) /var/lib/asterisk/sounds/*.gsm
+%dir /var/lib/asterisk/sounds/digits
+/var/lib/asterisk/sounds/digits/*.gsm
+%dir /var/lib/asterisk/images
+/var/lib/asterisk/images/*.jpg
+%dir /var/lib/asterisk/keys
+/var/lib/asterisk/keys/*.pub
+%dir /var/lib/asterisk/sounds
+/var/lib/asterisk/sounds/*.gsm
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/vm
 %dir /var/log/asterisk
 
 # RedHat specific init script file
-#%attr(0755,root,root)       /etc/rc.d/init.d/asterisk
-#%attr(0755,root,root) %dir /var/lib/asterisk/agi-bin/*
+#%attr(754,root,root)       /etc/rc.d/init.d/asterisk
+#%dir /var/lib/asterisk/agi-bin/*
 
 %files devel
 %defattr(644,root,root,755)
 %dir %{_includedir}/asterisk
-%attr(0644,root,root) %{_includedir}/asterisk/*.h
-
-%clean
-rm -rf $RPM_BUILD_ROOT
+%{_includedir}/asterisk/*.h
