@@ -150,9 +150,9 @@ fi
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
 %attr(754,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.conf
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/asterisk/*.adsi
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/asterisk/*.conf
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/asterisk/*.adsi
 %dir %{_libdir}/asterisk
 %dir %{_libdir}/asterisk/modules
 %attr(755,root,root) %{_libdir}/asterisk/modules/*.so
