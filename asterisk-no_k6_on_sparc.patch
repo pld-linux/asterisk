@@ -1,20 +1,5 @@
 --- codecs/gsm/Makefile~	2004-08-31 18:33:00.000000000 +0200
 +++ codecs/gsm/Makefile	2004-12-11 01:18:42.000000000 +0100
-@@ -42,12 +42,14 @@
- ifneq (${PROC},ultrasparc)
- ifneq ($(shell uname -m),ppc)
- ifneq ($(shell uname -m),alpha)
-+ifneq ($(shell uname -m),sparc)
- OPTIMIZE+=-march=$(PROC)
- endif
- endif
- endif
- endif
- endif
-+endif
- 
- #The problem with sparc is the best stuff is in newer versions of gcc (post 3.0) only.
- #This works for even old (2.96) versions of gcc and provides a small boost either way.
 @@ -215,12 +215,14 @@
  ifneq ($(shell uname -m),ppc)
  ifneq ($(shell uname -m),alpha)
@@ -63,3 +48,21 @@
  
  LIB = $(LIB_TARGET_DIR)/liblpc10.a
  
+--- codecs/gsm/Makefile~	2005-03-01 06:32:03.582121632 +0100
++++ codecs/gsm/Makefile	2005-03-01 06:52:55.075865664 +0100
+@@ -42,6 +42,7 @@
+ ifneq (${PROC},ultrasparc)
+ ifneq ($(shell uname -m),ppc)
+ ifneq ($(shell uname -m),alpha)
++ifneq ($(shell uname -m),sparc)
+ ifneq (${PROC},sparc64)
+ OPTIMIZE+=-march=$(PROC)
+ endif
+@@ -50,6 +51,7 @@
+ endif
+ endif
+ endif
++endif
+ 
+ #The problem with sparc is the best stuff is in newer versions of gcc (post 3.0) only.
+ #This works for even old (2.96) versions of gcc and provides a small boost either way.
