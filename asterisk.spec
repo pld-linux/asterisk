@@ -93,7 +93,7 @@ cd ../../
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/{log/asterisk,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
+install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -162,6 +162,7 @@ fi
 %dir /var/spool/asterisk/voicemail
 %dir /var/spool/asterisk/voicemail/default
 %dir /var/log/asterisk
+%dir /var/log/asterisk/cdr-csv
 
 # RedHat specific init script file
 #%attr(754,root,root)       /etc/rc.d/init.d/asterisk
