@@ -120,15 +120,13 @@ rm -f pbx/.depend
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}"
 
-%if %{!without h323}
+%if %{with h323}
 # H323 plugin:
-cd channels/h323/
-%{__make} \
+%{__make} -C channels/h323 \
 	PWLIBDIR="%{_prefix}" \
 	OPENH323DIR="%{_prefix}" \
 	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -fpic -I../../include"
-cd ../../
+	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -I../../include"
 %endif
 
 # it requires doxygen - I don't know if we should do this...
