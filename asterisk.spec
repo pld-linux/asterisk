@@ -12,13 +12,13 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.0
-%define snap 20040407
+%define snap 20040828
 Release:	0.%{snap}.1
 License:	GPL v2
 Group:		Applications/System
 #Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
 Source0:	%{name}-%{snap}.tar.gz
-# Source0-md5:	aea58515001f23c86dffa623b38253ab
+# Source0-md5:	a9b7841b26dea4d92530a46956399da7
 #Source0:	%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -99,7 +99,7 @@ Example files for the Asterisk PBX
 
 %prep
 %setup -q -n %{name}
-%patch0 -p1
+#%patch0 -p1
 #%patch1 -p1
 #%patch2 -p1
 
