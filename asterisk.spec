@@ -5,9 +5,10 @@
 # - put chan_h323 into separate package and make obsoletes to chan_oh323 from external spec
 #   These two h323 plugin are conflicting...
 # - CFLAGS passing
-
-%bcond_without openh323
-
+#
+# Conditional build:
+%bcond_without	openh323	# without OpenH323 support
+#
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -77,7 +78,7 @@ obs³ugiwanego sprzêtu mo¿na znale¼æ pod http://www.asterisk.org/.
 Summary:	Header files for Asterisk platform
 Summary(pl):	Pliki nag³ówkowe platformy Asterisk
 Group:		Development
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for Asterisk development platform.
@@ -87,15 +88,18 @@ Pliki nag³ówkowe platformy programistycznej Asterisk.
 
 %package examples
 Summary:	Example files for the Asterisk PBX
+Summary(pl):	Pliki przyk³adowe dla centralki Asterisk
 Group:		Applications/System
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description examples
-Example files for the Asterisk PBX
+Example files for the Asterisk PBX.
 
+%description examples -l pl
+Pliki przyk³adowe dla centralki Asterisk.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 #%patch0 -p1
 #%patch1 -p1
 #%patch2 -p1
