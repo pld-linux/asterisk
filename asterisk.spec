@@ -6,30 +6,28 @@
 #   These two h323 plugin are conflicting...
 # - CFLAGS passing
 
-%define		_snap	20030520
-
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	0.4.0.%{_snap}
-Release:	0.2
+Version:	0.7.2
+Release:	0.1
 License:	GPL v2
 Group:		Applications/System
-#Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
-Source0:	%{name}-%{version}.tar.bz2
-# Source0-md5:	a6cdb08e4201bed9457053d20f6923da
+Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
+# Source0-md5:	a1f9485f5f85a4e4129782b6e642e236
+#Source0:	%{name}-%{version}.tar.bz2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Patch0:		%{name}-Makefile.patch
+Patch0:		%{name}-openh323-makefile.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
-Patch2:		%{name}-Makefile2.patch
+#Patch2:		%{name}-Makefile2.patch
 URL:		http://www.asteriskpbx.com/
 BuildRequires:	bison
 BuildRequires:	gawk
-BuildRequires:	glib-devel
-BuildRequires:	gtk+-devel
+#BuildRequires:	glib-devel
+#BuildRequires:	gtk+-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
@@ -37,8 +35,10 @@ BuildRequires:	speex-devel
 BuildRequires:	zlib-devel
 # These libraries are crazy...
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
-BuildRequires:	openh323-devel = 1.10.4
-BuildRequires:	pwlib-devel = 1.4.4
+#BuildRequires:	openh323-devel = 1.10.4
+#BuildRequires:	pwlib-devel = 1.4.4
+BuildRequires:	openh323-devel
+BuildRequires:	pwlib-devel
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 %requires_eq	openh323
@@ -82,11 +82,20 @@ Header files for Asterisk development platform.
 %description devel -l pl
 Pliki nag³ówkowe platformy programistycznej Asterisk.
 
+%package examples
+Summary:	Example files for the Asterisk PBX
+Group:		Applications/System
+Requires:	%{name} = %{version}
+
+%description examples
+Example files for the Asterisk PBX
+
+
 %prep
-%setup -q -n %{name}
+%setup -q
 %patch0 -p1
 #%patch1 -p1
-%patch2 -p1
+#%patch2 -p1
 
 %build
 rm -f pbx/.depend
@@ -107,20 +116,9 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	INSTALL_PREFIX=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT 
 %{__make} samples \
-	DESTDIR=$RPM_BUILD_ROOT \
-	INSTALL_PREFIX=$RPM_BUILD_ROOT
-
-cd channels/h323/
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	INSTALL_PREFIX=$RPM_BUILD_ROOT
-%{__make} samples \
-	DESTDIR=$RPM_BUILD_ROOT \
-	INSTALL_PREFIX=$RPM_BUILD_ROOT
-cd ../../
+	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
@@ -174,6 +172,15 @@ fi
 %dir /var/spool/asterisk/voicemail/default
 %dir /var/log/asterisk
 %dir /var/log/asterisk/cdr-csv
+
+%files examples
+%defattr(644,root,root,755)
+%attr(755,root,root) /var/lib/asterisk/agi-bin/agi-test.agi
+%attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-sphinx-test
+%attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-test
+/var/lib/asterisk/mohmp3/sample-hold.mp3
+/var/spool/asterisk/voicemail/default/1234/busy.gsm
+/var/spool/asterisk/voicemail/default/1234/unavail.gsm
 
 # RedHat specific init script file
 #%attr(754,root,root) /etc/rc.d/init.d/asterisk
