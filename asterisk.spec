@@ -46,12 +46,12 @@ BuildRequires:	zlib-devel
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
 #BuildRequires:	openh323-devel = 1.10.4
 #BuildRequires:	pwlib-devel = 1.4.4
-%{!?without_h323:BuildRequires:	openh323-devel}
-%{!?without_h323:BuildRequires:	pwlib-devel}
+%{?with_openh323:BuildRequires:	openh323-devel}
+%{?with_openh323:BuildRequires:	pwlib-devel}
 PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
-%{?without_h323:%requires_eq	openh323}
-%{?without_h323:%requires_eq	pwlib}
+%{?with_openh323:%requires_eq	openh323}
+%{?with_openh323:%requires_eq	pwlib}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -120,7 +120,7 @@ rm -f pbx/.depend
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}"
 
-%if %{with h323}
+%if %{with openh323}
 # H323 plugin:
 %{__make} -C channels/h323 \
 	PWLIBDIR="%{_prefix}" \
