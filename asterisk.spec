@@ -23,6 +23,7 @@ Source2:	%{name}.sysconfig
 Patch0:		%{name}-openh323-makefile.patch
 Patch1:		%{name}-Makefile_fix_gcc33.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
+Patch3:		%{name}-h323.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
@@ -106,6 +107,7 @@ Pliki przyk³adowe dla centralki Asterisk.
 %setup -q
 %patch1 -p0
 %patch2
+%patch3 -p1
 #%patch0 -p1
 #%patch1 -p1
 #%patch2 -p1
