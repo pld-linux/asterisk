@@ -13,7 +13,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.0.6
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
@@ -127,6 +127,7 @@ rm -f pbx/.depend
 	OPENH323DIR="%{_prefix}" \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -I../../include"
+
 %endif
 
 # it requires doxygen - I don't know if we should do this...
@@ -143,6 +144,10 @@ install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/e
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+
+%if %{with openh323}
+install channels/h323/h323.conf.sample $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/h323.conf
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
