@@ -1,0 +1,86 @@
+#!/bin/sh
+#
+# asterix	This shell script takes care of starting and stopping
+#		Asterisk PBX
+#
+# chkconfig:	345 90 25
+#
+# description:	Asterisk is an Open Source PBX and telephony development platform that
+#		can both replace a conventional PBX and act as a platform for
+#		developing custom telephony applications for delivering dynamic
+#		content over a telephone similarly to how one can deliver dynamic
+#		content through a web browser using CGI and a web server.
+#		
+# pidfile:	/var/run/asterisk.pid
+# config:	/etc/asterisk/asterisk.conf
+
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Get service config
+[ -f /etc/sysconfig/asterisk ] && . /etc/sysconfig/asterisk
+
+# Check that networking is up.
+if is_no "${NETWORKING}"; then
+	msg_network_down Asterisk
+	exit 1
+fi
+
+# Sanity check
+[ -f /etc/asterisk/asterisk.conf ] || exit 0
+
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		msg_starting Asterisk
+		busy		
+		daemon $SERVICE_RUN_NICE_LEVEL asterisk $ASTERISK_OPTS
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
+	else
+		msg_already_running Asterisk
+	fi
+	;;
+  stop)
+	# Stop daemons.
+	if [ -f /var/lock/subsys/asterisk ]; then
+		msg_stopping Asterisk
+		killproc asterisk
+		rm -f /var/lock/subsys/asterisk >/dev/null 2>&1
+	else
+		msg_not_running Asterisk
+		exit 1
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  reload)
+	# Should be some better way...
+  	$0 restart
+#  	if [ -f /var/lock/subsys/ ]; then
+#		msg_reloading Asterisk
+#		busy
+#		ok
+#	else
+#		msg_not_running Asterisk
+#		exit 1
+#	fi
+  	;;
+  status)
+	status asterisk
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|status|restart|reload}"
+	exit 1
+esac
+
+exit $RETVAL
