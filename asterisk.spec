@@ -37,6 +37,8 @@ BuildRequires:	zlib-devel
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
 BuildRequires:	openh323-devel = 1.10.4
 BuildRequires:	pwlib-devel = 1.4.4
+PreReq:		rc-scripts
+Requires(post,preun):	/sbin/chkconfig
 %requires_eq	openh323
 %requires_eq	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
