@@ -1,12 +1,13 @@
 # TODO:
 # - cgi-bin package - separate, because of suid-root
 # - separate plugins into packages
+# - use shared versions of lpc10, gsm,...
 
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	0.4.0
-Release:	0.5
+Release:	0.6
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
@@ -104,6 +105,22 @@ install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+/sbin/chkconfig --add asterisk
+if [ -f /var/lock/subsys/asterisk ]; then
+	/etc/rc.d/init.d/asterisk restart 1>&2
+else
+	echo "Run \"/etc/rc.d/init.d/asterisk start\" to start Asterisk daemon."
+fi
+
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/asterisk ]; then
+		/etc/rc.d/init.d/asterisk stop 1>&2
+	fi
+	/sbin/chkconfig --del asterisk
+fi
 
 %files
 %defattr(644,root,root,755)
