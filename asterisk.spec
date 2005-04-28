@@ -26,6 +26,7 @@ Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Patch4:		%{name}-openh323-formats.patch
 Patch5:		%{name}-openh323-rtti.patch
+Patch6:		%{name}-freetds.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
@@ -112,6 +113,7 @@ Pliki przyk³adowe dla centralki Asterisk.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
