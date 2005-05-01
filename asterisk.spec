@@ -33,6 +33,7 @@ Patch6:		%{name}-freetds.patch
 #Patch2:		%{name}-Makefile2.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	bison
+BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 #BuildRequires:	glib-devel
 #BuildRequires:	gtk+-devel
