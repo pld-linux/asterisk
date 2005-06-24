@@ -12,12 +12,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.0.7
-Release:	4
+Version:	1.0.8
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
-# Source0-md5:	4cc3c1e4a1b12e0e4c748326ad153291
+# Source0-md5:	8400ebbd46e41cd772c7814b361de05a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Patch0:		%{name}-openh323-makefile.patch
@@ -110,7 +110,7 @@ Pliki przyk³adowe dla centralki Asterisk.
 %prep
 %setup -q
 %patch1 -p0
-%patch2
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
