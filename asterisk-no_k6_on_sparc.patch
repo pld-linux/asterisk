@@ -1,13 +1,15 @@
---- codecs/gsm/Makefile~	2004-08-31 18:33:00.000000000 +0200
-+++ codecs/gsm/Makefile	2004-12-11 01:18:42.000000000 +0100
-@@ -215,12 +215,14 @@
- ifneq ($(shell uname -m),ppc)
+diff -ur asterisk-1.0.8-o/codecs/gsm/Makefile asterisk-1.0.8/codecs/gsm/Makefile
+--- asterisk-1.0.8-o/codecs/gsm/Makefile	2005-06-21 08:27:28.000000000 -0600
++++ asterisk-1.0.8/codecs/gsm/Makefile	2005-06-23 23:28:35.000000000 -0600
+@@ -224,6 +224,7 @@
  ifneq ($(shell uname -m),alpha)
+ ifneq ($(shell uname -m),armv4l)
  ifneq ($(shell uname -m),sparc64)
 +ifneq ($(shell uname -m),sparc)
  GSM_SOURCES+= $(SRC)/k6opt.s
  endif
  endif
+@@ -231,6 +232,7 @@
  endif
  endif
  endif
@@ -15,14 +17,15 @@
  
  TOAST_SOURCES = $(SRC)/toast.c 		\
  		$(SRC)/toast_lin.c	\
-@@ -273,12 +273,14 @@
- ifneq ($(shell uname -m), ppc)
+@@ -282,6 +284,7 @@
  ifneq ($(shell uname -m), alpha)
+ ifneq ($(shell uname -m), armv4l)
  ifneq ($(shell uname -m), sparc64)
 +ifneq ($(shell uname -m), sparc)
  GSM_OBJECTS+= $(SRC)/k6opt.o
  endif
  endif
+@@ -289,6 +292,7 @@
  endif
  endif
  endif
@@ -30,39 +33,3 @@
  
  TOAST_OBJECTS =	$(SRC)/toast.o 		\
  		$(SRC)/toast_lin.o	\
---- codecs/lpc10/Makefile~	2004-08-31 18:33:00.000000000 +0200
-+++ codecs/lpc10/Makefile	2004-12-11 08:13:19.000000000 +0100
-@@ -31,6 +31,7 @@
- ifneq ($(PROC),ppc)
- ifneq ($(PROC),x86_64)
- ifneq ($(PROC),alpha)
-+ifneq ($(shell uname -m),sparc)
- #The problem with sparc is the best stuff is in newer versions of gcc (post 3.0) only.
- #This works for even old (2.96) versions of gcc and provides a small boost either way.
- #A ultrasparc cpu is really v9 but the stock debian stable 3.0 gcc doesn.t support it.
-@@ -46,6 +47,7 @@
- endif
- endif
- endif
-+endif
- 
- LIB = $(LIB_TARGET_DIR)/liblpc10.a
- 
---- codecs/gsm/Makefile~	2005-03-01 06:32:03.582121632 +0100
-+++ codecs/gsm/Makefile	2005-03-01 06:52:55.075865664 +0100
-@@ -42,6 +42,7 @@
- ifneq (${PROC},ultrasparc)
- ifneq ($(shell uname -m),ppc)
- ifneq ($(shell uname -m),alpha)
-+ifneq ($(shell uname -m),sparc)
- ifneq (${PROC},sparc64)
- OPTIMIZE+=-march=$(PROC)
- endif
-@@ -50,6 +51,7 @@
- endif
- endif
- endif
-+endif
- 
- #The problem with sparc is the best stuff is in newer versions of gcc (post 3.0) only.
- #This works for even old (2.96) versions of gcc and provides a small boost either way.
