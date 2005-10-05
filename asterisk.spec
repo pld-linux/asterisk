@@ -8,7 +8,6 @@
 #
 # Conditional build:
 %bcond_without	openh323	# without OpenH323 support
-%bcond_with			t30				# without T30 support
 #
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
@@ -21,7 +20,6 @@ Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
 # Source0-md5:	0d7f1c680ae53a739f26a069ef8b580a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Source3:	asterisk-t30.tar.gz
 Patch0:		%{name}-openh323-makefile.patch
 Patch1:		%{name}-Makefile_fix_gcc33.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
@@ -46,7 +44,8 @@ BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel
-%{?with_t30:BuildRequires:	spandsp-devel >= 0.0.3-0.pre1.1}
+BuildRequires:	spandsp-devel >= 0.0.2-0.pre20.1
+BuildRequires:	spandsp-devel < 0.0.3
 BuildRequires:	unixODBC-devel
 BuildRequires:	zaptel-devel
 BuildRequires:	zlib-devel
@@ -120,9 +119,7 @@ Pliki przyk³adowe dla centralki Asterisk.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%if %{with t30}
 %patch7 -p1
-%endif
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
