@@ -13,7 +13,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.0.9
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
@@ -44,8 +44,8 @@ BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	sed >= 4.0
 BuildRequires:	speex-devel
-BuildRequires:	spandsp-devel >= 0.0.2-0.pre20.1
-BuildRequires:	spandsp-devel < 0.0.3
+BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
+BuildRequires:	spandsp-devel < 1:0.0.3
 BuildRequires:	unixODBC-devel
 BuildRequires:	zaptel-devel
 BuildRequires:	zlib-devel
