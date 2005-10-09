@@ -13,7 +13,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.0.9
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
@@ -29,6 +29,7 @@ Patch5:		%{name}-openh323-rtti.patch
 Patch6:		%{name}-freetds.patch
 Patch7:		%{name}-t30.patch
 Patch8:		%{name}-awk.patch
+Patch9:		%{name}-noarch.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
@@ -122,6 +123,7 @@ Pliki przyk³adowe dla centralki Asterisk.
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
