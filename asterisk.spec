@@ -12,24 +12,24 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.0.9
-Release:	4
+Version:	1.2.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
-# Source0-md5:	0d7f1c680ae53a739f26a069ef8b580a
+# Source0-md5:	61d7f29b586ba9b9b5fbb67f952fd3ca
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Patch0:		%{name}-openh323-makefile.patch
+#Patch0:		%{name}-openh323-makefile.patch
 Patch1:		%{name}-Makefile_fix_gcc33.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
-Patch4:		%{name}-openh323-formats.patch
-Patch5:		%{name}-openh323-rtti.patch
-Patch6:		%{name}-freetds.patch
-Patch7:		%{name}-t30.patch
+#Patch4:		%{name}-openh323-formats.patch
+#Patch5:		%{name}-openh323-rtti.patch
+#Patch6:		%{name}-freetds.patch
+#Patch7:		%{name}-t30.patch
 Patch8:		%{name}-awk.patch
-Patch9:		%{name}-noarch.patch
+#Patch9:		%{name}-noarch.patch
 # It's included, but these sources are broken by me :)
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
@@ -115,15 +115,16 @@ Pliki przyk³adowe dla centralki Asterisk.
 
 %prep
 %setup -q
-%patch1 -p0
+#%patch0 -p1
+%patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
+#%patch4 -p1
+#%patch5 -p1
+#%patch6 -p1
+#%patch7 -p1
 %patch8 -p1
-%patch9 -p1
+#%patch9 -p1
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
@@ -190,6 +191,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/asterisk/*.conf
 %attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/asterisk/*.adsi
+%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/asterisk/extensions.ael
 %dir %{_libdir}/asterisk
 %dir %{_libdir}/asterisk/modules
 %attr(755,root,root) %{_libdir}/asterisk/modules/*.so
@@ -203,22 +205,27 @@ fi
 /var/lib/asterisk/mohmp3/fpm-world-mix.mp3
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
+%dir /var/lib/asterisk/sounds/dictate
 %dir /var/lib/asterisk/sounds/letters
 %dir /var/lib/asterisk/sounds/phonetic
 /var/lib/asterisk/images/*.jpg
 /var/lib/asterisk/keys/*.pub
 /var/lib/asterisk/sounds/*.gsm
 /var/lib/asterisk/sounds/digits/*.gsm
+/var/lib/asterisk/sounds/dictate/*.gsm
 /var/lib/asterisk/sounds/letters/*.gsm
 /var/lib/asterisk/sounds/phonetic/*.gsm
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
-%dir /var/spool/asterisk/vm
+#%%dir /var/spool/asterisk/vm
 %dir /var/spool/asterisk/voicemail
 %dir /var/spool/asterisk/voicemail/default
 %dir /var/log/asterisk
 %dir /var/log/asterisk/cdr-csv
 %{_mandir}/man8/asterisk.8*
+%{_mandir}/man8/astgenkey.8*
+%{_mandir}/man8/autosupport.8*
+%{_mandir}/man8/safe_asterisk.8*
 %dir /var/lib/asterisk/firmware
 %dir /var/lib/asterisk/firmware/iax
 /var/lib/asterisk/firmware/iax/iaxy.bin

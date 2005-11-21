@@ -1,13 +1,13 @@
---- Makefile~	2004-09-16 20:46:39.000000000 +0200
-+++ Makefile	2004-11-15 20:53:39.660750720 +0100
-@@ -22,8 +22,8 @@
- PROC=$(shell uname -m)
- ifeq ($(PROC),x86_64)
- # You must have GCC 3.4 to use k8, otherwise use athlon
--PROC=k8
--#PROC=athlon
-+#PROC=k8
-+PROC=athlon
- OPTIONS+=-m64
- endif
- ifeq ($(PROC),sparc64)
+--- asterisk-1.2.0/Makefile.orig	2005-11-21 14:34:29.000000000 +0100
++++ asterisk-1.2.0/Makefile	2005-11-21 14:34:36.000000000 +0100
+@@ -177,8 +177,8 @@
+ 
+   ifeq ($(PROC),x86_64)
+     # You must have GCC 3.4 to use k8, otherwise use athlon
+-    PROC=k8
+-    #PROC=athlon
++    #PROC=k8
++    PROC=athlon
+     OPTIONS+=-m64
+   endif
+ 
