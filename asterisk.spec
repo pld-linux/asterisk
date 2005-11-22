@@ -40,7 +40,7 @@ BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 #BuildRequires:	glib-devel
 #BuildRequires:	gtk+-devel
-BuildRequires:	libpri-devel
+BuildRequires:	libpri-devel >= 1.2.0
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
