@@ -10,7 +10,7 @@
 #		developing custom telephony applications for delivering dynamic \
 #		content over a telephone similarly to how one can deliver dynamic \
 #		content through a web browser using CGI and a web server.
-#		
+#
 # pidfile:	/var/run/asterisk.pid
 # config:	/etc/asterisk/asterisk.conf
 
