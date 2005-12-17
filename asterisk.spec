@@ -13,7 +13,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.2.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
@@ -138,7 +138,7 @@ rm -f pbx/.depend
 # H323 plugin:
 %{__make} -j1 -C channels/h323 \
 	PWLIBDIR="%{_prefix}" \
-	OPENH323DIR="%{_prefix}" \
+	OPENH323DIR="%{_datadir}/openh323" \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -I../../include"
 
