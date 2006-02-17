@@ -8,6 +8,9 @@
 #
 # Conditional build:
 %bcond_without	openh323	# without OpenH323 support
+%bcond_with		rxfax		# with rx (also tx :-D) fax
+
+%define _spandsp_version 0.0.2-pre25
 #
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
@@ -34,6 +37,9 @@ Patch8:		%{name}-awk.patch
 # will fit on clean cvs source
 #Patch1:		%{name}-DESTDIR.patch
 #Patch2:		%{name}-Makefile2.patch
+Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
+Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
+Patch10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	bison
 BuildRequires:	freetds >= 0.63
@@ -51,6 +57,7 @@ BuildRequires:	spandsp-devel < 1:0.0.3
 BuildRequires:	unixODBC-devel
 BuildRequires:	zaptel-devel
 BuildRequires:	zlib-devel
+%{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
 #BuildRequires:	mpg123
 # These libraries are crazy...
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
@@ -125,6 +132,13 @@ Pliki przyk³adowe dla centralki Asterisk.
 #%patch7 -p1
 %patch8 -p1
 #%patch9 -p1
+
+%if %{with rxfax}
+cd apps
+%patch10 -p1 
+cp %SOURCE10 .
+cp %SOURCE11 .
+%endif
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
