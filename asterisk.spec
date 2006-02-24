@@ -23,20 +23,20 @@ Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
 # Source0-md5:	14721abdc85fc3381db275b61dffce2d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-#Patch0:		%{name}-openh323-makefile.patch
+#Patch0:	%{name}-openh323-makefile.patch
 Patch1:		%{name}-Makefile_fix_gcc33.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
-#Patch4:		%{name}-openh323-formats.patch
-#Patch5:		%{name}-openh323-rtti.patch
-#Patch6:		%{name}-freetds.patch
-#Patch7:		%{name}-t30.patch
+#Patch4:	%{name}-openh323-formats.patch
+#Patch5:	%{name}-openh323-rtti.patch
+#Patch6:	%{name}-freetds.patch
+#Patch7:	%{name}-t30.patch
 Patch8:		%{name}-awk.patch
-#Patch9:		%{name}-noarch.patch
-# It's included, but these sources are broken by me :)
+#Patch9:	%{name}-noarch.patch
+# It's included, but these sources are broken by me:)
 # will fit on clean cvs source
-#Patch1:		%{name}-DESTDIR.patch
-#Patch2:		%{name}-Makefile2.patch
+#Patch1:	%{name}-DESTDIR.patch
+#Patch2:	%{name}-Makefile2.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
 Patch10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
@@ -47,26 +47,27 @@ BuildRequires:	gawk
 #BuildRequires:	glib-devel
 #BuildRequires:	gtk+-devel
 BuildRequires:	libpri-devel >= 1.2.0
+#BuildRequires:	mpg123
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
-BuildRequires:	speex-devel
-BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
 BuildRequires:	spandsp-devel < 1:0.0.3
+BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
+%{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
+BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	zaptel-devel
 BuildRequires:	zlib-devel
-%{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
-#BuildRequires:	mpg123
 # These libraries are crazy...
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
 #BuildRequires:	openh323-devel = 1.10.4
-#BuildRequires:	pwlib-devel = 1.4.4
 %{?with_openh323:BuildRequires:	openh323-devel}
+#BuildRequires:	pwlib-devel = 1.4.4
 %{?with_openh323:BuildRequires:	pwlib-devel}
-Requires:	rc-scripts
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 %{?with_openh323:%requires_eq	openh323}
 %{?with_openh323:%requires_eq	pwlib}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -135,9 +136,9 @@ Pliki przyk³adowe dla centralki Asterisk.
 
 %if %{with rxfax}
 cd apps
-%patch10 -p1 
-cp %SOURCE10 .
-cp %SOURCE11 .
+%patch10 -p1
+cp %{SOURCE10} .
+cp %{SOURCE11} .
 %endif
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
@@ -182,17 +183,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add asterisk
-if [ -f /var/lock/subsys/asterisk ]; then
-	/etc/rc.d/init.d/asterisk restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/asterisk start\" to start Asterisk daemon."
-fi
+%service asterisk restart "Asterisk daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/asterisk ]; then
-		/etc/rc.d/init.d/asterisk stop 1>&2
-	fi
+	%service asterisk stop
 	/sbin/chkconfig --del asterisk
 fi
 
@@ -252,8 +247,6 @@ fi
 /var/spool/asterisk/voicemail/default/1234/busy.gsm
 /var/spool/asterisk/voicemail/default/1234/unavail.gsm
 
-# RedHat specific init script file
-#%attr(754,root,root) /etc/rc.d/init.d/asterisk
 #%dir /var/lib/asterisk/agi-bin/*
 
 %files devel
