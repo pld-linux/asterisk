@@ -1,0 +1,4 @@
+- fixed building:
+  - h323 (Makefile2 patch),
+  - pbx (made .depend to refresh by removing the old one),
+- new todo: pass CFLAGS
