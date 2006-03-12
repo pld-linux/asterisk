@@ -1,0 +1,34 @@
+--- Makefile.orig	2006-01-11 18:39:21.000000000 +0800
++++ Makefile	2006-01-11 18:40:46.000000000 +0800
+@@ -52,10 +52,14 @@
+ 
+ ifneq ($(wildcard $(CROSS_COMPILE_TARGET)/usr/local/include/osp/osp.h $(CROSS_COMPILE_TARGET)/usr/include/osp/osp.h),)
+ APPS+=app_osplookup.so
+ endif
+ 
++ifneq ($(wildcard $(CROSS_COMPILE_TARGET)/usr/local/include/spandsp.h $(CROSS_COMPILE_TARGET)/usr/include/spandsp.h),)
++APPS+=app_rxfax.so app_txfax.so
++endif
++
+ ifeq ($(findstring BSD,${OSARCH}),BSD)
+ CFLAGS+=-I$(CROSS_COMPILE_TARGET)/usr/local/include -L$(CROSS_COMPILE_TARGET)/usr/local/lib
+ endif
+ 
+ CURLLIBS=$(shell $(CROSS_COMPILE_BIN)curl-config --libs)
+@@ -100,10 +104,16 @@
+ 	rm -f $(DESTDIR)$(MODULES_DIR)/app_qcall.so
+ 
+ app_curl.so: app_curl.o
+ 	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} $(CURLLIBS)
+ 
++app_rxfax.so : app_rxfax.o
++	$(CC) $(SOLINK) -o $@ $< -lspandsp -ltiff
++
++app_txfax.so : app_txfax.o
++	$(CC) $(SOLINK) -o $@ $< -lspandsp -ltiff
++
+ app_sql_postgres.o: app_sql_postgres.c
+ 	$(CC) -pipe -I/usr/local/pgsql/include $(CFLAGS) -c -o app_sql_postgres.o app_sql_postgres.c
+ 
+ app_sql_postgres.so: app_sql_postgres.o
+ 	$(CC) $(SOLINK) -o $@ ${CYGSOLINK} $< ${CYGSOLIB} -L/usr/local/pgsql/lib -lpq
