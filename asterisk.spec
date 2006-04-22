@@ -12,12 +12,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.0
+Version:	1.2.7.1
 Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	ftp://ftp.digium.com/pub/%{name}/%{name}-%{version}.tar.gz
-# Source0-md5:	61d7f29b586ba9b9b5fbb67f952fd3ca
+Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
+# Source0-md5:	5c4b473eee2fbc2cb9e346f0564ef970
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:		%{name}-openh323-makefile.patch
@@ -58,7 +58,7 @@ BuildRequires:	zlib-devel
 #BuildRequires:	pwlib-devel = 1.4.4
 %{?with_openh323:BuildRequires:	openh323-devel}
 %{?with_openh323:BuildRequires:	pwlib-devel}
-PreReq:		rc-scripts
+Requires:	rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 %{?with_openh323:%requires_eq	openh323}
 %{?with_openh323:%requires_eq	pwlib}
@@ -138,7 +138,7 @@ rm -f pbx/.depend
 # H323 plugin:
 %{__make} -j1 -C channels/h323 \
 	PWLIBDIR="%{_prefix}" \
-	OPENH323DIR="%{_prefix}" \
+	OPENH323DIR="%{_datadir}/openh323" \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -I../../include"
 
@@ -152,7 +152,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
 
 %{__make} -j1 install \
-	DESTDIR=$RPM_BUILD_ROOT 
+	DESTDIR=$RPM_BUILD_ROOT
 %{__make} -j1 samples \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -187,11 +187,11 @@ fi
 %doc BUGS ChangeLog CREDITS HARDWARE README* SECURITY configs doc/{*.txt,linkedlists.README}
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
-%attr(754,root,root) %{_sysconfdir}/rc.d/init.d/%{name}
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/sysconfig/%{name}
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/asterisk/*.conf
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/asterisk/*.adsi
-%attr(640,root,root) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/asterisk/extensions.ael
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/*.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/*.adsi
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.ael
 %dir %{_libdir}/asterisk
 %dir %{_libdir}/asterisk/modules
 %attr(755,root,root) %{_libdir}/asterisk/modules/*.so
