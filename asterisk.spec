@@ -41,25 +41,25 @@ BuildRequires:	gawk
 #BuildRequires:	glib-devel
 #BuildRequires:	gtk+-devel
 BuildRequires:	libpri-devel >= 1.2.0
+#BuildRequires:	mpg123
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	sed >= 4.0
-BuildRequires:	speex-devel
-BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
 BuildRequires:	spandsp-devel < 1:0.0.3
+BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
+BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	zaptel-devel
 BuildRequires:	zlib-devel
-#BuildRequires:	mpg123
 # These libraries are crazy...
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
 #BuildRequires:	openh323-devel = 1.10.4
-#BuildRequires:	pwlib-devel = 1.4.4
 %{?with_openh323:BuildRequires:	openh323-devel}
+#BuildRequires:	pwlib-devel = 1.4.4
 %{?with_openh323:BuildRequires:	pwlib-devel}
-Requires:	rc-scripts
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 %{?with_openh323:%requires_eq	openh323}
 %{?with_openh323:%requires_eq	pwlib}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
