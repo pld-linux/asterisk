@@ -136,7 +136,7 @@ Pliki przyk³adowe dla centralki Asterisk.
 
 %if %{with rxfax}
 cd apps
-%patch10 -p1
+%patch10 -p2
 cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
