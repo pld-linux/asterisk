@@ -15,12 +15,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.7.1
-Release:	2
+Version:	1.2.8
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	5c4b473eee2fbc2cb9e346f0564ef970
+# Source0-md5:	8bb592cda723e10e0cc32de12fdf88c9
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
@@ -46,7 +46,7 @@ BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 #BuildRequires:	glib-devel
 #BuildRequires:	gtk+-devel
-BuildRequires:	libpri-devel >= 1.2.0
+BuildRequires:	libpri-devel >= 1.2.3
 #BuildRequires:	mpg123
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
