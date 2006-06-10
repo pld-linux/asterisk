@@ -8,7 +8,7 @@
 #
 # Conditional build:
 %bcond_without	openh323	# without OpenH323 support
-%bcond_with		rxfax		# with rx (also tx :-D) fax
+%bcond_without		rxfax		# without rx (also tx :-D) fax
 
 %define _spandsp_version 0.0.2pre25
 #
@@ -24,7 +24,6 @@ Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
-Patch1:		%{name}-Makefile_fix_gcc33.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 #Patch4:	%{name}-openh323-formats.patch
@@ -38,12 +37,16 @@ Patch8:		%{name}-awk.patch
 #Patch1:	%{name}-DESTDIR.patch
 #Patch2:	%{name}-Makefile2.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
+# Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
-Patch10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
+# Source11-md5:	ab6983b51c412883545b36993d704999
+# http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
+Patch10:	%{name}-txfax-Makefile.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	bison
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
+BuildRequires:	gcc >= 5:3.4
 #BuildRequires:	glib-devel
 #BuildRequires:	gtk+-devel
 BuildRequires:	libpri-devel >= 1.2.3
@@ -124,7 +127,6 @@ Pliki przyk³adowe dla centralki Asterisk.
 %prep
 %setup -q
 #%patch0 -p1
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 #%patch4 -p1
@@ -136,7 +138,7 @@ Pliki przyk³adowe dla centralki Asterisk.
 
 %if %{with rxfax}
 cd apps
-%patch10 -p2
+%patch10 -p0
 cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
