@@ -177,7 +177,7 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 %if %{with openh323}
-install channels/h323/h323.conf.sample $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/h323.conf
+install channels/h323/h323.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/h323.conf
 %endif
 
 %clean
