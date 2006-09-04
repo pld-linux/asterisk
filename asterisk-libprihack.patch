@@ -1,0 +1,11 @@
+--- asterisk-1.2.9.1/channels/Makefile	2006-09-04 18:17:40.520009177 +0300
++++ /tmp/x	2006-09-04 18:17:26.119686189 +0300
+@@ -92,7 +92,7 @@
+   CHANNEL_LIBS+=chan_alsa.so
+ endif
+ 
+-ifneq ($(wildcard $(CROSS_COMPILE_TARGET)/usr/lib/libpri.so.1)$(wildcard $(CROSS_COMPILE_TARGET)/usr/local/lib/libpri.so.1),)
++ifneq ($(wildcard $(CROSS_COMPILE_TARGET)/usr/lib/buildhack-libpri.so.1)$(wildcard $(CROSS_COMPILE_TARGET)/usr/local/lib/buildhack-libpri.so.1),)
+   CFLAGS+=-DZAPATA_PRI
+   ZAPPRI=-lpri
+ endif
