@@ -16,7 +16,7 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.2.9.1
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
@@ -40,6 +40,7 @@ Patch8:		%{name}-awk.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
 Patch10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
+Patch11:	asterisk-libprihack.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	bison
 BuildRequires:	freetds >= 0.63
@@ -140,6 +141,7 @@ cd apps
 cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
+%patch11 -p1
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
