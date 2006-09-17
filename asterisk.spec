@@ -8,34 +8,28 @@
 #
 # Conditional build:
 %bcond_without	openh323	# without OpenH323 support
-%bcond_without		rxfax		# without rx (also tx :-D) fax
+%bcond_without	rxfax		# without rx (also tx :-D) fax
 
-%define _spandsp_version 0.0.2pre25
+%define _spandsp_version 0.0.2pre26
 #
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.12.1
-Release:	1
+Version:	1.4
+Release:	0.20060917
 License:	GPL v2
 Group:		Applications/System
-Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	9c0d427f96c740163a22f5e0dbcb101d
+Source0:	%{name}-%{version}.20060917.tar.gz
+# Source0-md5:	77b96fc0df5ed36111e23a0d593fa5b9
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-#Patch0:	%{name}-openh323-makefile.patch
+Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.1.tar.gz
+# Source3-md5:	0ad81081773609a26d7d58d2086fd902
+Source4: 	http://ftp.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
+# Source4-md5:	608cb2d89f46b28e2aa2bd0983d53c1c
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
-#Patch4:	%{name}-openh323-formats.patch
-#Patch5:	%{name}-openh323-rtti.patch
-#Patch6:	%{name}-freetds.patch
-#Patch7:	%{name}-t30.patch
 Patch8:		%{name}-awk.patch
-#Patch9:	%{name}-noarch.patch
-# It's included, but these sources are broken by me:)
-# will fit on clean cvs source
-#Patch1:	%{name}-DESTDIR.patch
-#Patch2:	%{name}-Makefile2.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
@@ -47,10 +41,8 @@ BuildRequires:	bison
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
-#BuildRequires:	glib-devel
-#BuildRequires:	gtk+-devel
-BuildRequires:	libpri-devel >= 1.2.3
-#BuildRequires:	mpg123
+BuildRequires:	iksemel-devel
+BuildRequires:	libpri-devel >= 1.2.4
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -61,11 +53,8 @@ BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
 %{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
 BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
-BuildRequires:	zaptel-devel
+BuildRequires:	zaptel-devel >= 1.2.10
 BuildRequires:	zlib-devel
-# These libraries are crazy...
-# With openh323 1.11.7 and pwlib 1.4.11 i had sig11
-#BuildRequires:	openh323-devel = 1.10.4
 %{?with_openh323:BuildRequires:	openh323-devel}
 #BuildRequires:	pwlib-devel = 1.4.4
 %{?with_openh323:BuildRequires:	pwlib-devel}
@@ -127,8 +116,8 @@ Pliki przyk³adowe dla centralki Asterisk.
 %prep
 %setup -q
 #%patch0 -p1
-%patch2 -p1
-%patch3 -p1
+#%patch2 -p1
+#%patch3 -p1
 #%patch4 -p1
 #%patch5 -p1
 #%patch6 -p1
@@ -147,9 +136,6 @@ sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
 %build
 rm -f pbx/.depend
-%{__make} -j1 \
-	CC="%{__cc}" \
-	OPTIMIZE="%{rpmcflags}"
 
 %if %{with openh323}
 # H323 plugin:
@@ -158,8 +144,16 @@ rm -f pbx/.depend
 	OPENH323DIR="%{_datadir}/openh323" \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -I../../include"
-
 %endif
+
+%configure
+
+cp -f .cleancount .lastclean
+
+%{__make} -C menuselect 
+%{__make} \
+     CC="%{__cc}" \
+     OPTIMIZE="%{rpmcflags}"
 
 # it requires doxygen - I don't know if we should do this...
 #%{__make} progdocs
@@ -167,6 +161,9 @@ rm -f pbx/.depend
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
+
+install %{SOURCE3} sounds
+install %{SOURCE4} sounds
 
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -195,7 +192,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc BUGS ChangeLog CREDITS HARDWARE README* SECURITY configs doc/{*.txt,linkedlists.README}
+%doc BUGS CREDITS README* configs doc/*.txt
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
@@ -210,10 +207,10 @@ fi
 %dir /var/lib/asterisk/agi-bin
 %dir /var/lib/asterisk/images
 %dir /var/lib/asterisk/keys
-%dir /var/lib/asterisk/mohmp3
-/var/lib/asterisk/mohmp3/fpm-calm-river.mp3
-/var/lib/asterisk/mohmp3/fpm-sunshine.mp3
-/var/lib/asterisk/mohmp3/fpm-world-mix.mp3
+%dir /var/lib/asterisk/moh
+/var/lib/asterisk/moh/fpm-calm-river.wav
+/var/lib/asterisk/moh/fpm-sunshine.wav
+/var/lib/asterisk/moh/fpm-world-mix.wav
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
 %dir /var/lib/asterisk/sounds/dictate
