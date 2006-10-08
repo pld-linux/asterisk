@@ -1,0 +1,61 @@
+diff -Nru asterisk-1.4.0-beta2/configure asterisk-1.4.0-beta2.orig/configure
+--- asterisk-1.4.0-beta2/configure	2006-09-19 17:09:01.000000000 +0000
++++ asterisk-1.4.0-beta2.orig/configure	2006-10-08 13:41:50.000000000 +0000
+@@ -547,7 +547,7 @@
+ #
+ # Initializations.
+ #
+-ac_default_prefix=/usr/local
++ac_default_prefix=/usr/
+ ac_clean_files=
+ ac_config_libobj_dir=.
+ LIBOBJS=
+@@ -24106,8 +24106,8 @@
+     if test "${HAS_PWLIB:-unset}" != "unset" ; then
+       PWLIBDIR="${HOME}/pwlib"
+     else
+-      { echo "$as_me:$LINENO: checking for /usr/local/include/ptlib.h" >&5
+-echo $ECHO_N "checking for /usr/local/include/ptlib.h... $ECHO_C" >&6; }
++      { echo "$as_me:$LINENO: checking for /usr/include/ptlib.h" >&5
++echo $ECHO_N "checking for /usr/include/ptlib.h... $ECHO_C" >&6; }
+ if test "${ac_cv_file__usr_local_include_ptlib_h+set}" = set; then
+   echo $ECHO_N "(cached) $ECHO_C" >&6
+ else
+@@ -24115,7 +24115,7 @@
+   { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+ echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+    { (exit 1); exit 1; }; }
+-if test -r "/usr/local/include/ptlib.h"; then
++if test -r "/usr/include/ptlib.h"; then
+   ac_cv_file__usr_local_include_ptlib_h=yes
+ else
+   ac_cv_file__usr_local_include_ptlib_h=no
+@@ -24141,7 +24141,7 @@
+   ;;
+   *)
+   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in /usr/local/bin
++for as_dir in /usr/bin
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+@@ -24182,7 +24182,7 @@
+   ;;
+   *)
+   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in /usr/local/share/pwlib/make
++for as_dir in /usr/share/pwlib/make
+ do
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+@@ -24210,8 +24210,8 @@
+ 
+ 
+         fi
+-        PWLIB_INCDIR="/usr/local/include"
+-        PWLIB_LIBDIR="/usr/local/lib"
++        PWLIB_INCDIR="/usr/include"
++        PWLIB_LIBDIR="/usr/lib"
+       else
+         { echo "$as_me:$LINENO: checking for /usr/include/ptlib.h" >&5
+ echo $ECHO_N "checking for /usr/include/ptlib.h... $ECHO_C" >&6; }
