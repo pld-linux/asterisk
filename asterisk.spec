@@ -26,7 +26,7 @@ Source2:	%{name}.sysconfig
 Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.1.tar.gz
 # Source3-md5:	0ad81081773609a26d7d58d2086fd902
 Source4: 	http://ftp.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
-# Source4-md5:	1c093f79a6eeae329685250b5842ab7e
+# Source4-md5:	e523fc2b4ac524f45da7815e97780540
 Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
