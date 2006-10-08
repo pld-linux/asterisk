@@ -7,26 +7,27 @@
 # - CFLAGS passing
 #
 # Conditional build:
-%bcond_without	openh323	# without OpenH323 support
-%bcond_without	rxfax		# without rx (also tx :-D) fax
+%bcond_with	openh323	# without OpenH323 support
+%bcond_with	rxfax		# without rx (also tx :-D) fax
 
 %define _spandsp_version 0.0.2pre26
 #
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.4
-Release:	0.20060917
+Version:	1.4.0
+Release:	0.beta2
 License:	GPL v2
 Group:		Applications/System
-Source0:	%{name}-%{version}.20060917.tar.gz
-# Source0-md5:	77b96fc0df5ed36111e23a0d593fa5b9
+Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}-beta2.tar.gz
+# Source0-md5:	dd22deccbe03618af192bb9b164f012d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.1.tar.gz
 # Source3-md5:	0ad81081773609a26d7d58d2086fd902
 Source4: 	http://ftp.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
-# Source4-md5:	608cb2d89f46b28e2aa2bd0983d53c1c
+# Source4-md5:	1c093f79a6eeae329685250b5842ab7e
+Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Patch8:		%{name}-awk.patch
@@ -114,8 +115,8 @@ Example files for the Asterisk PBX.
 Pliki przyk³adowe dla centralki Asterisk.
 
 %prep
-%setup -q
-#%patch0 -p1
+%setup -q -n %{name}-%{version}-beta2
+%patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
 #%patch4 -p1
