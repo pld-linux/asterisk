@@ -2,13 +2,14 @@
 # - cgi-bin package - separate, because of suid-root
 # - separate plugins into packages
 # - use shared versions of lpc10, gsm,...
-# - put chan_h323 into separate package and make obsoletes to chan_oh323 from external spec
-#   These two h323 plugin are conflicting...
 # - CFLAGS passing
+# - fix bluetooth patch
+# - package commandline tools (aelparse etc.)
 #
 # Conditional build:
 %bcond_with	openh323	# without OpenH323 support
 %bcond_with	rxfax		# without rx (also tx :-D) fax
+%bcond_without	bluetooth		# with bluetooth support (NFT)
 
 %define _spandsp_version 0.0.2pre26
 #
@@ -16,11 +17,11 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.4.0
-Release:	0.beta2
+Release:	0.beta3
 License:	GPL v2
 Group:		Applications/System
-Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}-beta2.tar.gz
-# Source0-md5:	dd22deccbe03618af192bb9b164f012d
+Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}-beta3.tar.gz
+# Source0-md5:	88bde3261b86a0c0d390d9c5f69aa65e
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.1.tar.gz
@@ -37,8 +38,15 @@ Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/a
 # Source11-md5:	ab6983b51c412883545b36993d704999
 # http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
+Patch11:	%{name}-fix-ptlib.patch
+%if %{with bluetooth}
+Patch12:	%{name}-chan_bluetooth.patch
+%endif
 URL:		http://www.asterisk.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	bison
+%{?with_bluetooth:BuildRequires: bluez-devel}
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
@@ -56,13 +64,12 @@ BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	zaptel-devel >= 1.2.10
 BuildRequires:	zlib-devel
-%{?with_openh323:BuildRequires:	openh323-devel}
-#BuildRequires:	pwlib-devel = 1.4.4
-%{?with_openh323:BuildRequires:	pwlib-devel}
+BuildRequires:	openh323-devel
+BuildRequires:	pwlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
-%{?with_openh323:%requires_eq	openh323}
-%{?with_openh323:%requires_eq	pwlib}
+%requires_eq	openh323
+%requires_eq	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -115,7 +122,7 @@ Example files for the Asterisk PBX.
 Pliki przyk³adowe dla centralki Asterisk.
 
 %prep
-%setup -q -n %{name}-%{version}-beta2
+%setup -q -n %{name}-%{version}-beta3 
 %patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
@@ -133,19 +140,19 @@ cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
 
+%patch11 -p1
+
+%if %{with bluetooth}
+%patch12 -p1
+%endif
+
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
 %build
 rm -f pbx/.depend
 
-%if %{with openh323}
-# H323 plugin:
-%{__make} -j1 -C channels/h323 \
-	PWLIBDIR="%{_prefix}" \
-	OPENH323DIR="%{_datadir}/openh323" \
-	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -I../../include"
-%endif
+%{__aclocal}
+%{__autoconf}
 
 %configure
 
@@ -154,7 +161,8 @@ cp -f .cleancount .lastclean
 %{__make} -C menuselect 
 %{__make} \
      CC="%{__cc}" \
-     OPTIMIZE="%{rpmcflags}"
+     OPTIMIZE="%{rpmcflags}" \
+		 CHANNEL_LIBS+=chan_bluetooth.so
 
 # it requires doxygen - I don't know if we should do this...
 #%{__make} progdocs
@@ -173,10 +181,6 @@ install %{SOURCE4} sounds
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
-
-%if %{with openh323}
-install channels/h323/h323.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/h323.conf
-%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
