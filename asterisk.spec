@@ -7,9 +7,8 @@
 # - package commandline tools (aelparse etc.)
 #
 # Conditional build:
-%bcond_with	openh323	# without OpenH323 support
 %bcond_with	rxfax		# without rx (also tx :-D) fax
-%bcond_without	bluetooth		# with bluetooth support (NFT)
+%bcond_with	bluetooth		# without bluetooth support (NFT)
 
 %define _spandsp_version 0.0.2pre26
 #
