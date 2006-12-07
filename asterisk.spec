@@ -8,19 +8,19 @@
 #
 # Conditional build:
 %bcond_without	openh323	# without OpenH323 support
-%bcond_with		rxfax		# with rx (also tx :-D) fax
+%bcond_with	rxfax		# with rx (also tx :-D) fax
 
-%define _spandsp_version 0.0.2pre25
+%define _spandsp_version 0.0.2pre26
 #
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.9.1
-Release:	5
+Version:	1.2.13
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	d98fc3dc5ee8df691ca2b0bd309bb251
+# Source0-md5:	ad8fbe2198568f55c254045ecb3b7926
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
@@ -137,10 +137,12 @@ Pliki przyk³adowe dla centralki Asterisk.
 
 %if %{with rxfax}
 cd apps
-%patch10 -p1
+%patch10 -p0
 cp %{SOURCE10} .
 cp %{SOURCE11} .
+cd ..
 %endif
+
 %patch11 -p1
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
