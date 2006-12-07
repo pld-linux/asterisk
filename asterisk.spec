@@ -10,17 +10,17 @@
 %bcond_without	openh323	# without OpenH323 support
 %bcond_without		rxfax		# without rx (also tx :-D) fax
 
-%define _spandsp_version 0.0.2pre25
+%define _spandsp_version 0.0.2pre26
 #
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.12.1
+Version:	1.2.13
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	9c0d427f96c740163a22f5e0dbcb101d
+# Source0-md5:	ad8fbe2198568f55c254045ecb3b7926
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
