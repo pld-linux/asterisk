@@ -15,12 +15,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.13
+Version:	1.2.14
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	ad8fbe2198568f55c254045ecb3b7926
+# Source0-md5:	2ce03466b99e0b9471e6c791ed14a5f2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
@@ -56,9 +56,10 @@ BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
+%if %{with rxfax}
 BuildRequires:	spandsp-devel < 1:0.0.3
 BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
-%{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
+%endif
 BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	zaptel-devel
@@ -141,9 +142,10 @@ cd apps
 %patch10 -p0
 cp %{SOURCE10} .
 cp %{SOURCE11} .
+cd ..
 %endif
 
-sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
+sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g" Makefile
 
 %build
 rm -f pbx/.depend
@@ -219,6 +221,7 @@ fi
 %dir /var/lib/asterisk/sounds/dictate
 %dir /var/lib/asterisk/sounds/letters
 %dir /var/lib/asterisk/sounds/phonetic
+%dir /var/lib/asterisk/sounds/silence
 /var/lib/asterisk/images/*.jpg
 /var/lib/asterisk/keys/*.pub
 /var/lib/asterisk/sounds/*.gsm
@@ -226,6 +229,7 @@ fi
 /var/lib/asterisk/sounds/dictate/*.gsm
 /var/lib/asterisk/sounds/letters/*.gsm
 /var/lib/asterisk/sounds/phonetic/*.gsm
+/var/lib/asterisk/sounds/silence/*.gsm
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
 #%%dir /var/spool/asterisk/vm
