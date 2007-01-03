@@ -16,11 +16,11 @@ Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.4.0
-Release:	0.beta3
+Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}-beta3.tar.gz
-# Source0-md5:	88bde3261b86a0c0d390d9c5f69aa65e
+Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	b4586be9bf00d438d6a53d408ba247d4
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.1.tar.gz
@@ -121,7 +121,7 @@ Example files for the Asterisk PBX.
 Pliki przyk³adowe dla centralki Asterisk.
 
 %prep
-%setup -q -n %{name}-%{version}-beta3 
+%setup -q -n %{name}-%{version}
 %patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
