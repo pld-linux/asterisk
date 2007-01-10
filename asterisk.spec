@@ -48,7 +48,7 @@ BuildRequires:	bison
 %{?with_bluetooth:BuildRequires: bluez-devel}
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
-BuildRequires:	gcc >= 5:3.4
+#BuildRequires:	gcc >= 5:3.4
 BuildRequires:	iksemel-devel
 BuildRequires:	libpri-devel >= 1.2.4
 BuildRequires:	mysql-devel
@@ -218,15 +218,19 @@ fi
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
 %dir /var/lib/asterisk/sounds/dictate
+%dir /var/lib/asterisk/sounds/followme
 %dir /var/lib/asterisk/sounds/letters
 %dir /var/lib/asterisk/sounds/phonetic
+%dir /var/lib/asterisk/sounds/silence
 /var/lib/asterisk/images/*.jpg
 /var/lib/asterisk/keys/*.pub
 /var/lib/asterisk/sounds/*.gsm
 /var/lib/asterisk/sounds/digits/*.gsm
 /var/lib/asterisk/sounds/dictate/*.gsm
+/var/lib/asterisk/sounds/followme/*.gsm
 /var/lib/asterisk/sounds/letters/*.gsm
 /var/lib/asterisk/sounds/phonetic/*.gsm
+/var/lib/asterisk/sounds/silence/*.gsm
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
 #%%dir /var/spool/asterisk/vm
@@ -247,6 +251,7 @@ fi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/agi-test.agi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-sphinx-test
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-test
+%attr(755,root,root) /var/lib/asterisk/agi-bin/jukebox.agi
 /var/spool/asterisk/voicemail/default/1234/busy.gsm
 /var/spool/asterisk/voicemail/default/1234/unavail.gsm
 
@@ -256,3 +261,4 @@ fi
 %defattr(644,root,root,755)
 %dir %{_includedir}/asterisk
 %{_includedir}/asterisk/*.h
+%{_includedir}/asterisk.h
