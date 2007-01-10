@@ -48,7 +48,7 @@ BuildRequires:	bison
 %{?with_bluetooth:BuildRequires: bluez-devel}
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
-#BuildRequires:	gcc >= 5:3.4
+BuildRequires:	gcc >= 5:3.4
 BuildRequires:	iksemel-devel
 BuildRequires:	libpri-devel >= 1.2.4
 BuildRequires:	mysql-devel
