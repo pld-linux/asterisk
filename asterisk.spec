@@ -196,7 +196,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc BUGS CREDITS README* configs doc/*.txt
+%doc BUGS ChangeLog CHANGES CREDITS README* UPGRADE.txt configs doc/*.txt
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
