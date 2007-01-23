@@ -38,9 +38,7 @@ Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/a
 # http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
 Patch11:	%{name}-fix-ptlib.patch
-%if %{with bluetooth}
 Patch12:	%{name}-chan_bluetooth.patch
-%endif
 URL:		http://www.asterisk.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
