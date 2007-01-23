@@ -2,78 +2,71 @@
 # - cgi-bin package - separate, because of suid-root
 # - separate plugins into packages
 # - use shared versions of lpc10, gsm,...
-# - put chan_h323 into separate package and make obsoletes to chan_oh323 from external spec
-#   These two h323 plugin are conflicting...
 # - CFLAGS passing
+# - fix bluetooth patch
+# - package commandline tools (aelparse etc.)
 #
 # Conditional build:
-%bcond_without	openh323	# without OpenH323 support
-%bcond_without		rxfax		# without rx (also tx :-D) fax
+%bcond_with	rxfax		# without rx (also tx :-D) fax
+%bcond_with	bluetooth		# without bluetooth support (NFT)
 
 %define _spandsp_version 0.0.2pre26
 #
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.14
-Release:	2
+Version:	1.4.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	2ce03466b99e0b9471e6c791ed14a5f2
+Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	b4586be9bf00d438d6a53d408ba247d4
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-#Patch0:	%{name}-openh323-makefile.patch
+Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.1.tar.gz
+# Source3-md5:	0ad81081773609a26d7d58d2086fd902
+Source4: 	http://ftp.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
+# Source4-md5:	e523fc2b4ac524f45da7815e97780540
+Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
-#Patch4:	%{name}-openh323-formats.patch
-#Patch5:	%{name}-openh323-rtti.patch
-#Patch6:	%{name}-freetds.patch
-#Patch7:	%{name}-t30.patch
 Patch8:		%{name}-awk.patch
-#Patch9:	%{name}-noarch.patch
-# It's included, but these sources are broken by me:)
-# will fit on clean cvs source
-#Patch1:	%{name}-DESTDIR.patch
-#Patch2:	%{name}-Makefile2.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
 # Source11-md5:	ab6983b51c412883545b36993d704999
 # http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
+Patch11:	%{name}-fix-ptlib.patch
+Patch12:	%{name}-chan_bluetooth.patch
 URL:		http://www.asterisk.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	bison
+%{?with_bluetooth:BuildRequires: bluez-devel}
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
-#BuildRequires:	glib-devel
-#BuildRequires:	gtk+-devel
-BuildRequires:	libpri-devel >= 1.2.3
-#BuildRequires:	mpg123
+BuildRequires:	iksemel-devel
+BuildRequires:	libpri-devel >= 1.2.4
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
-%if %{with rxfax}
 BuildRequires:	spandsp-devel < 1:0.0.3
 BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
-%endif
+%{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
 BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
-BuildRequires:	zaptel-devel
+BuildRequires:	zaptel-devel >= 1.2.10
 BuildRequires:	zlib-devel
-# These libraries are crazy...
-# With openh323 1.11.7 and pwlib 1.4.11 i had sig11
-#BuildRequires:	openh323-devel = 1.10.4
-%{?with_openh323:BuildRequires:	openh323-devel}
-#BuildRequires:	pwlib-devel = 1.4.4
-%{?with_openh323:BuildRequires:	pwlib-devel}
+BuildRequires:	openh323-devel
+BuildRequires:	pwlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
-%{?with_openh323:%requires_eq	openh323}
-%{?with_openh323:%requires_eq	pwlib}
+%requires_eq	openh323
+%requires_eq	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -105,7 +98,6 @@ obs³ugiwanego sprzêtu mo¿na znale¼æ pod http://www.asterisk.org/.
 Summary:	Header files for Asterisk platform
 Summary(pl):	Pliki nag³ówkowe platformy Asterisk
 Group:		Development
-Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for Asterisk development platform.
@@ -126,10 +118,10 @@ Example files for the Asterisk PBX.
 Pliki przyk³adowe dla centralki Asterisk.
 
 %prep
-%setup -q
-#%patch0 -p1
-%patch2 -p1
-%patch3 -p1
+%setup -q -n %{name}-%{version}
+%patch1 -p1
+#%patch2 -p1
+#%patch3 -p1
 #%patch4 -p1
 #%patch5 -p1
 #%patch6 -p1
@@ -142,26 +134,31 @@ cd apps
 %patch10 -p0
 cp %{SOURCE10} .
 cp %{SOURCE11} .
-cd ..
 %endif
 
-sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g" Makefile
+%patch11 -p1
+
+%if %{with bluetooth}
+%patch12 -p1
+%endif
+
+sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
 %build
 rm -f pbx/.depend
-%{__make} -j1 \
-	CC="%{__cc}" \
-	OPTIMIZE="%{rpmcflags}"
 
-%if %{with openh323}
-# H323 plugin:
-%{__make} -j1 -C channels/h323 \
-	PWLIBDIR="%{_prefix}" \
-	OPENH323DIR="%{_datadir}/openh323" \
-	CC="%{__cc}" \
-	CFLAGS="%{rpmcflags} -I/usr/include/openh323 -fPIC -I../../include"
+%{__aclocal}
+%{__autoconf}
 
-%endif
+%configure
+
+cp -f .cleancount .lastclean
+
+%{__make} -C menuselect 
+%{__make} \
+     CC="%{__cc}" \
+     OPTIMIZE="%{rpmcflags}" \
+		 CHANNEL_LIBS+=chan_bluetooth.so
 
 # it requires doxygen - I don't know if we should do this...
 #%{__make} progdocs
@@ -170,6 +167,9 @@ rm -f pbx/.depend
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
 
+install %{SOURCE3} sounds
+install %{SOURCE4} sounds
+
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 %{__make} -j1 samples \
@@ -177,10 +177,6 @@ install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/e
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
-
-%if %{with openh323}
-install channels/h323/h323.conf.sample $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/h323.conf
-%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -197,7 +193,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc BUGS ChangeLog CREDITS HARDWARE README* SECURITY configs doc/{*.txt,linkedlists.README}
+%doc BUGS ChangeLog CHANGES CREDITS README* UPGRADE.txt configs doc/*.txt
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
@@ -212,13 +208,14 @@ fi
 %dir /var/lib/asterisk/agi-bin
 %dir /var/lib/asterisk/images
 %dir /var/lib/asterisk/keys
-%dir /var/lib/asterisk/mohmp3
-/var/lib/asterisk/mohmp3/fpm-calm-river.mp3
-/var/lib/asterisk/mohmp3/fpm-sunshine.mp3
-/var/lib/asterisk/mohmp3/fpm-world-mix.mp3
+%dir /var/lib/asterisk/moh
+/var/lib/asterisk/moh/fpm-calm-river.wav
+/var/lib/asterisk/moh/fpm-sunshine.wav
+/var/lib/asterisk/moh/fpm-world-mix.wav
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
 %dir /var/lib/asterisk/sounds/dictate
+%dir /var/lib/asterisk/sounds/followme
 %dir /var/lib/asterisk/sounds/letters
 %dir /var/lib/asterisk/sounds/phonetic
 %dir /var/lib/asterisk/sounds/silence
@@ -227,6 +224,7 @@ fi
 /var/lib/asterisk/sounds/*.gsm
 /var/lib/asterisk/sounds/digits/*.gsm
 /var/lib/asterisk/sounds/dictate/*.gsm
+/var/lib/asterisk/sounds/followme/*.gsm
 /var/lib/asterisk/sounds/letters/*.gsm
 /var/lib/asterisk/sounds/phonetic/*.gsm
 /var/lib/asterisk/sounds/silence/*.gsm
@@ -250,6 +248,7 @@ fi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/agi-test.agi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-sphinx-test
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-test
+%attr(755,root,root) /var/lib/asterisk/agi-bin/jukebox.agi
 /var/spool/asterisk/voicemail/default/1234/busy.gsm
 /var/spool/asterisk/voicemail/default/1234/unavail.gsm
 
@@ -259,3 +258,4 @@ fi
 %defattr(644,root,root,755)
 %dir %{_includedir}/asterisk
 %{_includedir}/asterisk/*.h
+%{_includedir}/asterisk.h
