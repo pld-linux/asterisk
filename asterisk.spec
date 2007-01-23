@@ -100,7 +100,6 @@ obs³ugiwanego sprzêtu mo¿na znale¼æ pod http://www.asterisk.org/.
 Summary:	Header files for Asterisk platform
 Summary(pl):	Pliki nag³ówkowe platformy Asterisk
 Group:		Development
-Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for Asterisk development platform.
