@@ -13,7 +13,7 @@
 %define _spandsp_version 0.0.2pre26
 #
 Summary:	Asterisk PBX
-Summary(pl):	Centralka (PBX) Asterisk
+Summary(pl.UTF-8):   Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.4.0
 Release:	1
@@ -81,41 +81,41 @@ POTS, and IP telephony clients using the Inter-Asterisk eXchange
 protocol (e.g. gnophone or miniphone). For more information and a
 current list of supported hardware, see http://www.asterisk.org/.
 
-%description -l pl
-Asterisk to wolnodostêpna centralka (PBX) i platforma programistyczna
-dla telefonii, mog±ca zast±piæ konwencjonalne PBX-y oraz s³u¿yæ jako
-platforma do rozwijania w³asnych aplikacji telefonicznych do
-przekazywania dynamicznej tre¶ci przez telefon, podobnie jak mo¿na
-przekazywaæ dynamiczn± tre¶æ przez przegl±darkê WWW przy u¿yciu CGI i
+%description -l pl.UTF-8
+Asterisk to wolnodostÄ™pna centralka (PBX) i platforma programistyczna
+dla telefonii, mogÄ…ca zastÄ…piÄ‡ konwencjonalne PBX-y oraz sÅ‚uÅ¼yÄ‡ jako
+platforma do rozwijania wÅ‚asnych aplikacji telefonicznych do
+przekazywania dynamicznej treÅ›ci przez telefon, podobnie jak moÅ¼na
+przekazywaÄ‡ dynamicznÄ… treÅ›Ä‡ przez przeglÄ…darkÄ™ WWW przy uÅ¼yciu CGI i
 serwera WWW.
 
-Asterisk wspó³pracuje z wielorakim sprzêtem telefonicznym, w tym BRI,
-PRI, POTS oraz klienty telefonii IP u¿ywaj±ce protoko³u Inter-Asterisk
-eXchange (np. gnophone lub miniphone). Wiêcej informacji i listê
-obs³ugiwanego sprzêtu mo¿na znale¼æ pod http://www.asterisk.org/.
+Asterisk wspÃ³Å‚pracuje z wielorakim sprzÄ™tem telefonicznym, w tym BRI,
+PRI, POTS oraz klienty telefonii IP uÅ¼ywajÄ…ce protokoÅ‚u Inter-Asterisk
+eXchange (np. gnophone lub miniphone). WiÄ™cej informacji i listÄ™
+obsÅ‚ugiwanego sprzÄ™tu moÅ¼na znaleÅºÄ‡ pod http://www.asterisk.org/.
 
 %package devel
 Summary:	Header files for Asterisk platform
-Summary(pl):	Pliki nag³ówkowe platformy Asterisk
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe platformy Asterisk
 Group:		Development
 
 %description devel
 Header files for Asterisk development platform.
 
-%description devel -l pl
-Pliki nag³ówkowe platformy programistycznej Asterisk.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe platformy programistycznej Asterisk.
 
 %package examples
 Summary:	Example files for the Asterisk PBX
-Summary(pl):	Pliki przyk³adowe dla centralki Asterisk
+Summary(pl.UTF-8):   Pliki przykÅ‚adowe dla centralki Asterisk
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
 %description examples
 Example files for the Asterisk PBX.
 
-%description examples -l pl
-Pliki przyk³adowe dla centralki Asterisk.
+%description examples -l pl.UTF-8
+Pliki przykÅ‚adowe dla centralki Asterisk.
 
 %prep
 %setup -q -n %{name}-%{version}
