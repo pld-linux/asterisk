@@ -13,7 +13,7 @@
 %define _spandsp_version 0.0.2pre26
 #
 Summary:	Asterisk PBX
-Summary(pl.UTF-8):   Centralka (PBX) Asterisk
+Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.4.0
 Release:	1
@@ -96,7 +96,7 @@ obsługiwanego sprzętu można znaleźć pod http://www.asterisk.org/.
 
 %package devel
 Summary:	Header files for Asterisk platform
-Summary(pl.UTF-8):   Pliki nagłówkowe platformy Asterisk
+Summary(pl.UTF-8):	Pliki nagłówkowe platformy Asterisk
 Group:		Development
 
 %description devel
@@ -107,7 +107,7 @@ Pliki nagłówkowe platformy programistycznej Asterisk.
 
 %package examples
 Summary:	Example files for the Asterisk PBX
-Summary(pl.UTF-8):   Pliki przykładowe dla centralki Asterisk
+Summary(pl.UTF-8):	Pliki przykładowe dla centralki Asterisk
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
 
