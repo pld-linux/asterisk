@@ -45,21 +45,16 @@ URL:		http://www.asterisk.org/
 BuildRequires:	bison
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
-#BuildRequires:	glib-devel
-#BuildRequires:	gtk+-devel
-BuildRequires:	libpri-devel >= 1.2.0
-#BuildRequires:	mpg123
+BuildRequires:	libpri-devel >= 1.2.4
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
-BuildRequires:	spandsp-devel < 1:0.0.3
-BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
-%{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
+%{?with_rxfax:BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre26.1}
 BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
-BuildRequires:	zaptel-devel
+BuildRequires:	zaptel-devel >= 1.2.15
 BuildRequires:	zlib-devel
 # These libraries are crazy...
 # With openh323 1.11.7 and pwlib 1.4.11 i had sig11
@@ -221,6 +216,7 @@ fi
 %dir /var/lib/asterisk/sounds/dictate
 %dir /var/lib/asterisk/sounds/letters
 %dir /var/lib/asterisk/sounds/phonetic
+%dir /var/lib/asterisk/sounds/silence
 /var/lib/asterisk/images/*.jpg
 /var/lib/asterisk/keys/*.pub
 /var/lib/asterisk/sounds/*.gsm
@@ -228,6 +224,7 @@ fi
 /var/lib/asterisk/sounds/dictate/*.gsm
 /var/lib/asterisk/sounds/letters/*.gsm
 /var/lib/asterisk/sounds/phonetic/*.gsm
+/var/lib/asterisk/sounds/silence/*.gsm
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
 #%%dir /var/spool/asterisk/vm
