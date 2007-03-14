@@ -233,6 +233,7 @@ fi
 #%%dir /var/spool/asterisk/vm
 %dir /var/spool/asterisk/voicemail
 %dir /var/spool/asterisk/voicemail/default
+%dir /var/spool/asterisk/voicemail/default/1234
 %dir /var/log/asterisk
 %dir /var/log/asterisk/cdr-csv
 %{_mandir}/man8/asterisk.8*
