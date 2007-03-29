@@ -15,12 +15,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.16
+Version:	1.2.17
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	88cfcd5c3b2a8f2504e561cb93546299
+# Source0-md5:	1a41a1f4a535813b1272bae0545c7990
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
