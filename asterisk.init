@@ -15,6 +15,9 @@
 # config:	/etc/asterisk/asterisk.conf
 
 
+# Sanity check
+[ -f /etc/asterisk/asterisk.conf ] || exit 0
+
 # Source function library
 . /etc/rc.d/init.d/functions
 
@@ -34,13 +37,7 @@ else
 	exit 0
 fi
 
-# Sanity check
-[ -f /etc/asterisk/asterisk.conf ] || exit 0
-
-RETVAL=0
-# See how we were called.
-case "$1" in
-  start)
+start() {
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/asterisk ]; then
 		msg_starting Asterisk
@@ -50,8 +47,9 @@ case "$1" in
 	else
 		msg_already_running Asterisk
 	fi
-	;;
-  stop)
+}
+
+stop() {
 	# Stop daemons.
 	if [ -f /var/lock/subsys/asterisk ]; then
 		msg_stopping Asterisk
@@ -60,11 +58,20 @@ case "$1" in
 	else
 		msg_not_running Asterisk
 	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
 	;;
   restart|force-reload)
-	$0 stop
-	$0 start
-	exit $?
+	stop
+	start
 	;;
   reload)
 	if [ -f /var/lock/subsys/asterisk ]; then
