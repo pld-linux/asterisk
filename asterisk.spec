@@ -16,7 +16,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.4.2
-Release:	1
+Release:	0.1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -119,7 +119,7 @@ Pliki przykładowe dla centralki Asterisk.
 
 %prep
 %setup -q -n %{name}-%{version}
-%patch1 -p1
+#%patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
 #%patch4 -p1
@@ -150,15 +150,20 @@ rm -f pbx/.depend
 %{__aclocal}
 %{__autoconf}
 
+CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
 %configure
 
 cp -f .cleancount .lastclean
 
-%{__make} -C menuselect 
-%{__make} \
-     CC="%{__cc}" \
-     OPTIMIZE="%{rpmcflags}" \
-		 CHANNEL_LIBS+=chan_bluetooth.so
+%{__make} -C menuselect \
+	CC="%{__cc}" \
+	OPTIMIZE="%{rpmcflags}"
+
+%{__make} -j1 \
+	CC="%{__cc}" \
+	OPTIMIZE="%{rpmcflags}" \
+	OH323_LIBDIR="%{_libdir}" \
+	CHANNEL_LIBS+=chan_bluetooth.so
 
 # it requires doxygen - I don't know if we should do this...
 #%{__make} progdocs
