@@ -16,7 +16,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.4.2
-Release:	0.1
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -54,8 +54,6 @@ BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
-BuildRequires:	spandsp-devel < 1:0.0.3
-BuildRequires:	spandsp-devel >= 1:0.0.2-0.pre20.1
 %{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
 BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
@@ -155,14 +153,19 @@ CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
 
 cp -f .cleancount .lastclean
 
-%{__make} -C menuselect \
+%{__make} -j1 -C menuselect \
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}"
 
 %{__make} -j1 \
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}" \
-	OH323_LIBDIR="%{_libdir}" \
+	CHANNEL_LIBS+=chan_bluetooth.so || :
+
+# rerun needed; asterisk want's that
+%{__make} -j1 \
+	CC="%{__cc}" \
+	OPTIMIZE="%{rpmcflags}" \
 	CHANNEL_LIBS+=chan_bluetooth.so
 
 # it requires doxygen - I don't know if we should do this...
