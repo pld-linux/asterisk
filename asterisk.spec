@@ -5,6 +5,7 @@
 # - put chan_h323 into separate package and make obsoletes to chan_oh323 from external spec
 #   These two h323 plugin are conflicting...
 # - CFLAGS passing
+# - run as asterisk user not root
 #
 # Conditional build:
 %bcond_without	openh323	# without OpenH323 support
@@ -15,12 +16,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.22
+Version:	1.2.23
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://ftp.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	1e0f25a9914c1fc8c9339a1a414119be
+# Source0-md5:	e1e13a496a45342dec88dcf76162e6f0
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
@@ -40,7 +41,8 @@ Patch8:		%{name}-awk.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
 Patch10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
-Patch11:	asterisk-libprihack.patch
+Patch11:	%{name}-libprihack.patch
+Patch12:	%{name}-zaptel.h.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	bison
 BuildRequires:	freetds >= 0.63
@@ -139,8 +141,9 @@ cd ..
 %endif
 
 %patch11 -p1
+%patch12 -p1
 
-sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
+sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile channels/Makefile
 
 %build
 rm -f pbx/.depend
