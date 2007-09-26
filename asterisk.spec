@@ -195,7 +195,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add asterisk
-%service asterisk restart "Asterisk daemon"
+# this was insane; breaking all current calls
+#%%service asterisk restart "Asterisk daemon"
 
 %preun
 if [ "$1" = "0" ]; then
