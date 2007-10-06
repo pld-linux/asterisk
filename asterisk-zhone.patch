@@ -1,0 +1,43 @@
+diff -urN asterisk-1.4.11.org/channels/chan_zap.c asterisk-1.4.11/channels/chan_zap.c
+--- asterisk-1.4.11.org/channels/chan_zap.c	2007-08-17 23:01:43.000000000 +0200
++++ asterisk-1.4.11/channels/chan_zap.c	2007-10-06 06:09:46.353781463 +0200
+@@ -137,7 +137,7 @@
+  * is entirely unwilling to provide any assistance with their channel banks
+  * even though their web site says they support their products for life.
+  */
+-/* #define ZHONE_HACK */
++#define ZHONE_HACK 1
+ 
+ /*! \note
+  * Define if you want to check the hook state for an FXO (FXS signalled) interface
+@@ -3700,21 +3700,17 @@
+ 		ast_log(LOG_DEBUG, "Got event %s(%d) on channel %d (index %d)\n", event2str(res), res, p->channel, index);
+ 
+ 	if (res & (ZT_EVENT_PULSEDIGIT | ZT_EVENT_DTMFUP)) {
+-		p->pulsedial =  (res & ZT_EVENT_PULSEDIGIT) ? 1 : 0;
++		int pulse =  (res & ZT_EVENT_PULSEDIGIT) ? 1 : 0;
+ 
+-		ast_log(LOG_DEBUG, "Detected %sdigit '%c'\n", p->pulsedial ? "pulse ": "", res & 0xff);
+-#ifdef HAVE_PRI
+-		if (!p->proceeding && p->sig == SIG_PRI && p->pri && p->pri->overlapdial) {
+-			/* absorb event */
+-		} else {
+-#endif
+-			p->subs[index].f.frametype = AST_FRAME_DTMF_END;
+-			p->subs[index].f.subclass = res & 0xff;
+-#ifdef HAVE_PRI
++		ast_log(LOG_DEBUG, "Detected %sdigit '%c'\n", pulse ? "pulse ": "", res & 0xff);
++
++		if (res & 0xff != 1) {
++			/* try to reset zhone */
++			zt_set_hook(p->subs[SUB_REAL].zfd, ZT_OFFHOOK);
++			usleep(10);
++			zt_set_hook(p->subs[SUB_REAL].zfd, ZT_ONHOOK);
+ 		}
+-#endif
+-		zt_handle_dtmfup(ast, index, &f);
+-		return f;
++		/* do nothing */
+ 	}
+ 
+ 	if (res & ZT_EVENT_DTMFDOWN) {
