@@ -41,8 +41,8 @@ diff -urN asterisk-1.4.11.org/channels/chan_zap.c asterisk-1.4.11/channels/chan_
  	}
  
  	if (res & ZT_EVENT_DTMFDOWN) {
---- channels/chan_zap.c.org	2007-09-26 09:08:42.423698383 +0200
-+++ channels/chan_zap.c	2007-09-26 09:09:43.422303554 +0200
+--- asterisk/channels/chan_zap.c.org	2007-09-26 09:08:42.423698383 +0200
++++ asterisk/channels/chan_zap.c	2007-09-26 09:09:43.422303554 +0200
 @@ -1607,11 +1607,18 @@
  
  static inline int zt_set_hook(int fd, int hs)
