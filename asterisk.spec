@@ -10,6 +10,7 @@
 %bcond_with	rxfax		# without rx (also tx :-D) fax
 %bcond_with	bluetooth		# without bluetooth support (NFT)
 %bcond_with	zhone # zhone hack
+%bcond_with	zhone_hack # huge hack workarounding broken zhone channel banks
 
 %define _spandsp_version 0.0.2pre26
 #
@@ -40,6 +41,7 @@ Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/a
 Patch10:	%{name}-txfax-Makefile.patch
 Patch11:	%{name}-fix-ptlib.patch
 Patch12:	%{name}-chan_bluetooth.patch
+Patch13:	%{name}-zhone.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -143,6 +145,8 @@ cp %{SOURCE11} .
 %if %{with bluetooth}
 %patch12 -p1
 %endif
+
+%patch13 -p1
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
