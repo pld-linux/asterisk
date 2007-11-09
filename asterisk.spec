@@ -29,6 +29,7 @@ Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sound
 # Source3-md5:	02e582b6c7de58e5eaba220229c0a71a
 Source4: 	http://ftp.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
 # Source4-md5:	e523fc2b4ac524f45da7815e97780540
+Source5:	%{name}.logrotate
 Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
@@ -181,10 +182,11 @@ cp -f .cleancount .lastclean
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig}}
+install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}}
 
 install %{SOURCE3} sounds
 install %{SOURCE4} sounds
+install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -214,6 +216,7 @@ fi
 %attr(755,root,root) %{_sbindir}/*
 %dir %{_sysconfdir}/asterisk
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/*.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/*.adsi
