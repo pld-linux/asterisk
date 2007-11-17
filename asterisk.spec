@@ -52,6 +52,7 @@ BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	iksemel-devel
+BuildRequires:	imap-static
 BuildRequires:	libpri-devel >= 1.2.4
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
@@ -151,6 +152,11 @@ cp %{SOURCE11} .
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
+mkdir -p imap/c-client
+ln -s %{_libdir}/libc-client.a imap/c-client/c-client.a
+ln -s %{_includedir}/imap/* imap/c-client/
+echo '-lssl -lpam' > imap/c-client/LDFLAGS
+
 %build
 rm -f pbx/.depend
 
@@ -158,7 +164,8 @@ rm -f pbx/.depend
 %{__autoconf}
 
 CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
-%configure
+%configure \
+	--with-imap="`pwd`"/imap
 
 cp -f .cleancount .lastclean
 
