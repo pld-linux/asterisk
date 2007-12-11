@@ -16,7 +16,7 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.24
+Version:	1.2.25
 Release:	1
 License:	GPL v2
 Group:		Applications/System
