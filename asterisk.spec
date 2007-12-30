@@ -7,11 +7,11 @@
 # - package commandline tools (aelparse etc.)
 #
 # Conditional build:
-%bcond_with	rxfax		# without rx (also tx :-D) fax
+%bcond_with	rxfax			# without rx (also tx :-D) fax
 %bcond_with	bluetooth		# without bluetooth support (NFT)
-%bcond_with	zhone # zhone hack
-%bcond_with	zhone_hack # huge hack workarounding broken zhone channel banks
-
+%bcond_with	zhone 			# zhone hack
+%bcond_with	zhone_hack 		# huge hack workarounding broken zhone channel banks
+#
 %define _spandsp_version 0.0.2pre26
 #
 Summary:	Asterisk PBX
