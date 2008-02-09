@@ -8615,3 +8615,71 @@ Add or convert channel operations so they can use the unique ID.
  AST_EXT_LIB_CHECK([IKSEMEL], [iksemel], [iks_start_sasl], [iksemel.h])
  
  if test "${PBX_IKSEMEL}" = 1; then
+diff -ur asterisk-1.4.17.org/channels/chan_zap.c asterisk-1.4.17/channels/chan_zap.c
+--- asterisk-1.4.17.org/channels/chan_zap.c	2008-02-09 21:02:04.714653000 +0100
++++ asterisk-1.4.17/channels/chan_zap.c	2008-02-09 21:05:07.690124195 +0100
+@@ -47,6 +47,7 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+  ***/
+ 
+Tylko w asterisk-1.4.17/channels: chan_zap.c~
+diff -ur asterisk-1.4.17.org/channels/.chan_zap.moduleinfo asterisk-1.4.17/channels/.chan_zap.moduleinfo
+--- asterisk-1.4.17.org/channels/.chan_zap.moduleinfo	2008-01-02 21:30:40.000000000 +0100
++++ asterisk-1.4.17/channels/.chan_zap.moduleinfo	2008-02-09 21:04:54.802837479 +0100
+@@ -4,5 +4,6 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+ </member>
+Tylko w asterisk-1.4.17/channels: .chan_zap.moduleinfo~
+diff -ur asterisk-1.4.17.org/channels/.moduleinfo asterisk-1.4.17/channels/.moduleinfo
+--- asterisk-1.4.17.org/channels/.moduleinfo	2008-01-02 21:30:40.000000000 +0100
++++ asterisk-1.4.17/channels/.moduleinfo	2008-02-09 21:04:30.284991178 +0100
+@@ -50,6 +50,7 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+ </member>
+ <member name="chan_vpb" displayname="" remove_on_change="channels/chan_vpb.oo channels/chan_vpb.so">
+Tylko w asterisk-1.4.17/channels: .moduleinfo~
+diff -ur asterisk-1.4.17.org/menuselect-tree asterisk-1.4.17/menuselect-tree
+--- asterisk-1.4.17.org/menuselect-tree	2008-01-02 21:30:44.000000000 +0100
++++ asterisk-1.4.17/menuselect-tree	2008-02-09 21:03:56.613371109 +0100
+@@ -247,6 +247,7 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+ </member>
+ <member name="chan_vpb" displayname="" remove_on_change="channels/chan_vpb.oo channels/chan_vpb.so">
+--- asterisk-1.4.17/makeopts.in.org	2008-02-09 21:32:11.948061985 +0100
++++ asterisk-1.4.17/makeopts.in	2008-02-09 21:32:27.655480851 +0100
+@@ -83,6 +83,9 @@
+ GSM_INCLUDE=@GSM_INCLUDE@
+ GSM_LIB=@GSM_LIB@
+ 
++GSMAT_INCLUDE=@GSMAT_INCLUDE@
++GSMAT_LIB=@GSMAT_LIB@
++
+ GTK_INCLUDE=@GTK_INCLUDE@
+ GTK_LIB=@GTK_LIB@
+
+--- a/build_tools/menuselect-deps.in~	2007-09-14 17:50:49.000000000 +0200
++++ b/build_tools/menuselect-deps.in	2008-02-09 21:30:40.933703503 +0100
+@@ -2,6 +2,7 @@
+ CURL=@PBX_CURL@
+ FREETDS=@PBX_FREETDS@
+ GSM=@PBX_GSM@
++GSMAT=@PBX_GSMAT@
+ GTK=@PBX_GTK@
+ GTK2=@PBX_GTK2@
+ H323=@PBX_H323@
