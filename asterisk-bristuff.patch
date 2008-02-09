@@ -8602,7 +8602,7 @@ Add or convert channel operations so they can use the unique ID.
  AST_EXT_LIB_SETUP([CURSES], [curses], [curses])
  AST_EXT_LIB_SETUP([GNUTLS], [GNU TLS support (used for iksemel only)], [gnutls])
  AST_EXT_LIB_SETUP([GSM], [GSM], [gsm], [, or 'internal'])
-+AST_EXT_LIB_SETUP([GSMAT], [GSMAT], [GSM AT command signalling], [gsmat])
++AST_EXT_LIB_SETUP([GSMAT], [GSM AT command signalling], [gsmat])
  AST_EXT_LIB_SETUP([IKSEMEL], [Iksemel Jabber Library], [iksemel])
  AST_EXT_LIB_SETUP([IMAP_TK], [UW IMAP Toolkit], [imap])
  AST_EXT_LIB_SETUP([ISDNNET], [ISDN4Linux Library], [isdnnet])
