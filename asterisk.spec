@@ -11,6 +11,7 @@
 %bcond_with	bluetooth		# without bluetooth support (NFT)
 %bcond_with	zhone 			# zhone hack
 %bcond_with	zhone_hack 		# huge hack workarounding broken zhone channel banks
+%bcond_with	bristuff		# BRIstuff (Junghanns.NET BRI adapters) support
 #
 %define _spandsp_version 0.0.2pre26
 #
@@ -43,6 +44,7 @@ Patch10:	%{name}-txfax-Makefile.patch
 Patch11:	%{name}-fix-ptlib.patch
 Patch12:	%{name}-chan_bluetooth.patch
 Patch13:	%{name}-zhone.patch
+Patch14:	%{name}-bristuff.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -66,6 +68,10 @@ BuildRequires:	zaptel-devel >= 1.2.10
 BuildRequires:	zlib-devel
 BuildRequires:	openh323-devel
 BuildRequires:	pwlib-devel
+%if %{with bristuff}
+BuildRequires:	libpri-bristuff-devel >= 1.2.4
+Requires:	libpri-bristuff
+%endif
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 %requires_eq	openh323
@@ -144,11 +150,9 @@ cp %{SOURCE11} .
 
 %patch11 -p1
 
-%if %{with bluetooth}
-%patch12 -p1
-%endif
-
-%patch13 -p1
+%{?with_bluetooth:%patch12 -p1}
+%{?with_zhonehack:%patch13 -p1}
+%{?with_bristuff:%patch14 -p1}
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
