@@ -44,6 +44,7 @@ Patch10:	%{name}-txfax-Makefile.patch
 Patch11:	%{name}-fix-ptlib.patch
 Patch12:	%{name}-chan_bluetooth.patch
 Patch13:	%{name}-zhone.patch
+# http://svn.debian.org/wsvn/pkg-voip/asterisk/trunk/debian/patches/bristuff
 Patch14:	%{name}-bristuff.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	autoconf
