@@ -70,6 +70,7 @@ BuildRequires:	zlib-devel
 BuildRequires:	openh323-devel
 BuildRequires:	pwlib-devel
 %if %{with bristuff}
+BuildRequires:	libgsmat-devel
 BuildRequires:	libpri-bristuff-devel >= 1.2.4
 Requires:	libpri-bristuff
 %endif
@@ -166,10 +167,12 @@ echo '-lssl -lpam' > imap/c-client/LDFLAGS
 rm -f pbx/.depend
 
 %{__aclocal}
+%{__autoheader}
 %{__autoconf}
 
 CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
 %configure \
+	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap="`pwd`"/imap
 
 cp -f .cleancount .lastclean
