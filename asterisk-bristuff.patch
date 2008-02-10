@@ -8047,7 +8047,7 @@ Add or convert channel operations so they can use the unique ID.
 +		if (!ast_strlen_zero(e->ring.callingnum)) {
 +		    strncpy(gsm->pvt->cid_num, e->ring.callingnum, sizeof(gsm->pvt->cid_num) - 1);
 +		} else {
-+		    strncpy(gsm->pvt->cid_name, "FIXME FIXME FIXME" /*withheldcid*/, sizeof(gsm->pvt->cid_name));
++		    strncpy(gsm->pvt->cid_name, "CID withheld", sizeof(gsm->pvt->cid_name));
 +		}
 +		if (!ast_strlen_zero(gsm->exten)) {
 +		    strncpy(gsm->pvt->exten, gsm->exten, sizeof(gsm->pvt->exten) - 1);
