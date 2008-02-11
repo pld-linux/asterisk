@@ -5,7 +5,7 @@
  AST_EXT_LIB_CHECK([POPT], [popt], [poptStrerror], [popt.h])
  
 -AST_EXT_LIB_CHECK([PRI], [pri], [pri_keypad_facility], [libpri.h])
-+AST_EXT_LIB_CHECK([PRI], [pri-bristuffed], [pri_keypad_facility], [bristuffed/libpri.h])
++AST_EXT_LIB_CHECK([PRI], [pri-bristuff], [pri_keypad_facility], [bristuff/libpri.h])
  
  if test "${USE_PWLIB}" != "no"; then
  	if test -n "${PWLIB_DIR}"; then
@@ -16,7 +16,7 @@
  
  #ifdef HAVE_PRI
 -#include <libpri.h>
-+#include <bristuffed/libpri.h>
++#include <bristuff/libpri.h>
  #endif
  
  #include "asterisk/lock.h"
