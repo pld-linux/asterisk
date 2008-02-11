@@ -12,6 +12,7 @@
 %bcond_with	zhone 			# zhone hack
 %bcond_with	zhone_hack 		# huge hack workarounding broken zhone channel banks
 %bcond_with	bristuff		# BRIstuff (Junghanns.NET BRI adapters) support
+%bcond_with	verbose
 #
 %define _spandsp_version 0.0.2pre26
 #
@@ -46,6 +47,7 @@ Patch12:	%{name}-chan_bluetooth.patch
 Patch13:	%{name}-zhone.patch
 # http://svn.debian.org/wsvn/pkg-voip/asterisk/trunk/debian/patches/bristuff
 Patch14:	%{name}-bristuff.patch
+Patch15:	%{name}-bristuff-libpri.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -56,7 +58,6 @@ BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-static
-BuildRequires:	libpri-devel >= 1.2.4
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -72,7 +73,8 @@ BuildRequires:	pwlib-devel
 %if %{with bristuff}
 BuildRequires:	libgsmat-devel
 BuildRequires:	libpri-bristuff-devel >= 1.2.4
-Requires:	libpri-bristuff
+%else
+BuildRequires:  libpri-devel >= 1.2.4
 %endif
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
@@ -154,7 +156,10 @@ cp %{SOURCE11} .
 
 %{?with_bluetooth:%patch12 -p1}
 %{?with_zhonehack:%patch13 -p1}
-%{?with_bristuff:%patch14 -p1}
+%if %{with bristuff}
+%patch14 -p1
+%patch15 -p1
+%endif
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
@@ -178,16 +183,19 @@ CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
 cp -f .cleancount .lastclean
 
 %{__make} -j1 -C menuselect \
+	%{?with_verbose:NOISY_BUILD=yes} \
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}"
 
 %{__make} -j1 \
+	%{?with_verbose:NOISY_BUILD=yes} \
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}" \
 	CHANNEL_LIBS+=chan_bluetooth.so || :
 
 # rerun needed; asterisk want's that
 %{__make} -j1 \
+	%{?with_verbose:NOISY_BUILD=yes} \
 	CC="%{__cc}" \
 	OPTIMIZE="%{rpmcflags}" \
 	CHANNEL_LIBS+=chan_bluetooth.so
