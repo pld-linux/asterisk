@@ -10,7 +10,8 @@
 %bcond_with	rxfax		# without rx (also tx :-D) fax
 %bcond_with	bluetooth	# without bluetooth support (NFT)
 %bcond_with	zhone 		# zhone hack
-%bcond_with	zhone_hack 	# huge hack workarounding broken zhone channel banks
+%bcond_with	zhone_hack 	# huge hack workarounding broken zhone channel banks which start randomly
+				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
 %bcond_with	verbose		# verbose build
 #
