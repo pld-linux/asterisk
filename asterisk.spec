@@ -20,12 +20,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.4.18.1
+Version:	1.4.19
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	a0d7ee4054a04529b745e60dd4e750c4
+# Source0-md5:	2be30f9d35e808828ffb6876d6c947fe
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.6.tar.gz
