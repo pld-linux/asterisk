@@ -21,7 +21,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.4.19
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -36,6 +36,7 @@ Source5:	%{name}.logrotate
 Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
+Patch4:		%{name}-audiohook.patch
 Patch8:		%{name}-awk.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
@@ -139,7 +140,7 @@ Pliki przykładowe dla centralki Asterisk.
 #%patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
-#%patch4 -p1
+%patch4 -p0
 #%patch5 -p1
 #%patch6 -p1
 #%patch7 -p1
