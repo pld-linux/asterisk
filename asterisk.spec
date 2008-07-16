@@ -20,12 +20,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.4.20
-Release:	2
+Version:	1.4.21.1
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	15dbe409b72ee8b7fc30f74e49f877db
+# Source0-md5:	dfa1b73587aa74b36caaf4811cfe610e
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.6.tar.gz
@@ -33,6 +33,7 @@ Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sound
 Source4: 	http://ftp.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
 # Source4-md5:	e523fc2b4ac524f45da7815e97780540
 Source5:	%{name}.logrotate
+Patch0:		%{name}-m4.patch
 Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
@@ -136,6 +137,7 @@ Pliki przykładowe dla centralki Asterisk.
 
 %{?with_zhone:sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c}
 
+%patch0 -p0
 #%patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
