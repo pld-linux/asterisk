@@ -7828,6 +7828,16 @@ diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/channels/.modul
  	<use>pri</use>
  </member>
  <member name="chan_vpb" displayname="Voicetronix API driver" remove_on_change="channels/chan_vpb.oo channels/chan_vpb.so">
+--- asterisk-1.4.21.1/configure.ac~	2008-07-18 21:40:46.734019409 +0200
++++ asterisk-1.4.21.1/configure.ac	2008-07-18 21:44:45.714615015 +0200
+@@ -178,6 +178,7 @@
+ AST_EXT_LIB_SETUP([CURSES], [curses], [curses])
+ AST_EXT_LIB_SETUP([GNUTLS], [GNU TLS support (used for iksemel only)], [gnutls])
+ AST_EXT_LIB_SETUP([GSM], [GSM], [gsm], [, or 'internal'])
++AST_EXT_LIB_SETUP([GSMAT], [GSM AT command signalling], [gsmat])
+ AST_EXT_LIB_SETUP([IKSEMEL], [Iksemel Jabber Library], [iksemel])
+ AST_EXT_LIB_SETUP([IMAP_TK], [UW IMAP Toolkit], [imap])
+ AST_EXT_LIB_SETUP([ISDNNET], [ISDN4Linux Library], [isdnnet])
 diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/configure.ac asterisk-1.4.21.1.old/configure.ac
 --- asterisk-1.4.21.1.new/configure.ac	2008-07-18 08:18:57.389246988 +0200
 +++ asterisk-1.4.21.1.old/configure.ac	2008-07-18 08:18:42.806528869 +0200
