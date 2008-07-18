@@ -208,6 +208,9 @@ cp -f .cleancount .lastclean
 # it requires doxygen - I don't know if we should do this...
 #%{__make} progdocs
 
+# safe checks
+%{?with_bristuff:objdump -p channels/chan_zap.so | grep -qE 'NEEDED +libgsmat\.so' || exit 1}
+
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}}
