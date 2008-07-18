@@ -7806,7 +7806,17 @@ diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/build_tools/men
  GTK=@PBX_GTK@
  GTK2=@PBX_GTK2@
  H323=@PBX_H323@
-Tylko w asterisk-1.4.21.1.old/channels: chan_zap.c.rej
+diff -ur asterisk-1.4.21.1.org/channels/chan_zap.c asterisk-1.4.21.1/channels/chan_zap.c
+--- asterisk-1.4.21.1/channels/chan_zap.c~	2008-07-18 21:56:54.854339111 +0200
++++ asterisk-1.4.21.1/channels/chan_zap.c	2008-07-18 22:02:00.487649563 +0200
+@@ -47,6 +47,7 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+  ***/
+ 
 diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/channels/.chan_zap.moduleinfo asterisk-1.4.21.1.old/channels/.chan_zap.moduleinfo
 --- asterisk-1.4.21.1.new/channels/.chan_zap.moduleinfo	2008-06-30 18:24:08.000000000 +0200
 +++ asterisk-1.4.21.1.old/channels/.chan_zap.moduleinfo	2008-07-18 08:18:42.808831904 +0200
