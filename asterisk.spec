@@ -20,8 +20,8 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.4.21.1%{?with_bristuff:.bristuff}
-Release:	1
+Version:	1.4.21.1
+Release:	1%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -181,6 +181,9 @@ CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
 %configure \
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap="`pwd`"/imap
+
+# safe checks
+%{?with_bristuff:grep '^#define HAVE_GSMAT 1' include/asterisk/autoconfig.h || exit 1}
 
 cp -f .cleancount .lastclean
 
