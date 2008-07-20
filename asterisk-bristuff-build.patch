@@ -111,3 +111,29 @@ diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/menuselect-tree
  	.call = zt_call,
  	.hangup = zt_hangup,
  	.answer = zt_answer,
+--- asterisk/include/asterisk/channel.h~	2008-07-20 22:20:30.489834448 +0200
++++ asterisk/include/asterisk/channel.h	2008-07-20 22:24:21.859824471 +0200
+@@ -250,10 +250,8 @@
+ 	/*! \brief Display or transmit text */
+ 	int (* const send_text)(struct ast_channel *chan, const char *text);
+ 
+-#if 0 /* we (Debian) disable that addition because of ABI breakage */
+ 	/*! \brief send a message */
+ 	int (* const send_message)(struct ast_channel *chan, const char *dest, const char *text, int ispdu);
+-#endif
+ 
+ 	/*! \brief Display or send an image */
+ 	int (* const send_image)(struct ast_channel *chan, struct ast_frame *frame);
+--- asterisk/main/channel.c~	2008-07-20 22:20:30.489834448 +0200
++++ asterisk/main/channel.c	2008-07-20 22:25:38.689861614 +0200
+@@ -2496,10 +2496,8 @@
+ 	if (ast_test_flag(chan, AST_FLAG_ZOMBIE) || ast_check_hangup(chan))
+ 		return -1;
+ 	CHECK_BLOCKING(chan);
+-#if 0 /* we (Debian) disable that addition because of ABI breakage */
+ 	if (chan->tech->send_message)
+ 		res = chan->tech->send_message(chan, dest, text, ispdu);
+-#endif
+ 	ast_clear_flag(chan, AST_FLAG_BLOCKING);
+ 	return res;
+ }
