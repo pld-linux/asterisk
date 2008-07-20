@@ -21,7 +21,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.4.21.1
-Release:	1%{?with_bristuff:.bristuff}
+Release:	2%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -49,7 +49,8 @@ Patch12:	%{name}-chan_bluetooth.patch
 Patch13:	%{name}-zhone.patch
 # http://svn.debian.org/wsvn/pkg-voip/asterisk/trunk/debian/patches/bristuff
 Patch14:	%{name}-bristuff.patch
-Patch15:	%{name}-bristuff-libpri.patch
+Patch15:	%{name}-bristuff-build.patch
+Patch16:	%{name}-bristuff-libpri.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -161,6 +162,7 @@ cp %{SOURCE11} .
 %if %{with bristuff}
 %patch14 -p1
 %patch15 -p1
+%patch16 -p1
 %endif
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
