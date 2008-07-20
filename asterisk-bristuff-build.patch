@@ -1,0 +1,139 @@
+diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/build_tools/menuselect-deps.in asterisk-1.4.21.1.old/build_tools/menuselect-deps.in
+--- asterisk-1.4.21.1.new/build_tools/menuselect-deps.in	2008-05-06 00:10:05.000000000 +0200
++++ asterisk-1.4.21.1.old/build_tools/menuselect-deps.in	2008-07-18 08:18:42.813626657 +0200
+@@ -2,6 +2,7 @@
+ CURL=@PBX_CURL@
+ FREETDS=@PBX_FREETDS@
+ GSM=@PBX_GSM@
++GSMAT=@PBX_GSMAT@
+ GTK=@PBX_GTK@
+ GTK2=@PBX_GTK2@
+ H323=@PBX_H323@
+diff -ur asterisk-1.4.21.1.org/channels/chan_zap.c asterisk-1.4.21.1/channels/chan_zap.c
+--- asterisk-1.4.21.1/channels/chan_zap.c~	2008-07-18 21:56:54.854339111 +0200
++++ asterisk-1.4.21.1/channels/chan_zap.c	2008-07-18 22:02:00.487649563 +0200
+@@ -47,6 +47,7 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+  ***/
+ 
+diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/channels/.chan_zap.moduleinfo asterisk-1.4.21.1.old/channels/.chan_zap.moduleinfo
+--- asterisk-1.4.21.1.new/channels/.chan_zap.moduleinfo	2008-06-30 18:24:08.000000000 +0200
++++ asterisk-1.4.21.1.old/channels/.chan_zap.moduleinfo	2008-07-18 08:18:42.808831904 +0200
+@@ -4,5 +4,6 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+ </member>
+diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/channels/.moduleinfo asterisk-1.4.21.1.old/channels/.moduleinfo
+--- asterisk-1.4.21.1.new/channels/.moduleinfo	2008-06-30 18:24:08.000000000 +0200
++++ asterisk-1.4.21.1.old/channels/.moduleinfo	2008-07-18 08:18:42.808831904 +0200
+@@ -51,6 +51,7 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+ </member>
+ <member name="chan_vpb" displayname="Voicetronix API driver" remove_on_change="channels/chan_vpb.oo channels/chan_vpb.so">
+diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/configure.ac asterisk-1.4.21.1.old/configure.ac
+--- asterisk-1.4.21.1.new/configure.ac	2008-07-18 08:18:57.389246988 +0200
++++ asterisk-1.4.21.1.old/configure.ac	2008-07-18 08:18:42.806528869 +0200
+@@ -504,6 +504,8 @@
+    fi
+ fi
+ 
++AST_EXT_LIB_CHECK([GSMAT], [gsmat], [gsm_new_call], [libgsmat.h])
++
+ AST_EXT_LIB_CHECK([IKSEMEL], [iksemel], [iks_start_sasl], [iksemel.h])
+ 
+ if test "${PBX_IKSEMEL}" = 1; then
+diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/makeopts.in asterisk-1.4.21.1.old/makeopts.in
+--- asterisk-1.4.21.1.new/makeopts.in	2008-03-11 15:07:59.000000000 +0100
++++ asterisk-1.4.21.1.old/makeopts.in	2008-07-18 08:18:42.813626657 +0200
+@@ -83,6 +83,9 @@
+ GSM_INCLUDE=@GSM_INCLUDE@
+ GSM_LIB=@GSM_LIB@
+ 
++GSMAT_INCLUDE=@GSMAT_INCLUDE@
++GSMAT_LIB=@GSMAT_LIB@
++
+ GTK_INCLUDE=@GTK_INCLUDE@
+ GTK_LIB=@GTK_LIB@
+ 
+diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/menuselect-tree asterisk-1.4.21.1.old/menuselect-tree
+--- asterisk-1.4.21.1.new/menuselect-tree	2008-06-30 18:24:08.000000000 +0200
++++ asterisk-1.4.21.1.old/menuselect-tree	2008-07-18 08:18:42.813626657 +0200
+@@ -251,6 +251,7 @@
+ 	<depend>zaptel</depend>
+ 	<depend>tonezone</depend>
+ 	<depend>res_features</depend>
++	<depend>gsmat</depend>
+ 	<use>pri</use>
+ </member>
+ <member name="chan_vpb" displayname="Voicetronix API driver" remove_on_change="channels/chan_vpb.oo channels/chan_vpb.so">
+--- asterisk-1.4.21.1/configure.ac~	2008-07-20 18:07:54.188016698 +0200
++++ asterisk-1.4.21.1/configure.ac	2008-07-20 18:09:56.831337972 +0200
+@@ -178,7 +178,7 @@
+ AST_EXT_LIB_SETUP([CURSES], [curses], [curses])
+ AST_EXT_LIB_SETUP([GNUTLS], [GNU TLS support (used for iksemel only)], [gnutls])
+ AST_EXT_LIB_SETUP([GSM], [GSM], [gsm], [, or 'internal'])
+-AST_EXT_LIB_SETUP([GSMAT], [GSMAT], [GSM AT command signalling], [gsmat])
++AST_EXT_LIB_SETUP([GSMAT], [GSM AT command signalling], [gsmat])
+ AST_EXT_LIB_SETUP([IKSEMEL], [Iksemel Jabber Library], [iksemel])
+ AST_EXT_LIB_SETUP([IMAP_TK], [UW IMAP Toolkit], [imap])
+ AST_EXT_LIB_SETUP([ISDNNET], [ISDN4Linux Library], [isdnnet])
+--- asterisk/channels/chan_zap.c~	2008-07-20 18:15:39.464637514 +0200
++++ asterisk/channels/chan_zap.c	2008-07-20 21:38:13.280088092 +0200
+@@ -7573,7 +7573,7 @@
+ 			}
+ #endif
+ #ifdef HAVE_GSMAT
+-		if (conf->chan.sig == SIG_GSM) {
++		if (chan_sig == SIG_GSM) {
+ 		    struct zt_bufferinfo bi;
+ 		    ast_mutex_init(&tmp->gsm.lock);
+ 		    strncpy(tmp->gsm.pin, gsm_modem_pin, sizeof(tmp->gsm.pin) - 1);
+--- asterisk/channels/chan_zap.c~	2008-07-20 21:39:17.274665128 +0200
++++ asterisk/channels/chan_zap.c	2008-07-20 22:18:57.866822681 +0200
+@@ -743,9 +743,7 @@
+ 	.send_digit_begin = zt_digit_begin,
+ 	.send_digit_end = zt_digit_end,
+ 	.send_text = zt_sendtext,
+-#if 0 /* we (Debian) disable that addition because of ABI breakage */
+ 	.send_message = zt_sendmessage,
+-#endif
+ 	.call = zt_call,
+ 	.hangup = zt_hangup,
+ 	.answer = zt_answer,
+--- asterisk/include/asterisk/channel.h~	2008-07-20 22:20:30.489834448 +0200
++++ asterisk/include/asterisk/channel.h	2008-07-20 22:24:21.859824471 +0200
+@@ -250,10 +250,8 @@
+ 	/*! \brief Display or transmit text */
+ 	int (* const send_text)(struct ast_channel *chan, const char *text);
+ 
+-#if 0 /* we (Debian) disable that addition because of ABI breakage */
+ 	/*! \brief send a message */
+ 	int (* const send_message)(struct ast_channel *chan, const char *dest, const char *text, int ispdu);
+-#endif
+ 
+ 	/*! \brief Display or send an image */
+ 	int (* const send_image)(struct ast_channel *chan, struct ast_frame *frame);
+--- asterisk/main/channel.c~	2008-07-20 22:20:30.489834448 +0200
++++ asterisk/main/channel.c	2008-07-20 22:25:38.689861614 +0200
+@@ -2496,10 +2496,8 @@
+ 	if (ast_test_flag(chan, AST_FLAG_ZOMBIE) || ast_check_hangup(chan))
+ 		return -1;
+ 	CHECK_BLOCKING(chan);
+-#if 0 /* we (Debian) disable that addition because of ABI breakage */
+ 	if (chan->tech->send_message)
+ 		res = chan->tech->send_message(chan, dest, text, ispdu);
+-#endif
+ 	ast_clear_flag(chan, AST_FLAG_BLOCKING);
+ 	return res;
+ }
