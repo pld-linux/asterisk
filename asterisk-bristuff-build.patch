@@ -88,3 +88,14 @@ diff -ur -x '*.c' -x '*.orig' -x configure asterisk-1.4.21.1.new/menuselect-tree
  AST_EXT_LIB_SETUP([IKSEMEL], [Iksemel Jabber Library], [iksemel])
  AST_EXT_LIB_SETUP([IMAP_TK], [UW IMAP Toolkit], [imap])
  AST_EXT_LIB_SETUP([ISDNNET], [ISDN4Linux Library], [isdnnet])
+--- asterisk/channels/chan_zap.c~	2008-07-20 18:15:39.464637514 +0200
++++ asterisk/channels/chan_zap.c	2008-07-20 21:38:13.280088092 +0200
+@@ -7573,7 +7573,7 @@
+ 			}
+ #endif
+ #ifdef HAVE_GSMAT
+-		if (conf->chan.sig == SIG_GSM) {
++		if (chan_sig == SIG_GSM) {
+ 		    struct zt_bufferinfo bi;
+ 		    ast_mutex_init(&tmp->gsm.lock);
+ 		    strncpy(tmp->gsm.pin, gsm_modem_pin, sizeof(tmp->gsm.pin) - 1);
