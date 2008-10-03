@@ -20,12 +20,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.4.22
+Version:	1.6.0
 Release:	1%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	7626febc4a01e16e012dfccb9e4ab9d2
+# Source0-md5:	4031b05669be9d0556f52d88aa617803
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.6.tar.gz
@@ -251,6 +251,7 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/*.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/*.adsi
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/*.lua
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.ael
 %dir %{_libdir}/asterisk
 %dir %{_libdir}/asterisk/modules
@@ -264,27 +265,31 @@ fi
 /var/lib/asterisk/moh/fpm-sunshine.wav
 /var/lib/asterisk/moh/fpm-world-mix.wav
 %dir /var/lib/asterisk/sounds
-%dir /var/lib/asterisk/sounds/digits
-%dir /var/lib/asterisk/sounds/dictate
-%dir /var/lib/asterisk/sounds/followme
-%dir /var/lib/asterisk/sounds/letters
-%dir /var/lib/asterisk/sounds/phonetic
-%dir /var/lib/asterisk/sounds/silence
+%dir /var/lib/asterisk/sounds/en
+%dir /var/lib/asterisk/sounds/en/digits
+%dir /var/lib/asterisk/sounds/en/dictate
+%dir /var/lib/asterisk/sounds/en/followme
+%dir /var/lib/asterisk/sounds/en/letters
+%dir /var/lib/asterisk/sounds/en/phonetic
+%dir /var/lib/asterisk/sounds/en/silence
 /var/lib/asterisk/images/*.jpg
 /var/lib/asterisk/keys/*.pub
-/var/lib/asterisk/sounds/*.gsm
-/var/lib/asterisk/sounds/digits/*.gsm
-/var/lib/asterisk/sounds/dictate/*.gsm
-/var/lib/asterisk/sounds/followme/*.gsm
-/var/lib/asterisk/sounds/letters/*.gsm
-/var/lib/asterisk/sounds/phonetic/*.gsm
-/var/lib/asterisk/sounds/silence/*.gsm
+/var/lib/asterisk/phoneprov
+/var/lib/asterisk/sounds/en/*.gsm
+/var/lib/asterisk/sounds/en/digits/*.gsm
+/var/lib/asterisk/sounds/en/dictate/*.gsm
+/var/lib/asterisk/sounds/en/followme/*.gsm
+/var/lib/asterisk/sounds/en/letters/*.gsm
+/var/lib/asterisk/sounds/en/phonetic/*.gsm
+/var/lib/asterisk/sounds/en/silence/*.gsm
+/var/lib/asterisk/static-http
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
 #%%dir /var/spool/asterisk/vm
 %dir /var/spool/asterisk/voicemail
 %dir /var/spool/asterisk/voicemail/default
 %dir /var/spool/asterisk/voicemail/default/1234
+%dir /var/spool/asterisk/voicemail/default/1234/en
 %dir /var/log/asterisk
 %dir /var/log/asterisk/cdr-csv
 %{_mandir}/man8/asterisk.8*
@@ -301,8 +306,8 @@ fi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-sphinx-test
 %attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-test
 %attr(755,root,root) /var/lib/asterisk/agi-bin/jukebox.agi
-/var/spool/asterisk/voicemail/default/1234/busy.gsm
-/var/spool/asterisk/voicemail/default/1234/unavail.gsm
+/var/spool/asterisk/voicemail/default/1234/en/busy.gsm
+/var/spool/asterisk/voicemail/default/1234/en/unavail.gsm
 
 #%dir /var/lib/asterisk/agi-bin/*
 
