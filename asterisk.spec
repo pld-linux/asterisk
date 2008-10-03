@@ -20,12 +20,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.4.21.2
+Version:	1.4.22
 Release:	1%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	46881e1345eca21ea13a7d5b1036fa6e
+# Source0-md5:	7626febc4a01e16e012dfccb9e4ab9d2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.6.tar.gz
@@ -37,7 +37,6 @@ Patch0:		%{name}-m4.patch
 Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
-Patch8:		%{name}-awk.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
@@ -145,7 +144,6 @@ Pliki przykładowe dla centralki Asterisk.
 #%patch5 -p1
 #%patch6 -p1
 #%patch7 -p1
-%patch8 -p1
 #%patch9 -p1
 
 %if %{with rxfax}
