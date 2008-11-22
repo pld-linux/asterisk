@@ -1,0 +1,22 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -823,7 +823,7 @@ fi
+ 
+ AST_EXT_LIB_CHECK([POPT], [popt], [poptStrerror], [popt.h])
+ 
+-AST_EXT_LIB_CHECK([PRI], [pri], [pri_keypad_facility], [libpri.h])
++AST_EXT_LIB_CHECK([PRI], [pri-bristuff], [pri_keypad_facility], [bristuff/libpri.h])
+ 
+ if test "${USE_PWLIB}" != "no"; then
+ 	if test -n "${PWLIB_DIR}"; then
+--- a/channels/chan_zap.c
++++ b/channels/chan_zap.c
+@@ -71,7 +71,7 @@ ASTERISK_FILE_VERSION(__FILE__, "$Revisi
+ #include <zaptel/tonezone.h>
+ 
+ #ifdef HAVE_PRI
+-#include <libpri.h>
++#include <bristuff/libpri.h>
+ #endif
+ 
+ #include "asterisk/lock.h"
