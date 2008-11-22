@@ -50,6 +50,7 @@ Patch13:	%{name}-zhone.patch
 Patch14:	%{name}-bristuff.patch
 Patch15:	%{name}-bristuff-build.patch
 Patch16:	%{name}-bristuff-libpri.patch
+Patch17:	%{name}-r150557.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -135,7 +136,7 @@ Pliki przykładowe dla centralki Asterisk.
 %prep
 %setup -q -n %{name}-%{version}
 
-%{?with_zhone:sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c}
+%{?with_zhone:sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_dahdi.c}
 
 %patch0 -p0
 #%patch1 -p1
@@ -162,6 +163,7 @@ cp %{SOURCE11} .
 %patch15 -p1
 %patch16 -p1
 %endif
+%patch17 -p2
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
@@ -209,7 +211,7 @@ cp -f .cleancount .lastclean
 #%{__make} progdocs
 
 # safe checks
-%{?with_bristuff:objdump -p channels/chan_zap.so | grep -qE 'NEEDED +libgsmat\.so' || exit 1}
+%{?with_bristuff:objdump -p channels/chan_dahdi.so | grep -qE 'NEEDED +libgsmat\.so' || exit 1}
 
 %install
 rm -rf $RPM_BUILD_ROOT
