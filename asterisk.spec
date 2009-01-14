@@ -51,6 +51,9 @@ Patch14:	%{name}-bristuff.patch
 Patch15:	%{name}-bristuff-build.patch
 Patch16:	%{name}-bristuff-libpri.patch
 URL:		http://www.asterisk.org/
+# http://downloads.digium.com/pub/security/AST-2009-001.html
+# Upgrade to 1.6.0.3:
+BuildRequires:	security(CVE-2009-0041)
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
