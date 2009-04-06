@@ -57,6 +57,9 @@ BuildRequires:	security(CVE-2009-0041)
 # http://downloads.digium.com/pub/security/AST-2009-002.html
 # Upgrade to 1.6.0.6:
 BuildRequires:	security(CVE-2009-0871)
+#  http://downloads.digium.com/pub/security/AST-2009-003.html
+# Upgrade to 1.6.0.8:
+BuildRequires:	security(CVE-2008-3903)
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
