@@ -20,27 +20,27 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.6.0.1
-Release:	1%{?with_bristuff:.bristuff}
+Version:	1.6.1.0
+Release:	0.1%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
-Source0:	http://ftp.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	5277db1134f0dc736932279c6a25c29a
+Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	7e4dccc79c504ae497ff42062279905d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.13.tar.gz
+Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.13.tar.gz
 # Source3-md5:	65add705003e9aebdb4cd03bd1a26f97
-Source4: 	http://ftp.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
-# Source4-md5:	e523fc2b4ac524f45da7815e97780540
+Source4: 	http://downloads.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
+# Source4-md5:	1b29c55fe83ef119e69971f6fb51f30a
 Source5:	%{name}.logrotate
 Patch0:		%{name}-m4.patch
 Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
-# Source10-md5:	8c8fcb263b76897022b4c28052a7b439
+# Source10-md5:	ddf39744c43b01e1272a4a767a198129
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
-# Source11-md5:	ab6983b51c412883545b36993d704999
+# Source11-md5:	474376fb6c01ff9a47fdbc5d569bfba2
 # http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
 Patch11:	%{name}-fix-ptlib.patch
@@ -51,15 +51,8 @@ Patch14:	%{name}-bristuff.patch
 Patch15:	%{name}-bristuff-build.patch
 Patch16:	%{name}-bristuff-libpri.patch
 URL:		http://www.asterisk.org/
-# http://downloads.digium.com/pub/security/AST-2009-001.html
-# Upgrade to 1.6.0.3:
-BuildRequires:	security(CVE-2009-0041)
-# http://downloads.digium.com/pub/security/AST-2009-002.html
-# Upgrade to 1.6.0.6:
-BuildRequires:	security(CVE-2009-0871)
-#  http://downloads.digium.com/pub/security/AST-2009-003.html
-# Upgrade to 1.6.0.8:
-BuildRequires:	security(CVE-2008-3903)
+BuildRequires:	OSPToolkit
+BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
@@ -69,9 +62,16 @@ BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-static
+BuildRequires:	jack-audio-connection-kit-devel
+BuildRequires:	libogg-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
+BuildRequires:	net-snmp-devel
+BuildRequires:	newt-devel
+BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	popt-devel
+BuildRequires:	portaudio-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 %{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
@@ -81,6 +81,7 @@ BuildRequires:	zaptel-devel >= 1.2.10
 BuildRequires:	zlib-devel
 BuildRequires:	openh323-devel
 BuildRequires:	pwlib-devel
+BuildRequires:	sqlite3-devel
 %if %{with bristuff}
 BuildRequires:	libgsmat-devel
 BuildRequires:	libpri-bristuff-devel >= 1.2.4
@@ -146,7 +147,7 @@ Pliki przykładowe dla centralki Asterisk.
 
 %{?with_zhone:sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c}
 
-%patch0 -p0
+#%patch0 -p0
 #%patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
@@ -162,7 +163,7 @@ cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
 
-%patch11 -p1
+#%patch11 -p1
 
 %{?with_bluetooth:%patch12 -p1}
 %{?with_zhonehack:%patch13 -p1}
@@ -182,7 +183,7 @@ echo '-lssl -lpam' > imap/c-client/LDFLAGS
 %build
 rm -f pbx/.depend
 
-%{__aclocal}
+%{__aclocal} -I autoconf
 %{__autoheader}
 %{__autoconf}
 
