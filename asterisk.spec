@@ -21,7 +21,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.6.1.0
-Release:	0.1%{?with_bristuff:.bristuff}
+Release:	1%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -52,11 +52,14 @@ Patch15:	%{name}-bristuff-build.patch
 Patch16:	%{name}-bristuff-libpri.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit
+BuildRequires:	SDL_image-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 %{?with_bluetooth:BuildRequires: bluez-devel}
+BuildRequires:	curl-devel
+BuildRequires:	dahdi-tools-devel
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
@@ -64,6 +67,7 @@ BuildRequires:	iksemel-devel
 BuildRequires:	imap-static
 BuildRequires:	jack-audio-connection-kit-devel
 BuildRequires:	libogg-devel
+BuildRequires:	libvorbis-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	net-snmp-devel
@@ -77,11 +81,11 @@ BuildRequires:	sed >= 4.0
 %{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
 BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
-BuildRequires:	zaptel-devel >= 1.2.10
 BuildRequires:	zlib-devel
 BuildRequires:	openh323-devel
 BuildRequires:	pwlib-devel
 BuildRequires:	sqlite3-devel
+BuildRequires:	xorg-lib-libX11-devel
 %if %{with bristuff}
 BuildRequires:	libgsmat-devel
 BuildRequires:	libpri-bristuff-devel >= 1.2.4
