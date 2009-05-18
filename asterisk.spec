@@ -20,17 +20,17 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.4.22.1
+Version:	1.4.24.1
 Release:	1%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	00bfb39b63a614acb032cae0494de888
+# Source0-md5:	2b74744350f420b3a94d5323c489426f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Source3:	http://ftp.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.6.tar.gz
+Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.6.tar.gz
 # Source3-md5:	02e582b6c7de58e5eaba220229c0a71a
-Source4: 	http://ftp.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
+Source4: 	http://downloads.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
 # Source4-md5:	e523fc2b4ac524f45da7815e97780540
 Source5:	%{name}.logrotate
 Patch0:		%{name}-m4.patch
@@ -138,7 +138,7 @@ Pliki przykładowe dla centralki Asterisk.
 
 %{?with_zhone:sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_dahdi.c}
 
-%patch0 -p0
+#%patch0 -p0
 #%patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
@@ -154,7 +154,7 @@ cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
 
-%patch11 -p1
+#%patch11 -p1
 
 %{?with_bluetooth:%patch12 -p1}
 %{?with_zhonehack:%patch13 -p1}
@@ -163,7 +163,7 @@ cp %{SOURCE11} .
 %patch15 -p1
 %patch16 -p1
 %endif
-%patch17 -p2
+#%patch17 -p2
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
@@ -175,12 +175,14 @@ echo '-lssl -lpam' > imap/c-client/LDFLAGS
 %build
 rm -f pbx/.depend
 
-%{__aclocal}
+%{__aclocal} -I autoconf
 %{__autoheader}
 %{__autoconf}
 
 CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
 %configure \
+	--with-zaptel=%{_prefix} \
+	--without-dahdi \
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap="`pwd`"/imap
 
