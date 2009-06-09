@@ -16,12 +16,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.32
+Version:	1.2.33
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	1ba351401c911402cfcda48230fb8480
+# Source0-md5:	c062e237427b7ae587b76a252ce4c499
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
@@ -39,7 +39,9 @@ Patch8:		%{name}-awk.patch
 #Patch1:	%{name}-DESTDIR.patch
 #Patch2:	%{name}-Makefile2.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
+# Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
+# Source11-md5:	ab6983b51c412883545b36993d704999
 Patch10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch11:	%{name}-libprihack.patch
 Patch12:	%{name}-zaptel.h.patch
