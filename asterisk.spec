@@ -21,7 +21,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.6.1.1
-Release:	2%{?with_bristuff:.bristuff}
+Release:	3%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -33,14 +33,15 @@ Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/asterisk-core
 Source4: 	http://downloads.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
 # Source4-md5:	e523fc2b4ac524f45da7815e97780540
 Source5:	%{name}.logrotate
-Patch0:		%{name}-m4.patch
-Patch1:		%{name}-configure.patch
-Patch2:		%{name}-no_k6_on_sparc.patch
-Patch3:		%{name}-lib.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
 # Source11-md5:	ab6983b51c412883545b36993d704999
+Patch0:		%{name}-m4.patch
+Patch1:		%{name}-configure.patch
+Patch2:		%{name}-no_k6_on_sparc.patch
+Patch3:		%{name}-lib.patch
+Patch4:		%{name}-ppc.patch
 # http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
 Patch11:	%{name}-fix-ptlib.patch
@@ -155,6 +156,7 @@ Pliki przykładowe dla centralki Asterisk.
 #%patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
+%patch4 -p1
 #%patch5 -p1
 #%patch6 -p1
 #%patch7 -p1
