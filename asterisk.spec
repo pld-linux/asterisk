@@ -16,12 +16,12 @@
 Summary:	Asterisk PBX
 Summary(pl):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.2.33
+Version:	1.2.34
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	c062e237427b7ae587b76a252ce4c499
+# Source0-md5:	407d0313e16f3806a79ad14fb613699f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 #Patch0:	%{name}-openh323-makefile.patch
@@ -47,6 +47,7 @@ Patch11:	%{name}-libprihack.patch
 Patch12:	%{name}-zaptel.h.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	bison
+BuildRequires:	curl-devel
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 BuildRequires:	libpri-devel >= 1.2.4
@@ -213,9 +214,7 @@ fi
 %dir /var/lib/asterisk/images
 %dir /var/lib/asterisk/keys
 %dir /var/lib/asterisk/mohmp3
-/var/lib/asterisk/mohmp3/fpm-calm-river.mp3
-/var/lib/asterisk/mohmp3/fpm-sunshine.mp3
-/var/lib/asterisk/mohmp3/fpm-world-mix.mp3
+/var/lib/asterisk/mohmp3/*.mp3
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
 %dir /var/lib/asterisk/sounds/dictate
