@@ -9,8 +9,8 @@
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx :-D) fax
 %bcond_with	bluetooth	# without bluetooth support (NFT)
-%bcond_with	zhone 		# zhone hack
-%bcond_with	zhone_hack 	# huge hack workarounding broken zhone channel banks which start randomly
+%bcond_with	zhone		# zhone hack
+%bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
 %bcond_with	verbose		# verbose build
@@ -28,9 +28,9 @@ Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.ta
 # Source0-md5:	e40cc69fb53e1cad9f30d1d533383efd
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.13.tar.gz
+Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/%{name}-core-sounds-en-gsm-1.4.13.tar.gz
 # Source3-md5:	65add705003e9aebdb4cd03bd1a26f97
-Source4: 	http://downloads.digium.com/pub/telephony/sounds/asterisk-moh-freeplay-wav.tar.gz
+Source4:	http://downloads.digium.com/pub/telephony/sounds/%{name}-moh-freeplay-wav.tar.gz
 # Source4-md5:	e523fc2b4ac524f45da7815e97780540
 Source5:	%{name}.logrotate
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
@@ -60,38 +60,49 @@ BuildRequires:	automake
 BuildRequires:	bison
 %{?with_bluetooth:BuildRequires: bluez-devel}
 BuildRequires:	curl-devel
+BuildRequires:	dahdi-linux-devel
 BuildRequires:	dahdi-tools-devel
-BuildRequires:	freetds >= 0.63
+BuildRequires:	freetds-devel >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
+BuildRequires:	gmime22-devel
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-static
 BuildRequires:	jack-audio-connection-kit-devel
+BuildRequires:	libcap-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel
+BuildRequires:	mISDNuser-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
+BuildRequires:	openais-devel
+BuildRequires:	openh323-devel
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	pam-devel
+BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 BuildRequires:	portaudio-devel
+BuildRequires:	postgresql-devel
+BuildRequires:	pwlib-devel
+BuildRequires:	radiusclient-ng-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
+BuildRequires:	spandsp-devel
 %{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
 BuildRequires:	speex-devel
-BuildRequires:	unixODBC-devel
-BuildRequires:	zlib-devel
-BuildRequires:	openh323-devel
-BuildRequires:	pwlib-devel
+BuildRequires:	sqlite-devel
 BuildRequires:	sqlite3-devel
+BuildRequires:	unixODBC-devel
 BuildRequires:	xorg-lib-libX11-devel
+BuildRequires:	zlib-devel
 %if %{with bristuff}
 BuildRequires:	libgsmat-devel
 BuildRequires:	libpri-bristuff-devel >= 1.2.4
 %else
-BuildRequires:  libpri-devel >= 1.2.4
+BuildRequires:	libpri-devel >= 1.2.4
 %endif
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
@@ -148,7 +159,7 @@ Example files for the Asterisk PBX.
 Pliki przykładowe dla centralki Asterisk.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 
 %{?with_zhone:sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c}
 
@@ -193,7 +204,8 @@ rm -f pbx/.depend
 %{__autoheader}
 %{__autoconf}
 
-CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
+export CPPFLAGS="%{rpmcppflags} -I/usr/include/openh323"
+export WGET="/bin/true"
 %configure \
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap="`pwd`"/imap
