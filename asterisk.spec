@@ -16,16 +16,16 @@
 %bcond_with	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	3
+%define		rel	0.1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.6.1.9
+Version:	1.6.1.12
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	e40cc69fb53e1cad9f30d1d533383efd
+# Source0-md5:	d6bc1448b8fa274a2acaef1b15f4d485
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/%{name}-core-sounds-en-gsm-1.4.13.tar.gz
@@ -256,15 +256,15 @@ install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 
 # unpackaged at this point
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/moh/.asterisk-moh-opsound-wav
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/moh/CHANGES-asterisk-moh-opsound-wav
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/moh/CREDITS-asterisk-moh-opsound-wav
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/moh/LICENSE-asterisk-moh-opsound-wav
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/.asterisk-core-sounds-en-gsm-1.4.15
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/CHANGES-asterisk-core-en-1.4.15
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/CREDITS-asterisk-core-en-1.4.15
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/LICENSE-asterisk-core-en-1.4.15
-rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/core-sounds-en.txt
+rm $RPM_BUILD_ROOT/var/lib/asterisk/moh/.asterisk-moh-opsound-wav
+rm $RPM_BUILD_ROOT/var/lib/asterisk/moh/CHANGES-asterisk-moh-opsound-wav
+rm $RPM_BUILD_ROOT/var/lib/asterisk/moh/CREDITS-asterisk-moh-opsound-wav
+rm $RPM_BUILD_ROOT/var/lib/asterisk/moh/LICENSE-asterisk-moh-opsound-wav
+rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/.asterisk-core-sounds-en-gsm-1.4.16
+rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/CHANGES-asterisk-core-en-1.4.16
+rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/core-sounds-en.txt
+rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/CREDITS-asterisk-core-en-1.4.16
+rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/LICENSE-asterisk-core-en-1.4.16
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -294,7 +294,15 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.ael
 %dir %{_libdir}/asterisk
 %dir %{_libdir}/asterisk/modules
-%attr(755,root,root) %{_libdir}/asterisk/modules/*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/cdr_*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/pbx_*.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_*.so
+
 %dir /var/lib/asterisk
 %dir /var/lib/asterisk/agi-bin
 %dir /var/lib/asterisk/images
@@ -322,7 +330,6 @@ fi
 /var/lib/asterisk/static-http
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
-#%%dir /var/spool/asterisk/vm
 %dir /var/spool/asterisk/voicemail
 %dir /var/spool/asterisk/voicemail/default
 %dir /var/spool/asterisk/voicemail/default/1234
@@ -335,7 +342,7 @@ fi
 %{_mandir}/man8/safe_asterisk.8*
 %dir /var/lib/asterisk/firmware
 %dir /var/lib/asterisk/firmware/iax
-/var/lib/asterisk/firmware/iax/iaxy.bin
+#/var/lib/asterisk/firmware/iax/iaxy.bin
 
 %files examples
 %defattr(644,root,root,755)
@@ -345,8 +352,6 @@ fi
 %attr(755,root,root) /var/lib/asterisk/agi-bin/jukebox.agi
 /var/spool/asterisk/voicemail/default/1234/en/busy.gsm
 /var/spool/asterisk/voicemail/default/1234/en/unavail.gsm
-
-#%dir /var/lib/asterisk/agi-bin/*
 
 %files devel
 %defattr(644,root,root,755)
