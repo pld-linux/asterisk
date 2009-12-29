@@ -1,9 +1,9 @@
---- asterisk-1.2.0/channels/Makefile.orig	2005-11-21 13:47:31.000000000 +0100
-+++ asterisk-1.2.0/channels/Makefile	2005-11-21 13:49:38.000000000 +0100
-@@ -31,8 +31,8 @@
+--- asterisk-1.6.1.12/channels/Makefile~	2009-07-21 16:48:38.000000000 +0300
++++ asterisk-1.6.1.12/channels/Makefile	2009-12-29 20:52:01.351345246 +0200
+@@ -21,8 +21,8 @@
  endif
  
- ifeq (${OSARCH},Linux)
+ ifeq ($(OSARCH),linux-gnu)
 -  PTLIB=-lpt_linux_x86_r
 -  H323LIB=-lh323_linux_x86_r
 +  PTLIB=-lpt

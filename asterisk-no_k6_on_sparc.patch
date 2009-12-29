@@ -1,34 +1,20 @@
---- asterisk-1.2.0/codecs/gsm/Makefile.orig	2005-11-21 13:34:00.000000000 +0100
-+++ asterisk-1.2.0/codecs/gsm/Makefile	2005-11-21 13:40:02.000000000 +0100
-@@ -235,6 +235,7 @@
- ifneq ($(shell uname -m),alpha)
- ifneq ($(shell uname -m),armv4l)
- ifneq ($(shell uname -m),sparc64)
-+ifneq ($(shell uname -m),sparc)
- ifneq (${PROC},arm)
+--- asterisk-1.6.1.12/codecs/gsm/Makefile~	2009-12-29 20:48:57.000000000 +0200
++++ asterisk-1.6.1.12/codecs/gsm/Makefile	2009-12-29 20:49:58.084691177 +0200
+@@ -208,7 +208,7 @@
+ # XXX Keep a space after each findstring argument
+ # XXX should merge with GSM_OBJECTS
+ ifeq ($(OSARCH),linux-gnu)
+-ifeq (,$(findstring $(shell uname -m) , x86_64 amd64 ppc ppc64 alpha armv4l sparc64 parisc s390 ))
++ifeq (,$(findstring $(shell uname -m) , x86_64 amd64 ppc ppc64 alpha armv4l sparc64 sparc parisc s390 ))
+ ifeq (,$(findstring $(PROC) , arm armv5b armeb powerpc ia64 s390 bfin mipsel mips ))
  GSM_SOURCES+= $(SRC)/k6opt.s
  endif
-@@ -245,6 +246,7 @@
- endif
- endif
- endif
-+endif
+@@ -261,7 +261,7 @@
+ 		$(SRC)/table.o
  
- TOAST_SOURCES = $(SRC)/toast.c 		\
- 		$(SRC)/toast_lin.c	\
-@@ -296,6 +298,7 @@
- ifneq ($(shell uname -m), ppc64)
- ifneq ($(shell uname -m), alpha)
- ifneq ($(shell uname -m), sparc64)
-+ifneq ($(shell uname -m), sparc)
- ifneq ($(shell uname -m), armv4l)
+ ifeq ($(OSARCH),linux-gnu)
+-ifeq (,$(findstring $(shell uname -m) , x86_64 amd64 ppc ppc64 alpha armv4l sparc64 parisc ))
++ifeq (,$(findstring $(shell uname -m) , x86_64 amd64 ppc ppc64 alpha armv4l sparc64 sparc parisc ))
+ ifeq (,$(findstring $(PROC) , arm armv5b armeb powerpc ia64 bfin mipsel mips ))
  GSM_OBJECTS+= $(SRC)/k6opt.o
  endif
-@@ -305,6 +308,7 @@
- endif
- endif
- endif
-+endif
- 
- TOAST_OBJECTS =	$(SRC)/toast.o 		\
- 		$(SRC)/toast_lin.o	\
