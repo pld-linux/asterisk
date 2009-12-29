@@ -14,14 +14,14 @@
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
 %bcond_with	verbose		# verbose build
-#
-%define _spandsp_version 0.0.2pre26
-#
+
+%define		spandsp_version 0.0.2pre26
+%define		rel	3
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	1.6.1.9
-Release:	3%{?with_bristuff:.bristuff}
+Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -33,16 +33,16 @@ Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/%{name}-core-
 Source4:	http://downloads.digium.com/pub/telephony/sounds/%{name}-moh-freeplay-wav.tar.gz
 # Source4-md5:	e523fc2b4ac524f45da7815e97780540
 Source5:	%{name}.logrotate
-Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
+Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_txfax.c
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
-Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
+Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_rxfax.c
 # Source11-md5:	ab6983b51c412883545b36993d704999
 Patch0:		%{name}-m4.patch
 Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Patch4:		%{name}-ppc.patch
-# http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
+# http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
 Patch11:	%{name}-fix-ptlib.patch
 Patch12:	%{name}-chan_bluetooth.patch
@@ -91,7 +91,7 @@ BuildRequires:	radiusclient-ng-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
 BuildRequires:	spandsp-devel
-%{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
+%{?with_rxfax:BuildRequires:	spandsp-devel-%{spandsp_version}}
 BuildRequires:	speex-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	sqlite3-devel
@@ -226,7 +226,7 @@ cp -f .cleancount .lastclean
 	OPTIMIZE="%{rpmcflags}" \
 	CHANNEL_LIBS+=chan_bluetooth.so || :
 
-# rerun needed; asterisk want's that
+# rerun needed; asterisk wants that
 %{__make} -j1 \
 	%{?with_verbose:NOISY_BUILD=yes} \
 	CC="%{__cc}" \
@@ -254,6 +254,17 @@ install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+
+# unpackaged at this point
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/moh/.asterisk-moh-opsound-wav
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/moh/CHANGES-asterisk-moh-opsound-wav
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/moh/CREDITS-asterisk-moh-opsound-wav
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/moh/LICENSE-asterisk-moh-opsound-wav
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/.asterisk-core-sounds-en-gsm-1.4.15
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/CHANGES-asterisk-core-en-1.4.15
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/CREDITS-asterisk-core-en-1.4.15
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/LICENSE-asterisk-core-en-1.4.15
+rm -f $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/core-sounds-en.txt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
