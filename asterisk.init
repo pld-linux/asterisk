@@ -30,7 +30,7 @@
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
-		msg_network_down Asterisk
+		msg_network_down "Asterisk"
 		exit 1
 	fi
 else
@@ -39,25 +39,27 @@ fi
 
 start() {
 	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/asterisk ]; then
-		msg_starting Asterisk
-		daemon $SERVICE_RUN_NICE_LEVEL asterisk $ASTERISK_OPTS
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
-	else
-		msg_already_running Asterisk
+	if [ -f /var/lock/subsys/asterisk ]; then
+		msg_already_running "Asterisk"
+		return
 	fi
+
+	msg_starting "Asterisk"
+	daemon /usr/sbin/asterisk $ASTERISK_OPTS
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
 }
 
 stop() {
 	# Stop daemons.
-	if [ -f /var/lock/subsys/asterisk ]; then
-		msg_stopping Asterisk
-		killproc asterisk
-		rm -f /var/lock/subsys/asterisk >/dev/null 2>&1
-	else
-		msg_not_running Asterisk
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		msg_not_running "Asterisk"
+		return
 	fi
+
+	msg_stopping "Asterisk"
+	killproc asterisk
+	rm -f /var/lock/subsys/asterisk >/dev/null 2>&1
 }
 
 RETVAL=0
@@ -75,19 +77,19 @@ case "$1" in
 	;;
   reload)
 	if [ -f /var/lock/subsys/asterisk ]; then
-		msg_reloading Asterisk
+		msg_reloading "Asterisk"
 		busy
-		asterisk -rx reload > /dev/null 2>&1
+		/usr/sbin/asterisk -rx reload > /dev/null 2>&1
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
 		ok
 	else
-		msg_not_running Asterisk
+		msg_not_running "Asterisk"
 		exit 1
 	fi
 	;;
   logger-reload)
-        asterisk -rx 'logger reload'
+        /usr/sbin/asterisk -rx "logger reload"
         ;;
   status)
 	status asterisk
