@@ -6,6 +6,8 @@
 # - fix bluetooth patch
 # - package commandline tools (aelparse etc.)
 # - system mxml
+# - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
+# - openh323 is missing regardless of BR, see http://pld.pastebin.com/f7f84c312
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx :-D) fax
@@ -17,7 +19,7 @@
 %bcond_with	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.3
+%define		rel	0.4
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -38,8 +40,6 @@ Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/as
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_rxfax.c
 # Source11-md5:	ab6983b51c412883545b36993d704999
-Patch0:		%{name}-m4.patch
-Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Patch4:		%{name}-ppc.patch
@@ -48,7 +48,6 @@ Patch6:		pkg-config-gmime.patch
 Patch7:		FHS-paths.patch
 # http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
-Patch11:	%{name}-fix-ptlib.patch
 Patch12:	%{name}-chan_bluetooth.patch
 Patch13:	%{name}-zhone.patch
 # http://svn.debian.org/wsvn/pkg-voip/asterisk/trunk/debian/patches/bristuff
@@ -74,6 +73,7 @@ BuildRequires:	iksemel-devel
 BuildRequires:	imap-devel
 BuildRequires:	jack-audio-connection-kit-devel
 BuildRequires:	libcap-devel
+BuildRequires:	libedit-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	mISDNuser-devel
@@ -110,8 +110,6 @@ BuildRequires:	libpri-devel >= 1.2.4
 %endif
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
-%requires_eq	openh323
-%requires_eq	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -164,17 +162,16 @@ Pliki przykładowe dla centralki Asterisk.
 
 %prep
 %setup -q
-
-%{?with_zhone:sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c}
-
-#%patch0 -p0
-#%patch1 -p1
-#%patch2 -p1
-#%patch3 -p1
+%patch2 -p1
+%patch3 -p1
 %patch4 -p1
 %patch5 -p0
 %patch6 -p0
 %patch7 -p0
+
+%if %{with zhone}
+sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c
+%endif
 
 %if %{with rxfax}
 cd apps
@@ -183,26 +180,17 @@ cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
 
-#%patch11 -p1
-
 %{?with_bluetooth:%patch12 -p1}
 %{?with_zhonehack:%patch13 -p1}
+
 %if %{with bristuff}
 %patch14 -p1
 %patch15 -p1
 %patch16 -p1
 %endif
 
-sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
-
-%if 0
-mkdir -p imap/c-client
-ln -s %{_libdir}/libc-client.a imap/c-client/c-client.a
-ln -s %{_includedir}/imap/* imap/c-client/
-echo '-lssl -lpam' > imap/c-client/LDFLAGS
-%else
+# avoid using it
 rm -rf imap
-%endif
 
 %build
 rm -f pbx/.depend
