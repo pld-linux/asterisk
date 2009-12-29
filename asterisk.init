@@ -62,6 +62,35 @@ stop() {
 	rm -f /var/lock/subsys/asterisk >/dev/null 2>&1
 }
 
+condrestart() {
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		msg_not_running "Asterisk"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
+reload() {
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		RETVAL=1
+		msg_not_running "Asterisk"
+		return
+	fi
+
+	msg_reloading "Asterisk"; busy
+	/usr/sbin/asterisk -rx reload > /dev/null 2>&1
+	RETVAL=$?
+	if [ $RETVAL -eq 0 ]; then
+	   	touch /var/lock/subsys/asterisk
+		ok
+	else
+		fail
+	fi
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
@@ -71,32 +100,25 @@ case "$1" in
   stop)
   	stop
 	;;
-  restart|force-reload)
+  restart)
 	stop
 	start
 	;;
-  reload)
-	if [ -f /var/lock/subsys/asterisk ]; then
-		msg_reloading "Asterisk"
-		busy
-		/usr/sbin/asterisk -rx reload > /dev/null 2>&1
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
-		ok
-	else
-		msg_not_running "Asterisk"
-		exit 1
-	fi
+  try-restart)
+	condrestart 0
+	;;
+  reload|force-reload)
+  	reload
 	;;
   logger-reload)
-        /usr/sbin/asterisk -rx "logger reload"
-        ;;
+	/usr/sbin/asterisk -rx "logger reload"
+	;;
   status)
 	status asterisk
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|logger-reload|status}"
 	exit 3
 esac
 
