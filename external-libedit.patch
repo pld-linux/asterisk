@@ -1,0 +1,115 @@
+Index: build_tools/menuselect-deps.in
+===================================================================
+--- build_tools/menuselect-deps.in	(revision 226061)
++++ build_tools/menuselect-deps.in	(working copy)
+@@ -17,6 +17,7 @@
+ IXJUSER=@PBX_IXJUSER@
+ JACK=@PBX_JACK@
+ LDAP=@PBX_LDAP@
++LIBEDIT=@PBX_LIBEDIT@
+ LTDL=@PBX_LTDL@
+ LUA=@PBX_LUA@
+ MISDN=@PBX_MISDN@
+Index: configure.ac
+===================================================================
+--- configure.ac	(revision 226061)
++++ configure.ac	(working copy)
+@@ -232,6 +232,7 @@
+ AST_EXT_LIB_SETUP([ISDNNET], [ISDN4Linux Library], [isdnnet])
+ AST_EXT_LIB_SETUP([JACK], [Jack Audio Connection Kit], [jack])
+ AST_EXT_LIB_SETUP([LDAP], [OpenLDAP], [ldap])
++AST_EXT_LIB_SETUP([LIBEDIT], [NetBSD Editline library], [libedit])
+ AST_EXT_LIB_SETUP([LTDL], [libtool], [ltdl])
+ AST_EXT_LIB_SETUP([LUA], [Lua], [lua])
+ AST_EXT_LIB_SETUP([MISDN], [mISDN User Library], [misdn])
+@@ -1593,6 +1594,27 @@
+ AST_EXT_LIB_CHECK([SDL_IMAGE], [SDL_image], [IMG_Load], [SDL_image.h], [${SDL_LIB}], [${SDL_INCLUDE}])
+ AST_EXT_LIB_CHECK([FFMPEG], [avcodec], [sws_getContext], [ffmpeg/avcodec.h], [-lpthread -lz -lm])
+ 
++PBX_LIBEDIT=0
++LIBEDIT_INCLUDE=-Ieditline/readline
++LIBEDIT_LIB=
++LIBEDIT_OBJ=editline/libedit.a
++if test  "${USE_LIBEDIT}" != "no"; then
++   AC_CHECK_TOOL(PKGCONFIG, pkg-config, no)
++   if test "${PKGCONFIG}" != "no"; then
++      if ${PKGCONFIG} --exists libedit; then
++         LIBEDIT_INCLUDE=$(${PKGCONFIG} libedit --cflags)
++         LIBEDIT_LIB=$(${PKGCONFIG} libedit --libs)
++         LIBEDIT_OBJ=
++         PBX_LIBEDIT=1
++         AC_DEFINE([HAVE_LIBEDIT], 1, [Define if your system has the NetBSD Editline libraries.])
++      fi
++   fi
++fi
++AC_SUBST(PBX_LIBEDIT)
++AC_SUBST(LIBEDIT_INCLUDE)
++AC_SUBST(LIBEDIT_LIB)
++AC_SUBST(LIBEDIT_OBJ)
++
+ # possible places for video4linux version 1
+ AC_CHECK_HEADER([linux/videodev.h],
+ 	[AC_DEFINE_UNQUOTED([HAVE_VIDEODEV_H], 1, [Define to 1 if your system has linux/videodev.h.])])
+Index: main/Makefile
+===================================================================
+--- main/Makefile	(revision 226061)
++++ main/Makefile	(working copy)
+@@ -129,6 +129,8 @@
+ 	$(CC) -g -o testexpr2 ast_expr2f.o ast_expr2.o -lm
+ 	rm ast_expr2.o ast_expr2f.o 
+ 
++cli.o: ASTCFLAGS+=$(LIBEDIT_INCLUDE)
++
+ ifneq ($(findstring ENABLE_UPLOADS,$(MENUSELECT_CFLAGS)),)
+ http.o: _ASTCFLAGS+=$(GMIME_INCLUDE)
+ endif
+@@ -161,13 +163,13 @@
+ GMIMELDFLAGS+=$(GMIME_LIB)
+ endif
+ 
+-$(MAIN_TGT): $(OBJS) editline/libedit.a db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS)
++$(MAIN_TGT): $(OBJS) $(LIBEDIT_OBJ) db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS)
+ 	@$(CC) -c -o buildinfo.o $(_ASTCFLAGS) buildinfo.c $(ASTCFLAGS)
+ 	$(ECHO_PREFIX) echo "   [LD] $^ -> $@"
+ ifneq ($(findstring chan_h323,$(MENUSELECT_CHANNELS)),)
+-	$(CMD_PREFIX) $(CC) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(ASTLDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(GMIMELDFLAGS)
++	$(CMD_PREFIX) $(CC) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(ASTLDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(GMIMELDFLAGS) $(LIBEDIT_LIB)
+ else
+-	$(CMD_PREFIX) $(CXX) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(ASTLDFLAGS) $(H323LDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(H323LDLIBS) $(GMIMELDFLAGS)
++	$(CMD_PREFIX) $(CXX) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(ASTLDFLAGS) $(H323LDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(H323LDLIBS) $(GMIMELDFLAGS) $(LIBEDIT_LIB)
+ endif
+ 	$(CMD_PREFIX) $(ASTTOPDIR)/build_tools/strip_nonapi $@ || rm $@
+ 
+Index: main/cli.c
+===================================================================
+--- main/cli.c	(revision 226061)
++++ main/cli.c	(working copy)
+@@ -34,6 +34,8 @@
+ #include <ctype.h>
+ #include <regex.h>
+ 
++#include <readline.h>
++
+ #include "asterisk/cli.h"
+ #include "asterisk/linkedlists.h"
+ #include "asterisk/module.h"
+@@ -42,7 +44,6 @@
+ #include "asterisk/utils.h"
+ #include "asterisk/app.h"
+ #include "asterisk/lock.h"
+-#include "editline/readline/readline.h"
+ #include "asterisk/threadstorage.h"
+ 
+ /*!
+Index: makeopts.in
+===================================================================
+--- makeopts.in	(revision 226061)
++++ makeopts.in	(working copy)
+@@ -246,3 +246,7 @@
+ 
+ # if poll is not present, let the makefile know.
+ POLL_AVAILABLE=@HAS_POLL@
++
++LIBEDIT_INCLUDE=@LIBEDIT_INCLUDE@
++LIBEDIT_LIB=@LIBEDIT_LIB@
++LIBEDIT_OBJ=@LIBEDIT_OBJ@

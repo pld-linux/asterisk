@@ -5,6 +5,7 @@
 # - CFLAGS passing
 # - fix bluetooth patch
 # - package commandline tools (aelparse etc.)
+# - system mxml
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx :-D) fax
@@ -16,7 +17,7 @@
 %bcond_with	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.1
+%define		rel	0.3
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -42,6 +43,9 @@ Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Patch4:		%{name}-ppc.patch
+Patch5:		external-libedit.patch
+Patch6:		pkg-config-gmime.patch
+Patch7:		FHS-paths.patch
 # http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
 Patch11:	%{name}-fix-ptlib.patch
@@ -67,7 +71,7 @@ BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	gmime22-devel
 BuildRequires:	iksemel-devel
-BuildRequires:	imap-static
+BuildRequires:	imap-devel
 BuildRequires:	jack-audio-connection-kit-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libogg-devel
@@ -168,10 +172,9 @@ Pliki przykładowe dla centralki Asterisk.
 #%patch2 -p1
 #%patch3 -p1
 %patch4 -p1
-#%patch5 -p1
-#%patch6 -p1
-#%patch7 -p1
-#%patch9 -p1
+%patch5 -p0
+%patch6 -p0
+%patch7 -p0
 
 %if %{with rxfax}
 cd apps
@@ -192,10 +195,14 @@ cp %{SOURCE11} .
 
 sed -i -e "s#/usr/lib/#/usr/%{_lib}/#g#" Makefile
 
+%if 0
 mkdir -p imap/c-client
 ln -s %{_libdir}/libc-client.a imap/c-client/c-client.a
 ln -s %{_includedir}/imap/* imap/c-client/
 echo '-lssl -lpam' > imap/c-client/LDFLAGS
+%else
+rm -rf imap
+%endif
 
 %build
 rm -f pbx/.depend
@@ -206,9 +213,28 @@ rm -f pbx/.depend
 
 export CPPFLAGS="%{rpmcppflags} -I/usr/include/openh323"
 export WGET="/bin/true"
+
+# be sure to invoke ./configure with our flags
+cd menuselect/mxml
+%configure2_13
+cd ../../
+
+cd menuselect
+%{__aclocal}
+%{__autoheader}
+%{__autoconf}
+%configure
+cd ..
+
+cd main/editline
+%configure2_13
+cd ../..
+
 %configure \
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
-	--with-imap="`pwd`"/imap
+	--with-imap=system \
+	--with-gsm=/usr \
+	--with-libedit=yes
 
 # safe checks
 %{?with_bristuff:grep '^#define HAVE_GSMAT 1' include/asterisk/autoconfig.h || exit 1}
