@@ -16,7 +16,7 @@
 #   /usr/lib64/asterisk/modules/cdr_sqlite.so
 #   /usr/lib64/asterisk/modules/format_ilbc.so
 #   /usr/lib64/asterisk/modules/res_config_sqlite.so
-# - package for moh sound files
+# - make package for moh sound files
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -28,7 +28,7 @@
 %bcond_with	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.11
+%define		rel	0.17
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -624,12 +624,16 @@ install -D -p doc/digium-mib.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs/DIGIUM-MIB
 # create some directories that need to be packaged
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/moh
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/sounds
+install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/licenses
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/asterisk
 install -d $RPM_BUILD_ROOT%{_localstatedir}/log/asterisk/cdr-custom
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/festival
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/monitor
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/outgoing
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/uploads
+
+# upstream prebuilt binaries (register, benchg729) use /var location
+ln -s %{_datadir}/asterisk/licenses $RPM_BUILD_ROOT%{_localstatedir}/lib/asterisk
 
 # We're not going to package any of the sample AGI scripts
 rm -f $RPM_BUILD_ROOT%{_datadir}/asterisk/agi-bin/*
@@ -657,8 +661,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun
 if [ "$1" = 0 ]; then
-	%groupremove asterisk
 	%userremove asterisk
+	%groupremove asterisk
 fi
 
 %pre dahdi
@@ -677,6 +681,13 @@ if [ "$1" = "0" ]; then
 	%service asterisk stop
 	/sbin/chkconfig --del asterisk
 fi
+
+%triggerpostun -- %{name} < 1.6.1.12-0.1
+# chown to asterisk previously root owned files
+# loose one (not one that cames from rpm), as we're not trying to split the
+# hair with file permission bits.
+chown -R asterisk:asterisk /var/spool/asterisk
+chown -R asterisk:asterisk /var/lib/asterisk
 
 %files
 %defattr(644,root,root,755)
@@ -913,13 +924,16 @@ fi
 %dir %{_datadir}/asterisk/images
 %dir %{_datadir}/asterisk/moh
 %dir %{_datadir}/asterisk/sounds
+%dir %attr(750,root,asterisk) %{_datadir}/asterisk/licenses
 %dir %attr(750,root,asterisk) %{_datadir}/asterisk/keys
+# no need to protect publicly downloaded and packaged .pub
 %{_datadir}/asterisk/keys/*.pub
 %{_datadir}/asterisk/images/*.jpg
 %{_datadir}/asterisk/static-http
 %{_datadir}/asterisk/phoneprov
 
 %attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
+%{_localstatedir}/lib/asterisk/licenses
 
 %attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk
 %attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk/cdr-csv
