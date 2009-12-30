@@ -25,7 +25,7 @@
 %bcond_with	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.6
+%define		rel	0.7
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -37,10 +37,6 @@ Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.ta
 # Source0-md5:	d6bc1448b8fa274a2acaef1b15f4d485
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
-Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/%{name}-core-sounds-en-gsm-1.4.13.tar.gz
-# Source3-md5:	65add705003e9aebdb4cd03bd1a26f97
-Source4:	http://downloads.digium.com/pub/telephony/
-# Source4-md5:	e523fc2b4ac524f45da7815e97780540
 Source5:	%{name}.logrotate
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_txfax.c
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
@@ -177,18 +173,6 @@ Group:		Documentation
 
 %description apidocs
 API documentation for Asterisk.
-
-%package examples
-Summary:	Example files for the Asterisk PBX
-Summary(pl.UTF-8):	Pliki przykładowe dla centralki Asterisk
-Group:		Applications/System
-Requires:	%{name} = %{version}-%{release}
-
-%description examples
-Example files for the Asterisk PBX.
-
-%description examples -l pl.UTF-8
-Pliki przykładowe dla centralki Asterisk.
 
 %package ais
 Summary:	Modules for Asterisk that use OpenAIS
@@ -599,28 +583,72 @@ touch apps/app_voicemail.so apps/app_directory.so
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}}
 
-install %{SOURCE3} sounds
-install %{SOURCE4} sounds
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+export ASTCFLAGS="%{rpmcflags}"
 
 %{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 %{__make} -j1 samples \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+%{__make} install \
+	DEBUG= \
+	OPTIMIZE= \
+	DESTDIR=$RPM_BUILD_ROOT \
+	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
+	ASTDATADIR=%{_datadir}/asterisk \
+	ASTVARLIBDIR=%{_datadir}/asterisk \
+	ASTDBDIR=%{_localstatedir}/spool/asterisk
 
-# unpackaged at this point
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/moh/.asterisk-moh-opsound-wav
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/moh/CHANGES-asterisk-moh-opsound-wav
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/moh/CREDITS-asterisk-moh-opsound-wav
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/moh/LICENSE-asterisk-moh-opsound-wav
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/.asterisk-core-sounds-en-gsm-1.4.16
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/CHANGES-asterisk-core-en-1.4.16
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/core-sounds-en.txt
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/CREDITS-asterisk-core-en-1.4.16
-#rm $RPM_BUILD_ROOT/var/lib/asterisk/sounds/en/LICENSE-asterisk-core-en-1.4.16
+%{__make} samples \
+	DEBUG= \
+	OPTIMIZE= \
+	DESTDIR=$RPM_BUILD_ROOT \
+	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
+	ASTDATADIR=%{_datadir}/asterisk \
+	ASTVARLIBDIR=%{_datadir}/asterisk \
+	ASTDBDIR=%{_localstatedir}/spool/asterisk
+
+rm $RPM_BUILD_ROOT%{_libdir}/asterisk/modules/app_directory.so
+rm $RPM_BUILD_ROOT%{_libdir}/asterisk/modules/app_voicemail.so
+install -D -p apps/app_directory_imap.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
+install -D -p apps/app_voicemail_imap.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
+install -D -p apps/app_directory_odbc.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
+install -D -p apps/app_voicemail_odbc.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
+install -D -p apps/app_directory_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
+install -D -p apps/app_voicemail_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
+
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
+cp -a %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install -D -p doc/asterisk-mib.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs/ASTERISK-MIB.txt
+install -D -p doc/digium-mib.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs/DIGIUM-MIB.txt
+
+# create some directories that need to be packaged
+install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/moh
+install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/sounds
+install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/asterisk
+install -d $RPM_BUILD_ROOT%{_localstatedir}/log/asterisk/cdr-custom
+install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/festival
+install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/monitor
+install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/outgoing
+install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/uploads
+
+# We're not going to package any of the sample AGI scripts
+rm -f $RPM_BUILD_ROOT%{_datadir}/asterisk/agi-bin/*
+
+# Don't package the sample voicemail user
+rm -rf $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/voicemail/default
+
+# Don't package example phone provision configs
+rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/phoneprov/*
+
+# these are compiled with -O0 and thus include unfortified code.
+rm -rf $RPM_BUILD_ROOT%{_sbindir}/hashtest
+rm -rf $RPM_BUILD_ROOT%{_sbindir}/hashtest2
+
+rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
+
+find doc/api/html -name '*.map' -size 0 -delete
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -863,36 +891,16 @@ fi
 
 %dir /var/lib/asterisk
 %dir /var/lib/asterisk/agi-bin
-%dir /var/lib/asterisk/images
-%dir /var/lib/asterisk/keys
+%dir /usr/share/asterisk/images
+%dir /usr/share/asterisk/keys
 
-#%dir /var/lib/asterisk/moh
-#/var/lib/asterisk/moh/*.wav
-#%dir /var/lib/asterisk/sounds
-#%dir /var/lib/asterisk/sounds/en
-#%dir /var/lib/asterisk/sounds/en/digits
-#%dir /var/lib/asterisk/sounds/en/dictate
-#%dir /var/lib/asterisk/sounds/en/followme
-#%dir /var/lib/asterisk/sounds/en/letters
-#%dir /var/lib/asterisk/sounds/en/phonetic
-#%dir /var/lib/asterisk/sounds/en/silence
-/var/lib/asterisk/images/*.jpg
-/var/lib/asterisk/keys/*.pub
+/usr/share/asterisk/images/*.jpg
+/usr/share/asterisk/keys/*.pub
 /var/lib/asterisk/phoneprov
-#/var/lib/asterisk/sounds/en/*.gsm
-#/var/lib/asterisk/sounds/en/digits/*.gsm
-#/var/lib/asterisk/sounds/en/dictate/*.gsm
-#/var/lib/asterisk/sounds/en/followme/*.gsm
-#/var/lib/asterisk/sounds/en/letters/*.gsm
-#/var/lib/asterisk/sounds/en/phonetic/*.gsm
-#/var/lib/asterisk/sounds/en/silence/*.gsm
-/var/lib/asterisk/static-http
+/usr/share/asterisk/static-http
 %dir /var/spool/asterisk
 %dir /var/spool/asterisk/monitor
 %dir /var/spool/asterisk/voicemail
-%dir /var/spool/asterisk/voicemail/default
-#%dir /var/spool/asterisk/voicemail/default/1234
-#%dir /var/spool/asterisk/voicemail/default/1234/en
 %dir /var/log/asterisk
 %dir /var/log/asterisk/cdr-csv
 %{_mandir}/man8/asterisk.8*
@@ -910,18 +918,9 @@ fi
 %{_includedir}/asterisk/*.h
 %{_includedir}/asterisk.h
 
-%files examples
-%defattr(644,root,root,755)
-%attr(755,root,root) /var/lib/asterisk/agi-bin/agi-test.agi
-%attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-sphinx-test
-%attr(755,root,root) /var/lib/asterisk/agi-bin/eagi-test
-%attr(755,root,root) /var/lib/asterisk/agi-bin/jukebox.agi
-#/var/spool/asterisk/voicemail/default/1234/en/busy.gsm
-#/var/spool/asterisk/voicemail/default/1234/en/unavail.gsm
-
 %files apidocs
 %defattr(644,root,root,755)
-#%doc doc/api/html/*
+%doc doc/api/html/*
 
 %files ais
 %defattr(644,root,root,755)
@@ -1061,8 +1060,9 @@ fi
 %doc doc/snmp.txt
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_snmp.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_snmp.so
-#%{_datadir}/snmp/mibs/ASTERISK-MIB.txt
-#%{_datadir}/snmp/mibs/DIGIUM-MIB.txt
+# XXX: system mibs dir
+%{_datadir}/snmp/mibs/ASTERISK-MIB.txt
+%{_datadir}/snmp/mibs/DIGIUM-MIB.txt
 
 %files sqlite
 %defattr(644,root,root,755)
@@ -1092,16 +1092,16 @@ fi
 
 %files voicemail-imap
 %defattr(644,root,root,755)
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_imap.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_imap.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_imap.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_imap.so
 
 %files voicemail-odbc
 %defattr(644,root,root,755)
 %doc doc/voicemail_odbc_postgresql.txt
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_odbc.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_odbc.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_odbc.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_odbc.so
 
 %files voicemail-plain
 %defattr(644,root,root,755)
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_plain.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_plain.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_plain.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_plain.so
