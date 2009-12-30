@@ -3,7 +3,6 @@
 # - use shared versions of lpc10, gsm,...
 # - CFLAGS passing
 # - fix bluetooth patch
-# - system mxml
 # - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
 # - libpath:
 #   /usr/bin/ld: skipping incompatible /usr/lib/libpthread.so when searching for -lpthread
@@ -33,7 +32,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.32
+%define		rel	0.34
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -58,6 +57,8 @@ Patch4:		%{name}-ppc.patch
 Patch5:		external-libedit.patch
 Patch6:		pkg-config-gmime.patch
 Patch7:		FHS-paths.patch
+Patch8:		libedit-history.patch
+Patch9:		pld-banner.patch
 # http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
 Patch12:	%{name}-chan_bluetooth.patch
@@ -238,12 +239,15 @@ Application for the Asterisk PBX that uses Festival to convert text to
 speech.
 
 %package h323
-Summary:	h323 resources for Asterisk
+Summary:	H.323 protocol support for Asterisk
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description h323
-h323 resources for Asterisk.
+This channel driver (chan_h323) provides support for the H.323 protocol for
+Asterisk. This is an implementation originally contributed by NuFone and
+nowdays maintained and distributed by Digium, Inc. Hence, it is considered the
+official H.323 chanel driver.
 
 %package ices
 Summary:	Stream audio from Asterisk to an IceCast server
@@ -458,6 +462,8 @@ local filesystem.
 %patch5 -p0
 %patch6 -p0
 %patch7 -p0
+%patch8 -p1
+%patch9 -p1
 
 %if %{with zhone}
 sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c
@@ -484,7 +490,7 @@ cp %{SOURCE11} .
 %{__sed} -i -e 's/^install:.*$/install:/' sounds/Makefile
 
 # avoid using it
-rm -rf imap menuselect/mxml
+rm -rf imap menuselect/mxml main/editline
 
 %build
 rm -f pbx/.depend
@@ -499,15 +505,16 @@ export WGET="/bin/true"
 
 # be sure to invoke ./configure with our flags
 cd menuselect
-%{__aclocal}
+%{__aclocal} -I ../autoconf
 %{__autoheader}
 %{__autoconf}
-%configure
+# we need just plain cli for building
+%configure \
+  --without-newt \
+  --without-gtk2 \
+  --without-curses \
+  --without-ncurses
 cd ..
-
-cd main/editline
-%configure2_13
-cd ../..
 
 %configure \
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
