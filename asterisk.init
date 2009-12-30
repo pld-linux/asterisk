@@ -3,7 +3,7 @@
 # asterix	This shell script takes care of starting and stopping
 #		Asterisk PBX
 #
-# chkconfig:	345 90 25
+# chkconfig:	345 90 10
 #
 # description:	Asterisk is an Open Source PBX and telephony development platform that \ \
 #		can both replace a conventional PBX and act as a platform for \
@@ -11,18 +11,28 @@
 #		content over a telephone similarly to how one can deliver dynamic \
 #		content through a web browser using CGI and a web server.
 #
-# pidfile:	/var/run/asterisk.pid
+# pidfile:	/var/run/asterisk/asterisk.pid
 # config:	/etc/asterisk/asterisk.conf
-
-
-# Sanity check
-[ -f /etc/asterisk/asterisk.conf ] || exit 0
 
 # Source function library
 . /etc/rc.d/init.d/functions
 
 # Get network config
 . /etc/sysconfig/network
+
+# Specify the configuration file
+AST_CONFIG=/etc/asterisk/asterisk.conf
+
+# The user that Asterisk will run as.
+AST_USER="asterisk"
+
+# If a user is specified above, Asterisk will change the group it runs
+# as to the primary group of the user, as well as initialize the
+# supplementary groups.  If you want to run Asterisk as a different
+# group, set AST_GROUP to the group that Asterisk should run as.  Note
+# that this may break DAHDI devices as supplementary groups will not
+# be initialized.
+#AST_GROUP="asterisk"
 
 # Get service config
 [ -f /etc/sysconfig/asterisk ] && . /etc/sysconfig/asterisk
@@ -45,7 +55,17 @@ start() {
 	fi
 
 	msg_starting "Asterisk"
-	daemon /usr/sbin/asterisk $ASTERISK_OPTS
+	if [ $AST_USER ] ; then
+		AST_ARGS="-U $AST_USER"
+	fi
+	if [ $AST_GROUP ] ; then
+		AST_ARGS="$AST_ARGS -G $AST_GROUP"
+	fi
+	if [ $AST_CONFIG ]; then
+		AST_ARGS="$AST_ARGS -C $AST_CONFIG"
+	fi
+	daemon /usr/sbin/asterisk $AST_ARGS $ASTERISK_OPTS
+
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
 }
