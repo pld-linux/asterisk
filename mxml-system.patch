@@ -1,0 +1,54 @@
+--- asterisk-1.6.1.12/menuselect/Makefile~	2008-12-11 00:00:19.000000000 +0200
++++ asterisk-1.6.1.12/menuselect/Makefile	2009-12-30 23:14:47.201686543 +0200
+@@ -23,6 +23,7 @@
+ # Basic set of sources and flags/libraries/includes
+ OBJS:=menuselect.o strcompat.o
+ CFLAGS:=-g -c -D_GNU_SOURCE -Wall
++MXML_LIB:=$(shell pkg-config --libs mxml)
+ 
+ ifeq ($(MENUSELECT_DEBUG),yes)
+   CFLAGS += -DMENUSELECT_DEBUG
+@@ -44,19 +45,20 @@
+ 
+ ifdef GTK2_LIB
+   G_OBJS += menuselect_gtk.o
+-  G_LIBS += $(GTK2_LIB)
++  G_LIBS += $(MXML_LIB) $(GTK2_LIB)
+   G_INCLUDE += $(GTK2_INCLUDE)
+   ALL_TGTS += gmenuselect
+ endif
+ 
+ ifdef NEWT_LIB
+   N_OBJS += menuselect_newt.o
+-  N_LIBS += $(NEWT_LIB)
++  N_LIBS += $(MXML_LIB) $(NEWT_LIB)
+   N_INCLUDE += $(NEWT_INCLUDE)
+   ALL_TGTS += nmenuselect
+ endif
+ 
+ M_OBJS += menuselect_stub.o
++M_LIBS += $(MXML_LIB)
+ ALL_TGTS += menuselect
+ 
+ all: $(ALL_TGTS)
+@@ -66,7 +68,7 @@
+ makeopts autoconfig.h: autoconfig.h.in makeopts.in
+ 	@./configure $(CONFIGURE_SILENT) CC= LD= AR= CFLAGS=
+ 
+-$(ALL_TGTS): mxml/libmxml.a
++$(ALL_TGTS):
+ 
+ ifdef C_OBJS
+ menuselect_curses.o: CFLAGS+=$(C_INCLUDE)
+--- asterisk-1.6.1.12/menuselect/menuselect.c~	2009-06-03 02:21:48.000000000 +0300
++++ asterisk-1.6.1.12/menuselect/menuselect.c	2009-12-30 23:18:45.881616815 +0200
+@@ -29,8 +29,8 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <stdarg.h>
++#include <mxml.h>
+ 
+-#include "mxml/mxml.h"
+ #include "linkedlists.h"
+ #include "menuselect.h"
+ 

@@ -33,7 +33,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.30
+%define		rel	0.32
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -50,6 +50,7 @@ Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/as
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_rxfax.c
 # Source11-md5:	ab6983b51c412883545b36993d704999
+Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
@@ -89,6 +90,7 @@ BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	lua51-devel
 BuildRequires:	mISDNuser-devel
+BuildRequires:	mxml-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	net-snmp-devel
@@ -448,6 +450,7 @@ local filesystem.
 
 %prep
 %setup -q
+%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -481,7 +484,7 @@ cp %{SOURCE11} .
 %{__sed} -i -e 's/^install:.*$/install:/' sounds/Makefile
 
 # avoid using it
-rm -rf imap
+rm -rf imap menuselect/mxml
 
 %build
 rm -f pbx/.depend
@@ -495,10 +498,6 @@ export ASTLDFLAGS="%{rpmldflags}"
 export WGET="/bin/true"
 
 # be sure to invoke ./configure with our flags
-cd menuselect/mxml
-%configure2_13
-cd ../../
-
 cd menuselect
 %{__aclocal}
 %{__autoheader}
