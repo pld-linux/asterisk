@@ -21,7 +21,7 @@
 #   and  /usr/lib64/asterisk/modules/app_directory_imap.so
 # - lua not detected
 # - ncurses dep gone for good (replaced by libedit)?
-# - make as-needed compatible
+# - make as-needed compatible, or why chan_h323 gets built w/o libs initially?
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -34,7 +34,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.23
+%define		rel	0.28
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -51,6 +51,7 @@ Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/as
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_rxfax.c
 # Source11-md5:	ab6983b51c412883545b36993d704999
+Patch1:		lua51-path.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Patch4:		%{name}-ppc.patch
@@ -87,6 +88,7 @@ BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel
+BuildRequires:	lua51-devel
 BuildRequires:	mISDNuser-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
@@ -134,14 +136,10 @@ BuildRequires:	libss7-devel >= 1.0.1
 BuildRequires:	libtool-ltdl-devel
 BuildRequires:	libusb-devel
 BuildRequires:	lm_sensors-devel
-BuildRequires:	lua-devel
 BuildRequires:	mISDN-devel
 %endif
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-
-# h323 for sure broken
-%define		filterout_ld	-Wl,--as-needed
 
 %description
 Asterisk is an Open Source PBX and telephony development platform that
@@ -443,6 +441,7 @@ local filesystem.
 
 %prep
 %setup -q
+%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -485,6 +484,7 @@ rm -f pbx/.depend
 %{__autoconf}
 
 export ASTCFLAGS="%{rpmcflags}"
+export ASTLDFLAGS="%{rpmldflags}"
 export WGET="/bin/true"
 
 # be sure to invoke ./configure with our flags
@@ -514,6 +514,10 @@ cd ../..
 
 cp -f .cleancount .lastclean
 
+# included conditionally, so make sure its there first
+%{__make} -C channels/h323 Makefile.ast \
+	%{?with_verbose:NOISY_BUILD=yes} \
+
 %{__make} DEBUG= \
 	OPTIMIZE= \
 	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
@@ -521,6 +525,10 @@ cp -f .cleancount .lastclean
 	ASTVARLIBDIR=%{_datadir}/asterisk \
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
+
+# rm, as it links it wrong for the fist time
+# i.e the flags written to file "channels/h323/Makefile.ast" are not yet there
+rm channels/*.so
 
 rm apps/app_voicemail.o apps/app_directory.o
 mv apps/app_voicemail.so apps/app_voicemail_plain.so
@@ -1044,7 +1052,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files lua
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.lua
-#%attr(755,root,root) %{_libdir}/asterisk/modules/pbx_lua.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/pbx_lua.so
 
 %files ldap
 %defattr(644,root,root,755)
