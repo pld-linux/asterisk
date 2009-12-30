@@ -1,7 +1,6 @@
 # TODO:
 # - cgi-bin package - separate, because of suid-root
 # - use shared versions of lpc10, gsm,...
-# - subpkg for h323 (it has extra deps, etc)
 # - CFLAGS passing
 # - fix bluetooth patch
 # - system mxml
@@ -34,7 +33,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.28
+%define		rel	0.29
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -235,6 +234,14 @@ Requires:	festival
 %description festival
 Application for the Asterisk PBX that uses Festival to convert text to
 speech.
+
+%package h323
+Summary:	h323 resources for Asterisk
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description h323
+h323 resources for Asterisk.
 
 %package ices
 Summary:	Stream audio from Asterisk to an IceCast server
@@ -759,7 +766,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/features.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/followme.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/h323.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/http.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/iax.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/iaxprov.conf
@@ -849,7 +855,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_manager.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_agent.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_h323.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_local.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
@@ -1028,6 +1033,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/festival.conf
 #%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/festival
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_festival.so
+
+%files h323
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/h323.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_h323.so
 
 %files ices
 %defattr(644,root,root,755)
