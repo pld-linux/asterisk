@@ -33,7 +33,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.29
+%define		rel	0.30
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -532,10 +532,6 @@ cp -f .cleancount .lastclean
 	ASTVARLIBDIR=%{_datadir}/asterisk \
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
-
-# rm, as it links it wrong for the fist time
-# i.e the flags written to file "channels/h323/Makefile.ast" are not yet there
-rm channels/*.so
 
 rm apps/app_voicemail.o apps/app_directory.o
 mv apps/app_voicemail.so apps/app_voicemail_plain.so
