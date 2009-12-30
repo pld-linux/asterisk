@@ -1,11 +1,8 @@
 # TODO:
-# - asterisk uid/gid
 # - cgi-bin package - separate, because of suid-root
-# - separate plugins into packages
 # - use shared versions of lpc10, gsm,...
 # - CFLAGS passing
 # - fix bluetooth patch
-# - package commandline tools (aelparse etc.)
 # - system mxml
 # - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
 # - openh323 is missing regardless of BR, see http://pld.pastebin.com/f7f84c312
@@ -14,6 +11,12 @@
 #   /usr/bin/ld: skipping incompatible /usr/lib/libpthread.a when searching for -lpthread
 #   /usr/bin/ld: skipping incompatible /usr/lib/libc.so when searching for -lc
 #   /usr/bin/ld: skipping incompatible /usr/lib/libc.a when searching for -lc
+# - package:
+#   /usr/lib64/asterisk/modules/app_mp3.so
+#   /usr/lib64/asterisk/modules/cdr_sqlite.so
+#   /usr/lib64/asterisk/modules/format_ilbc.so
+#   /usr/lib64/asterisk/modules/res_config_sqlite.so
+# - package for moh sound files
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -25,7 +28,7 @@
 %bcond_with	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.7
+%define		rel	0.11
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -585,11 +588,6 @@ install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/e
 
 export ASTCFLAGS="%{rpmcflags}"
 
-%{__make} -j1 install \
-	DESTDIR=$RPM_BUILD_ROOT
-%{__make} -j1 samples \
-	DESTDIR=$RPM_BUILD_ROOT
-
 %{__make} install \
 	DEBUG= \
 	OPTIMIZE= \
@@ -685,7 +683,26 @@ fi
 %doc README* *.txt ChangeLog BUGS CREDITS configs
 %doc doc/{asterisk.sgml,PEERING} doc/{backtrace,callfiles,externalivr,macroexclusive,manager_1_1,modules,queue}.txt
 %doc doc/{rtp-packetization,siptls,smdi,sms,speechrec,ss7,video}.txt
-%attr(755,root,root) %{_sbindir}/*
+
+%attr(755,root,root) %{_sbindir}/aelparse
+%attr(755,root,root) %{_sbindir}/astcanary
+%attr(755,root,root) %{_sbindir}/asterisk
+%attr(755,root,root) %{_sbindir}/astgenkey
+%attr(755,root,root) %{_sbindir}/astman
+%attr(755,root,root) %{_sbindir}/autosupport
+%attr(755,root,root) %{_sbindir}/conf2ael
+%attr(755,root,root) %{_sbindir}/muted
+%attr(755,root,root) %{_sbindir}/rasterisk
+%attr(755,root,root) %{_sbindir}/refcounter
+%attr(755,root,root) %{_sbindir}/safe_asterisk
+%attr(755,root,root) %{_sbindir}/smsq
+%attr(755,root,root) %{_sbindir}/stereorize
+%attr(755,root,root) %{_sbindir}/streamplayer
+%{_mandir}/man8/asterisk.8*
+%{_mandir}/man8/astgenkey.8*
+%{_mandir}/man8/autosupport.8*
+%{_mandir}/man8/safe_asterisk.8*
+
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
@@ -889,27 +906,33 @@ fi
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_dlinklists.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_heap.so
 
-%dir /var/lib/asterisk
-%dir /var/lib/asterisk/agi-bin
-%dir /usr/share/asterisk/images
-%dir /usr/share/asterisk/keys
+%dir %{_datadir}/asterisk
+%dir %{_datadir}/asterisk/agi-bin
+%dir %{_datadir}/asterisk/firmware
+%dir %{_datadir}/asterisk/firmware/iax
+%dir %{_datadir}/asterisk/images
+%dir %{_datadir}/asterisk/moh
+%dir %{_datadir}/asterisk/sounds
+%dir %attr(750,root,asterisk) %{_datadir}/asterisk/keys
+%{_datadir}/asterisk/keys/*.pub
+%{_datadir}/asterisk/images/*.jpg
+%{_datadir}/asterisk/static-http
+%{_datadir}/asterisk/phoneprov
 
-/usr/share/asterisk/images/*.jpg
-/usr/share/asterisk/keys/*.pub
-/var/lib/asterisk/phoneprov
-/usr/share/asterisk/static-http
-%dir /var/spool/asterisk
-%dir /var/spool/asterisk/monitor
-%dir /var/spool/asterisk/voicemail
-%dir /var/log/asterisk
-%dir /var/log/asterisk/cdr-csv
-%{_mandir}/man8/asterisk.8*
-%{_mandir}/man8/astgenkey.8*
-%{_mandir}/man8/autosupport.8*
-%{_mandir}/man8/safe_asterisk.8*
-%dir /var/lib/asterisk/firmware
-%dir /var/lib/asterisk/firmware/iax
-#/var/lib/asterisk/firmware/iax/iaxy.bin
+%attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
+
+%attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk
+%attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk/cdr-csv
+%attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk/cdr-custom
+
+%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk
+%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/monitor
+%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/outgoing
+%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/tmp
+%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/uploads
+%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/voicemail
+
+%attr(775,root,asterisk) %dir %{_localstatedir}/run/asterisk
 
 %files devel
 %defattr(644,root,root,755)
