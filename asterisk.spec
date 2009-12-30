@@ -1,22 +1,27 @@
 # TODO:
 # - cgi-bin package - separate, because of suid-root
 # - use shared versions of lpc10, gsm,...
+# - subpkg for h323 (it has extra deps, etc)
 # - CFLAGS passing
 # - fix bluetooth patch
 # - system mxml
 # - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
-# - openh323 is missing regardless of BR, see http://pld.pastebin.com/f7f84c312
 # - libpath:
 #   /usr/bin/ld: skipping incompatible /usr/lib/libpthread.so when searching for -lpthread
 #   /usr/bin/ld: skipping incompatible /usr/lib/libpthread.a when searching for -lpthread
 #   /usr/bin/ld: skipping incompatible /usr/lib/libc.so when searching for -lc
 #   /usr/bin/ld: skipping incompatible /usr/lib/libc.a when searching for -lc
-# - package:
-#   /usr/lib64/asterisk/modules/app_mp3.so
-#   /usr/lib64/asterisk/modules/cdr_sqlite.so
-#   /usr/lib64/asterisk/modules/format_ilbc.so
-#   /usr/lib64/asterisk/modules/res_config_sqlite.so
 # - make package for moh sound files
+# - likely odbc and imap broken:
+    #*** WARNING: identical binaries are copied, not linked:
+#        /usr/lib64/asterisk/modules/app_directory_odbc.so
+#   and  /usr/lib64/asterisk/modules/app_directory_imap.so
+#   *** WARNING: identical binaries are copied, not linked:
+#        /usr/lib64/asterisk/modules/app_directory_plain.so
+#   and  /usr/lib64/asterisk/modules/app_directory_imap.so
+# - lua not detected
+# - ncurses dep gone for good (replaced by libedit)?
+# - make as-needed compatible
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -25,10 +30,11 @@
 %bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
-%bcond_with	verbose		# verbose build
+%bcond_without	apidocs		# disable apidocs building
+%bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.17
+%define		rel	0.23
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -87,7 +93,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
 BuildRequires:	openais-devel
-BuildRequires:	openh323-devel
+BuildRequires:	openh323-devel >= 1.19.0
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
@@ -133,6 +139,9 @@ BuildRequires:	mISDN-devel
 %endif
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# h323 for sure broken
+%define		filterout_ld	-Wl,--as-needed
 
 %description
 Asterisk is an Open Source PBX and telephony development platform that
@@ -351,6 +360,7 @@ Modules for Asterisk that support the SCCP/Skinny protocol.
 Summary:	Module that enables SNMP monitoring of Asterisk
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
+Requires:	mibs-dirs
 
 %description snmp
 Module that enables SNMP monitoring of Asterisk.
@@ -475,7 +485,6 @@ rm -f pbx/.depend
 %{__autoconf}
 
 export ASTCFLAGS="%{rpmcflags}"
-export CPPFLAGS="%{rpmcppflags} -I/usr/include/openh323"
 export WGET="/bin/true"
 
 # be sure to invoke ./configure with our flags
@@ -547,8 +556,7 @@ mv apps/app_directory.so apps/app_directory_odbc.so
 touch apps/app_voicemail.o apps/app_directory.o
 touch apps/app_voicemail.so apps/app_directory.so
 
-# it requires doxygen - I don't know if we should do this...
-# - ???
+%if %{with apidocs}
 %{__make} progdocs \
 	DEBUG= \
 	OPTIMIZE= \
@@ -557,6 +565,7 @@ touch apps/app_voicemail.so apps/app_directory.so
 	ASTVARLIBDIR=%{_datadir}/asterisk \
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
+%endif
 
 %{__make} \
 	DEBUG= \
@@ -618,8 +627,8 @@ install -D -p apps/app_voicemail_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/mod
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 cp -a %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install -D -p doc/asterisk-mib.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs/ASTERISK-MIB.txt
-install -D -p doc/digium-mib.txt $RPM_BUILD_ROOT%{_datadir}/snmp/mibs/DIGIUM-MIB.txt
+install -D -p doc/asterisk-mib.txt $RPM_BUILD_ROOT%{_datadir}/mibs/ASTERISK-MIB.txt
+install -D -p doc/digium-mib.txt $RPM_BUILD_ROOT%{_datadir}/mibs/DIGIUM-MIB.txt
 
 # create some directories that need to be packaged
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/moh
@@ -650,7 +659,9 @@ rm -rf $RPM_BUILD_ROOT%{_sbindir}/hashtest2
 
 rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 
+%if %{with apidocs}
 find doc/api/html -name '*.map' -size 0 -delete
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -796,6 +807,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_milliwatt.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_mixmonitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_morsecode.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_mp3.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_nbscat.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_parkandannounce.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_playback.so
@@ -829,6 +841,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_manager.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_agent.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_h323.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_local.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
@@ -841,7 +854,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_gsm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_lpc10.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/codec_resample.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g723.so
@@ -850,11 +862,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_gsm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_h263.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_h264.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_jpeg.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_ogg_vorbis.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_pcm.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/format_sln.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_sln16.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_sln.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_vox.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav_gsm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav.so
@@ -904,8 +917,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_indications.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_http_post.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_indications.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_musiconhold.so
@@ -914,6 +927,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_smdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_speech.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
+#%attr(755,root,root) %{_libdir}/asterisk/modules/codec_resample.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_dlinklists.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_heap.so
 
@@ -955,9 +969,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %{_includedir}/asterisk/*.h
 %{_includedir}/asterisk.h
 
+%if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
 %doc doc/api/html/*
+%endif
 
 %files ais
 %defattr(644,root,root,755)
@@ -1097,14 +1113,15 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %doc doc/snmp.txt
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_snmp.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_snmp.so
-# XXX: system mibs dir
-%{_datadir}/snmp/mibs/ASTERISK-MIB.txt
-%{_datadir}/snmp/mibs/DIGIUM-MIB.txt
+%{_datadir}/mibs/ASTERISK-MIB.txt
+%{_datadir}/mibs/DIGIUM-MIB.txt
 
 %files sqlite
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_sqlite3_custom.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite3_custom.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
 
 %files tds
 %defattr(644,root,root,755)
