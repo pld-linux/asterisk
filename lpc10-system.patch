@@ -64,7 +64,7 @@
  AST_EXT_LIB_SETUP([GTK], [gtk libraries], [gtk])
  AST_EXT_LIB_SETUP([GTK2], [gtk2 libraries], [gtk2])
  AST_EXT_LIB_SETUP([GMIME], [GMime library], [gmime])
-@@ -712,6 +713,63 @@
+@@ -712,6 +713,72 @@
     fi
  fi
  
@@ -72,6 +72,15 @@
 +AC_SUBST(LPC10_INTERNAL)
 +LPC10_SYSTEM="yes"
 +if test "${USE_LPC10}" != "no"; then
++   case "$host_cpu" in
++   x86_64|s390x)
++       _lib=lib64
++       ;;
++   *)
++       _lib=lib
++       ;;
++   esac
++
 +   if test "${LPC10_DIR}" = "internal"; then
 +      LPC10_SYSTEM="no"
 +   elif test "${LPC10_DIR}" != ""; then
@@ -80,8 +89,8 @@
 +   if test "${LPC10_SYSTEM}" = "yes"; then
 +      lpc10libdir=""
 +      if test "x${LPC10_DIR}" != "x"; then
-+         if test -d ${LPC10_DIR}/lib; then
-+            lpc10libdir="-L${LPC10_DIR}/lib"
++         if test -d ${LPC10_DIR}/${_lib}; then
++            lpc10libdir="-L${LPC10_DIR}/${_lib}"
 +         else
 +            lpc10libdir="-L${LPC10_DIR}"
 +         fi
