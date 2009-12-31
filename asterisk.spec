@@ -1,6 +1,6 @@
 # TODO:
 # - cgi-bin package - separate, because of suid-root
-# - use shared versions of lpc10, gsm,...
+# - use shared versions of LIBILBC:=ilbc/libilbc.a
 # - CFLAGS passing
 # - fix bluetooth patch
 # - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
@@ -17,9 +17,17 @@
 #   *** WARNING: identical binaries are copied, not linked:
 #        /usr/lib64/asterisk/modules/app_directory_plain.so
 #   and  /usr/lib64/asterisk/modules/app_directory_imap.so
-# - lua not detected
 # - ncurses dep gone for good (replaced by libedit)?
-# - make as-needed compatible, or why chan_h323 gets built w/o libs initially?
+# - missing/failed features:
+# $ grep =0 build_tools/menuselect-deps
+#   H323=0
+#   HOARD=0
+#   NBS=0
+#   OSPTK=0
+#   RESAMPLE=0
+#   SS7=0
+#   VPBAPI=0
+#   WINARCH=0
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -32,7 +40,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.34
+%define		rel	0.37
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -61,12 +69,13 @@ Patch8:		libedit-history.patch
 Patch9:		pld-banner.patch
 # http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
-Patch12:	%{name}-chan_bluetooth.patch
-Patch13:	%{name}-zhone.patch
+Patch11:	%{name}-chan_bluetooth.patch
+Patch12:	%{name}-zhone.patch
 # http://svn.debian.org/wsvn/pkg-voip/asterisk/trunk/debian/patches/bristuff
-Patch14:	%{name}-bristuff.patch
-Patch15:	%{name}-bristuff-build.patch
-Patch16:	%{name}-bristuff-libpri.patch
+Patch13:	%{name}-bristuff.patch
+Patch14:	%{name}-bristuff-build.patch
+Patch15:	%{name}-bristuff-libpri.patch
+Patch16:	lpc10-system.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit
 BuildRequires:	SDL_image-devel
@@ -87,8 +96,10 @@ BuildRequires:	imap-devel
 BuildRequires:	jack-audio-connection-kit-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
+BuildRequires:	libgsm-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libvorbis-devel
+BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
 BuildRequires:	mISDNuser-devel
 BuildRequires:	mxml-devel
@@ -109,8 +120,7 @@ BuildRequires:	pwlib-devel
 BuildRequires:	radiusclient-ng-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
-BuildRequires:	spandsp-devel
-%{?with_rxfax:BuildRequires:	spandsp-devel >= %{spandsp_version}}
+BuildRequires:	spandsp-devel >= 0.0.5
 BuildRequires:	speex-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	sqlite3-devel
@@ -244,10 +254,10 @@ Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description h323
-This channel driver (chan_h323) provides support for the H.323 protocol for
-Asterisk. This is an implementation originally contributed by NuFone and
-nowdays maintained and distributed by Digium, Inc. Hence, it is considered the
-official H.323 chanel driver.
+This channel driver (chan_h323) provides support for the H.323
+protocol for Asterisk. This is an implementation originally
+contributed by NuFone and nowdays maintained and distributed by
+Digium, Inc. Hence, it is considered the official H.323 chanel driver.
 
 %package ices
 Summary:	Stream audio from Asterisk to an IceCast server
@@ -464,33 +474,30 @@ local filesystem.
 %patch7 -p0
 %patch8 -p1
 %patch9 -p1
-
 %if %{with zhone}
 sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c
 %endif
-
 %if %{with rxfax}
 cd apps
 %patch10 -p0
 cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
-
-%{?with_bluetooth:%patch12 -p1}
-%{?with_zhonehack:%patch13 -p1}
-
+%{?with_bluetooth:%patch11 -p1}
+%{?with_zhonehack:%patch12 -p1}
 %if %{with bristuff}
+%patch13 -p1
 %patch14 -p1
 %patch15 -p1
-%patch16 -p1
 %endif
+%patch16 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
 %{__sed} -i -e 's/^install:.*$/install:/' sounds/Makefile
 
-# avoid using it
-rm -rf imap menuselect/mxml main/editline
+# avoid using these
+rm -rf imap menuselect/mxml main/editline codecs/gsm codecs/lpc10
 
 %build
 rm -f pbx/.depend
@@ -520,6 +527,7 @@ cd ..
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap=system \
 	--with-gsm=/usr \
+	--with-lpc10=/usr \
 	--with-libedit=yes
 
 # safe checks

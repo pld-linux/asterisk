@@ -1,0 +1,130 @@
+--- asterisk-1.6.1.12/codecs/codec_lpc10.c	2009-12-31 13:37:17.453275676 +0200
++++ asterisk-1.6.1.12/codecs/codec_lpc10.c	2009-12-31 13:18:26.630953709 +0200
+@@ -26,6 +26,9 @@
+  *
+  * \ingroup codecs
+  */
++/*** MODULEINFO
++	<depend>lpc10</depend>
++ ***/
+ 
+ #include "asterisk.h"
+ 
+@@ -33,7 +36,7 @@
+ #include "asterisk/module.h"
+ #include "asterisk/utils.h"
+ 
+-#include "lpc10/lpc10.h"
++#include <lpc10.h>
+ 
+ /* Sample frame data */
+ #include "slin_lpc10_ex.h"
+--- asterisk-1.6.1.12/build_tools/menuselect-deps.in~	2009-12-31 13:39:17.000000000 +0200
++++ asterisk-1.6.1.12/build_tools/menuselect-deps.in	2009-12-31 14:19:55.440132344 +0200
+@@ -5,6 +5,7 @@
+ FREETDS=@PBX_FREETDS@
+ GMIME=@PBX_GMIME@
+ GNU_LD=@GNU_LD@
++LPC10=@PBX_LPC10@
+ GSM=@PBX_GSM@
+ GTK2=@PBX_GTK2@
+ GTK=@PBX_GTK@
+--- asterisk-1.6.1.12/codecs/Makefile~	2009-07-21 16:48:38.000000000 +0300
++++ asterisk-1.6.1.12/codecs/Makefile	2009-12-31 13:11:04.977664417 +0200
+@@ -42,7 +42,9 @@
+ $(LIBLPC10):
+ 	@$(MAKE) -C lpc10 all
+ 
++ifneq ($(LPC10_INTERNAL),no)
+ $(if $(filter codec_lpc10,$(EMBEDDED_MODS)),modules.link,codec_lpc10.so): $(LIBLPC10)
++endif
+ 
+ $(LIBILBC):
+ 	@$(MAKE) -C ilbc all _ASTCFLAGS="$(filter-out -Wmissing-prototypes -Wmissing-declarations -Wshadow,$(_ASTCFLAGS)) $(AST_NO_STRICT_OVERFLOW)"
+--- asterisk-1.6.1.12/makeopts.in~	2009-12-31 11:15:37.000000000 +0200
++++ asterisk-1.6.1.12/makeopts.in	2009-12-31 13:02:52.623760100 +0200
+@@ -96,6 +96,10 @@
+ GSM_INCLUDE=@GSM_INCLUDE@
+ GSM_LIB=@GSM_LIB@
+ 
++LPC10_INTERNAL=@LPC10_INTERNAL@
++LPC10_INCLUDE=@LPC10_INCLUDE@
++LPC10_LIB=@LPC10_LIB@
++
+ GTK_INCLUDE=@GTK_INCLUDE@
+ GTK_LIB=@GTK_LIB@
+ 
+--- asterisk-1.6.1.12/configure.ac~	2009-12-31 11:15:37.000000000 +0200
++++ asterisk-1.6.1.12/configure.ac	2009-12-31 13:09:33.900041134 +0200
+@@ -237,6 +237,7 @@
+ AST_EXT_LIB_SETUP([DAHDI], [DAHDI], [dahdi])
+ AST_EXT_LIB_SETUP([FFMPEG], [Ffmpeg and avcodec library], [avcodec])
+ AST_EXT_LIB_SETUP([GSM], [External GSM library], [gsm], [, use 'internal' GSM otherwise])
++AST_EXT_LIB_SETUP([LPC10], [External lpc10 library], [lpc10], [, use 'internal' lpc10 otherwise])
+ AST_EXT_LIB_SETUP([GTK], [gtk libraries], [gtk])
+ AST_EXT_LIB_SETUP([GTK2], [gtk2 libraries], [gtk2])
+ AST_EXT_LIB_SETUP([GMIME], [GMime library], [gmime])
+@@ -712,6 +713,63 @@
+    fi
+ fi
+ 
++LPC10_INTERNAL="yes"
++AC_SUBST(LPC10_INTERNAL)
++LPC10_SYSTEM="yes"
++if test "${USE_LPC10}" != "no"; then
++   if test "${LPC10_DIR}" = "internal"; then
++      LPC10_SYSTEM="no"
++   elif test "${LPC10_DIR}" != ""; then
++      LPC10_INTERNAL="no"
++   fi
++   if test "${LPC10_SYSTEM}" = "yes"; then
++      lpc10libdir=""
++      if test "x${LPC10_DIR}" != "x"; then
++         if test -d ${LPC10_DIR}/lib; then
++            lpc10libdir="-L${LPC10_DIR}/lib"
++         else
++            lpc10libdir="-L${LPC10_DIR}"
++         fi
++      fi
++      AC_CHECK_LIB([lpc10], [lpc10_encode], AC_DEFINE_UNQUOTED([HAVE_LPC10], 1,
++      [Define to indicate the GSM library]), [], ${gsmlibdir})
++      if test "${ac_cv_lib_lpc10_lpc10_encode}" = "yes"; then
++         if test "x${LPC10_DIR}" != "x" ; then
++            AC_CHECK_HEADER([${LPC10_DIR}/include/lpc10.h], [LPC10_HEADER_FOUND=1], [LPC10_HEADER_FOUND=0])
++         else
++            AC_CHECK_HEADER([lpc10.h], [LPC10_HEADER_FOUND=1], [LPC10_HEADER_FOUND=0])
++         fi
++         if test "${LPC10_HEADER_FOUND}" = "0" ; then
++		   if test "x${LPC10_MANDATORY}" = "xyes" ; then
++			  AC_MSG_NOTICE([***])
++			  AC_MSG_NOTICE([*** It appears that you do not have the lpc10 development package installed.])
++			  AC_MSG_NOTICE([*** Please install it to include ${LPC10_DESCRIP} support, or re-run configure])
++			  AC_MSG_NOTICE([*** without explicitly specifying --with-${LPC10_OPTION}])
++			  exit 1
++		   fi
++         fi
++         LPC10_OK=0
++         if test "${LPC10_HEADER_FOUND}" = "1" ; then
++            AC_DEFINE_UNQUOTED([HAVE_LPC10_HEADER], 1, [Define to indicate that lpc10.h has no prefix for its location])
++            LPC10_OK=1
++         fi
++         if test "${LPC10_OK}" = "1" ; then
++            LPC10_LIB="-llpc10"
++            if test "x${LPC10_DIR}" != "x"; then
++               LPC10_LIB="${lpc10libdir} ${LPC10_LIB}"
++               LPC10_INCLUDE="-I${LPC10_DIR}/include"
++            fi
++            PBX_LPC10=1
++            LPC10_INTERNAL="no"
++         fi
++      fi
++   fi
++   if test "${LPC10_INTERNAL}" = "yes"; then
++      PBX_LPC10=1
++      AC_DEFINE_UNQUOTED([HAVE_LPC10_HEADER], 1, [Define to indicate that lpc10.h has no prefix for its location])
++   fi
++fi
++
+ AST_EXT_LIB_CHECK([ICONV], [iconv], [iconv_open], [iconv.h])
+ # Some versions of Linux package iconv in glibc
+ AST_EXT_LIB_CHECK([ICONV], [c], [iconv_close], [iconv.h])
