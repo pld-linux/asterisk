@@ -19,10 +19,10 @@
 #   HOARD=0
 #   NBS=0
 #   OSPTK=0
-#   RESAMPLE=0
 #   SS7=0
 #   VPBAPI=0
 #   WINARCH=0
+# - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -35,7 +35,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.38
+%define		rel	0.39
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -94,6 +94,7 @@ BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libgsm-devel
 BuildRequires:	libogg-devel
+BuildRequires:	libresample-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
@@ -139,12 +140,10 @@ BuildRequires:	libpri-devel >= 1.4.6
 %endif
 Requires(post,preun):	/sbin/chkconfig
 %if %{with fc}
-BuildRequires:	libresample-devel
 BuildRequires:	libss7-devel >= 1.0.1
 BuildRequires:	libtool-ltdl-devel
 BuildRequires:	libusb-devel
 BuildRequires:	lm_sensors-devel
-BuildRequires:	mISDN-devel
 %endif
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -874,6 +873,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_gsm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_lpc10.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_resample.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g723.so
@@ -947,7 +947,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_smdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_speech.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/codec_resample.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_dlinklists.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_heap.so
 
@@ -1038,7 +1037,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files festival
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/festival.conf
-#%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/festival
+%attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/festival
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_festival.so
 
 %files h323
@@ -1064,7 +1063,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files jack
 %defattr(644,root,root,755)
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_jack.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_jack.so
 
 %files lua
 %defattr(644,root,root,755)
@@ -1077,9 +1076,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_ldap.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_ldap.so
 
+%if 0
 %files ldap-fds
 %defattr(644,root,root,755)
-#%{_sysconfdir}/dirsrv/schema/99asterisk.ldif
+%{_sysconfdir}/dirsrv/schema/99asterisk.ldif
+%endif
 
 %files minivm
 %defattr(644,root,root,755)
