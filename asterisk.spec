@@ -1,17 +1,12 @@
 # TODO:
 # - cgi-bin package - separate, because of suid-root
-# - use shared versions of LIBILBC:=ilbc/libilbc.a
+# - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
 # - CFLAGS passing
 # - fix bluetooth patch
 # - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
-# - libpath:
-#   /usr/bin/ld: skipping incompatible /usr/lib/libpthread.so when searching for -lpthread
-#   /usr/bin/ld: skipping incompatible /usr/lib/libpthread.a when searching for -lpthread
-#   /usr/bin/ld: skipping incompatible /usr/lib/libc.so when searching for -lc
-#   /usr/bin/ld: skipping incompatible /usr/lib/libc.a when searching for -lc
 # - make package for moh sound files
 # - likely odbc and imap broken:
-    #*** WARNING: identical binaries are copied, not linked:
+#   *** WARNING: identical binaries are copied, not linked:
 #        /usr/lib64/asterisk/modules/app_directory_odbc.so
 #   and  /usr/lib64/asterisk/modules/app_directory_imap.so
 #   *** WARNING: identical binaries are copied, not linked:
@@ -40,7 +35,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.37
+%define		rel	0.38
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -76,6 +71,7 @@ Patch13:	%{name}-bristuff.patch
 Patch14:	%{name}-bristuff-build.patch
 Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
+Patch17:	gsm-libpoison.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit
 BuildRequires:	SDL_image-devel
@@ -491,6 +487,7 @@ cp %{SOURCE11} .
 %patch15 -p1
 %endif
 %patch16 -p1
+%patch17 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile

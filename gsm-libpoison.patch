@@ -1,0 +1,25 @@
+--- asterisk-1.6.1.12/configure.ac~	2009-12-31 20:48:16.000000000 +0200
++++ asterisk-1.6.1.12/configure.ac	2009-12-31 20:50:47.660532467 +0200
+@@ -657,10 +657,20 @@
+       GSM_INTERNAL="no"
+    fi
+    if test "${GSM_SYSTEM}" = "yes"; then
++
++      case "$host_cpu" in
++      x86_64|s390x)
++          _lib=lib64
++          ;;
++      *)
++          _lib=lib
++          ;;
++      esac
++
+       gsmlibdir=""
+       if test "x${GSM_DIR}" != "x"; then
+-         if test -d ${GSM_DIR}/lib; then
+-            gsmlibdir="-L${GSM_DIR}/lib"
++         if test -d ${GSM_DIR}/${_lib}; then
++            gsmlibdir="-L${GSM_DIR}/${_lib}"
+          else
+             gsmlibdir="-L${GSM_DIR}"
+          fi
