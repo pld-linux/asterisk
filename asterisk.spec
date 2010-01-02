@@ -15,13 +15,11 @@
 # - ncurses dep gone for good (replaced by libedit)?
 # - missing/failed features:
 # $ grep =0 build_tools/menuselect-deps
-#   H323=0
-#   HOARD=0
-#   NBS=0
-#   OSPTK=0
-#   SS7=0
-#   VPBAPI=0
-#   WINARCH=0
+#   HOARD=0 AST_EXT_LIB_SETUP([HOARD], [Hoard Memory Allocator], [hoard])
+#   NBS=0 AST_EXT_LIB_SETUP([NBS], [Network Broadcast Sound], [nbs])
+#   OSPTK=0 AST_EXT_LIB_SETUP([OSPTK], [OSP Toolkit], [osptk])
+#   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
+#   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 #
 # Conditional build:
