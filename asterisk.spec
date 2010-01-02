@@ -17,7 +17,6 @@
 # $ grep =0 build_tools/menuselect-deps
 #   HOARD=0 AST_EXT_LIB_SETUP([HOARD], [Hoard Memory Allocator], [hoard])
 #   NBS=0 AST_EXT_LIB_SETUP([NBS], [Network Broadcast Sound], [nbs])
-#   OSPTK=0 AST_EXT_LIB_SETUP([OSPTK], [OSP Toolkit], [osptk])
 #   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
 #   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
@@ -33,7 +32,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.39
+%define		rel	0.40
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -71,7 +70,7 @@ Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
 URL:		http://www.asterisk.org/
-BuildRequires:	OSPToolkit
+BuildRequires:	OSPToolkit-devel
 BuildRequires:	SDL_image-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
@@ -329,6 +328,14 @@ Requires:	%{name} = %{version}-%{release}
 
 %description odbc
 Applications for Asterisk that use ODBC (except voicemail)
+
+%package osp
+Summary:	Modules for Asterisk that use Open Settlement Protocol (OSP) Applications
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description osp
+Open Settlement Protocol (OSP) Applications.
 
 %package oss
 Summary:	Modules for Asterisk that use OSS sound drivers
@@ -780,7 +787,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/modules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/musiconhold.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/muted.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/osp.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phone.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phoneprov.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queuerules.conf
@@ -1102,6 +1108,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc.so
+
+%files osp
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/osp.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_osplookup.so
 
 %files oss
 %defattr(644,root,root,755)
