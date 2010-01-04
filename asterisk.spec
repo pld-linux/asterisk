@@ -15,7 +15,6 @@
 # - ncurses dep gone for good (replaced by libedit)?
 # - missing/failed features:
 # $ grep =0 build_tools/menuselect-deps
-#   HOARD=0 AST_EXT_LIB_SETUP([HOARD], [Hoard Memory Allocator], [hoard])
 #   NBS=0 AST_EXT_LIB_SETUP([NBS], [Network Broadcast Sound], [nbs])
 #   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
 #   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
@@ -32,7 +31,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.40
+%define		rel	0.42
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -204,6 +203,16 @@ Requires:	%{name} = %{version}-%{release}
 %description alsa
 Modules for Asterisk that use Alsa sound drivers.
 
+%package astman
+Summary:	Astman is a text mode Manager for Asterisk
+Group:		Applications/Networking
+
+%description astman
+Astman is a text mode Manager for Asterisk.
+
+Astman connects to Asterisk by TCP, so you can run Astman on a
+completely different computer than your Asterisk computer.
+
 %package curl
 Summary:	Modules for Asterisk that use cURL
 Group:		Applications/Networking
@@ -240,6 +249,14 @@ Requires:	festival
 Application for the Asterisk PBX that uses Festival to convert text to
 speech.
 
+%package gsm
+Summary:	Support GSM audio encoding/decoding
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description gsm
+Support GSM audio encoding/decoding.
+
 %package h323
 Summary:	H.323 protocol support for Asterisk
 Group:		Applications/Networking
@@ -250,6 +267,14 @@ This channel driver (chan_h323) provides support for the H.323
 protocol for Asterisk. This is an implementation originally
 contributed by NuFone and nowdays maintained and distributed by
 Digium, Inc. Hence, it is considered the official H.323 chanel driver.
+
+%package http
+Summary:	HTTP Server Support
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description http
+HTTP Server Support.
 
 %package ices
 Summary:	Stream audio from Asterisk to an IceCast server
@@ -303,6 +328,14 @@ Requires:	fedora-ds-base
 
 %description ldap-fds
 LDAP resources for Asterisk and the Fedora Directory Server.
+
+%package lpc10
+Summary:	LPC-10 2400 bps Voice Codec support
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description lpc10
+LPC-10 2400 bps Voice Codec support
 
 %package misdn
 Summary:	mISDN channel for Asterisk
@@ -369,6 +402,14 @@ Requires:	%{name} = %{version}-%{release}
 %description radius
 Applications for Asterisk that use RADIUS.
 
+%package resample
+Summary:	resample codec
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description resample
+resample codec.
+
 %package skinny
 Summary:	Modules for Asterisk that support the SCCP/Skinny protocol
 Group:		Applications/Networking
@@ -385,6 +426,14 @@ Requires:	mibs-dirs
 
 %description snmp
 Module that enables SNMP monitoring of Asterisk.
+
+%package speex
+Summary:	Speex codec support
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description speex
+Speex codec support.
 
 %package sqlite
 Summary:	Sqlite modules for Asterisk
@@ -461,6 +510,14 @@ Provides:	%{name}-voicemail-implementation = %{version}-%{release}
 %description voicemail-plain
 Voicemail implementation for Asterisk that stores voicemail on the
 local filesystem.
+
+%package vorbis
+Summary:	Ogg Vorbis format support
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description vorbis
+Ogg Vorbis format support.
 
 %prep
 %setup -q
@@ -683,6 +740,10 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/phoneprov/*
 rm -rf $RPM_BUILD_ROOT%{_sbindir}/hashtest
 rm -rf $RPM_BUILD_ROOT%{_sbindir}/hashtest2
 
+# we're not using safe_asterisk
+rm -f $RPM_BUILD_ROOT%{_sbindir}/safe_asterisk
+rm -f $RPM_BUILD_ROOT%{_mandir}/man8/safe_asterisk.8*
+
 rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 
 %if %{with apidocs}
@@ -736,20 +797,17 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_sbindir}/astcanary
 %attr(755,root,root) %{_sbindir}/asterisk
 %attr(755,root,root) %{_sbindir}/astgenkey
-%attr(755,root,root) %{_sbindir}/astman
 %attr(755,root,root) %{_sbindir}/autosupport
 %attr(755,root,root) %{_sbindir}/conf2ael
 %attr(755,root,root) %{_sbindir}/muted
 %attr(755,root,root) %{_sbindir}/rasterisk
 %attr(755,root,root) %{_sbindir}/refcounter
-%attr(755,root,root) %{_sbindir}/safe_asterisk
 %attr(755,root,root) %{_sbindir}/smsq
 %attr(755,root,root) %{_sbindir}/stereorize
 %attr(755,root,root) %{_sbindir}/streamplayer
 %{_mandir}/man8/asterisk.8*
 %{_mandir}/man8/astgenkey.8*
 %{_mandir}/man8/autosupport.8*
-%{_mandir}/man8/safe_asterisk.8*
 
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
@@ -777,7 +835,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/features.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/followme.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/http.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/iax.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/iaxprov.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/indications.conf
@@ -875,25 +932,18 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_gsm.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_lpc10.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_resample.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g723.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g726.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g729.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/format_gsm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_h263.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_h264.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_jpeg.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/format_ogg_vorbis.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_pcm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_sln16.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_sln.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_vox.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/format_wav_gsm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_audiohookinherit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_base64.so
@@ -922,7 +972,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sha1.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_shell.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/func_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_strings.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sysinfo.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_timeout.so
@@ -941,7 +990,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_http_post.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_indications.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_monitor.so
@@ -966,7 +1014,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 # no need to protect publicly downloaded and packaged .pub
 %{_datadir}/asterisk/keys/*.pub
 %{_datadir}/asterisk/images/*.jpg
-%{_datadir}/asterisk/static-http
 %{_datadir}/asterisk/phoneprov
 
 %attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
@@ -1008,6 +1055,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alsa.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_alsa.so
 
+%files astman
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/astman
+
 %files curl
 %defattr(644,root,root,755)
 %doc contrib/scripts/dbsep.cgi
@@ -1044,10 +1095,22 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(770,root,asterisk) %dir %{_localstatedir}/spool/asterisk/festival
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_festival.so
 
+%files gsm
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_gsm.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_gsm.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_wav_gsm.so
+
 %files h323
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/h323.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_h323.so
+
+%files http
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/http.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_http_post.so
+%{_datadir}/asterisk/static-http
 
 %files ices
 %defattr(644,root,root,755)
@@ -1085,6 +1148,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %{_sysconfdir}/dirsrv/schema/99asterisk.ldif
 %endif
+
+%files lpc10
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_lpc10.so
 
 %files minivm
 %defattr(644,root,root,755)
@@ -1136,6 +1203,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_radius.so
 
+%files resample
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_resample.so
+
 %files skinny
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/skinny.conf
@@ -1150,6 +1221,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_snmp.so
 %{_datadir}/mibs/ASTERISK-MIB.txt
 %{_datadir}/mibs/DIGIUM-MIB.txt
+
+%files speex
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_speex.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_speex.so
 
 %files sqlite
 %defattr(644,root,root,755)
@@ -1194,3 +1270,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_plain.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_plain.so
+
+%files vorbis
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_ogg_vorbis.so
