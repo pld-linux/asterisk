@@ -31,7 +31,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.42
+%define		rel	0.44
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -716,16 +716,14 @@ install -D -p doc/digium-mib.txt $RPM_BUILD_ROOT%{_datadir}/mibs/DIGIUM-MIB.txt
 # create some directories that need to be packaged
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/moh
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/sounds
-install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/licenses
-install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/asterisk
+ln -s %{_localstatedir}/lib/asterisk/licenses $RPM_BUILD_ROOT%{_datadir}/asterisk/licenses
+
+install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/asterisk/licenses
 install -d $RPM_BUILD_ROOT%{_localstatedir}/log/asterisk/cdr-custom
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/festival
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/monitor
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/outgoing
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/uploads
-
-# upstream prebuilt binaries (register, benchg729) use /var location
-ln -s %{_datadir}/asterisk/licenses $RPM_BUILD_ROOT%{_localstatedir}/lib/asterisk
 
 # We're not going to package any of the sample AGI scripts
 rm -f $RPM_BUILD_ROOT%{_datadir}/asterisk/agi-bin/*
@@ -1009,15 +1007,15 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %dir %{_datadir}/asterisk/images
 %dir %{_datadir}/asterisk/moh
 %dir %{_datadir}/asterisk/sounds
-%dir %attr(750,root,asterisk) %{_datadir}/asterisk/licenses
 %dir %attr(750,root,asterisk) %{_datadir}/asterisk/keys
 # no need to protect publicly downloaded and packaged .pub
 %{_datadir}/asterisk/keys/*.pub
 %{_datadir}/asterisk/images/*.jpg
 %{_datadir}/asterisk/phoneprov
+%{_datadir}/asterisk/licenses
 
 %attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
-%{_localstatedir}/lib/asterisk/licenses
+%dir %attr(750,root,asterisk) %{_localstatedir}/lib/asterisk/licenses
 
 %attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk
 %attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk/cdr-csv
