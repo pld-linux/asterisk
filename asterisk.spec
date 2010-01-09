@@ -31,7 +31,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.44
+%define		rel	0.45
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -109,7 +109,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 BuildRequires:	portaudio-devel >= 19
 BuildRequires:	postgresql-devel
-BuildRequires:	pwlib-devel
+BuildRequires:	ptlib-devel
 BuildRequires:	radiusclient-ng-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
