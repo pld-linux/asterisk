@@ -264,9 +264,11 @@ fi
 %dir /var/lib/asterisk/images
 %dir /var/lib/asterisk/keys
 %dir /var/lib/asterisk/moh
-/var/lib/asterisk/moh/fpm-calm-river.wav
-/var/lib/asterisk/moh/fpm-sunshine.wav
-/var/lib/asterisk/moh/fpm-world-mix.wav
+/var/lib/asterisk/moh/macroform-cold_day.wav
+/var/lib/asterisk/moh/macroform-robot_dity.wav
+/var/lib/asterisk/moh/macroform-the_simplicity.wav
+/var/lib/asterisk/moh/manolo_camp-morning_coffee.wav
+/var/lib/asterisk/moh/eno_project-system.wav
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
 %dir /var/lib/asterisk/sounds/dictate
@@ -297,7 +299,7 @@ fi
 %{_mandir}/man8/safe_asterisk.8*
 %dir /var/lib/asterisk/firmware
 %dir /var/lib/asterisk/firmware/iax
-/var/lib/asterisk/firmware/iax/iaxy.bin
+#/var/lib/asterisk/firmware/iax/iaxy.bin
 
 %files examples
 %defattr(644,root,root,755)
