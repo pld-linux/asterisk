@@ -268,7 +268,7 @@ fi
 /var/lib/asterisk/moh/macroform-robot_dity.wav
 /var/lib/asterisk/moh/macroform-the_simplicity.wav
 /var/lib/asterisk/moh/manolo_camp-morning_coffee.wav
-/var/lib/asterisk/moh/eno_project-system.wav
+/var/lib/asterisk/moh/reno_project-system.wav
 %dir /var/lib/asterisk/sounds
 %dir /var/lib/asterisk/sounds/digits
 %dir /var/lib/asterisk/sounds/dictate
