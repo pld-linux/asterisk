@@ -109,7 +109,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 BuildRequires:	portaudio-devel >= 19
 BuildRequires:	postgresql-devel
-BuildRequires:	ptlib-devel
+BuildRequires:	pwlib-devel
 BuildRequires:	radiusclient-ng-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
