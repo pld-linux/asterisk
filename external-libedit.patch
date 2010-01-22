@@ -14,14 +14,14 @@ Index: configure.ac
 ===================================================================
 --- configure.ac	(revision 226061)
 +++ configure.ac	(working copy)
-@@ -232,6 +232,7 @@
+@@ -267,6 +267,7 @@
  AST_EXT_LIB_SETUP([ISDNNET], [ISDN4Linux Library], [isdnnet])
  AST_EXT_LIB_SETUP([JACK], [Jack Audio Connection Kit], [jack])
  AST_EXT_LIB_SETUP([LDAP], [OpenLDAP], [ldap])
 +AST_EXT_LIB_SETUP([LIBEDIT], [NetBSD Editline library], [libedit])
+ AST_EXT_LIB_SETUP([LIBXML2], [LibXML2], [libxml2])
  AST_EXT_LIB_SETUP([LTDL], [libtool], [ltdl])
  AST_EXT_LIB_SETUP([LUA], [Lua], [lua])
- AST_EXT_LIB_SETUP([MISDN], [mISDN User Library], [misdn])
 @@ -1593,6 +1594,27 @@
  AST_EXT_LIB_CHECK([SDL_IMAGE], [SDL_image], [IMG_Load], [SDL_image.h], [${SDL_LIB}], [${SDL_INCLUDE}])
  AST_EXT_LIB_CHECK([FFMPEG], [avcodec], [sws_getContext], [ffmpeg/avcodec.h], [-lpthread -lz -lm])
@@ -105,11 +105,12 @@ Index: makeopts.in
 ===================================================================
 --- makeopts.in	(revision 226061)
 +++ makeopts.in	(working copy)
-@@ -246,3 +246,7 @@
- 
+@@ -263,3 +263,8 @@
  # if poll is not present, let the makefile know.
  POLL_AVAILABLE=@HAS_POLL@
+ TIMERFD_INCLUDE=@TIMERFD_INCLUDE@
 +
 +LIBEDIT_INCLUDE=@LIBEDIT_INCLUDE@
 +LIBEDIT_LIB=@LIBEDIT_LIB@
 +LIBEDIT_OBJ=@LIBEDIT_OBJ@
++

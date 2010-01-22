@@ -31,16 +31,16 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.45
+%define		rel	1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.6.1.12
+Version:	1.6.2.1
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	d6bc1448b8fa274a2acaef1b15f4d485
+# Source0-md5:	8fbc60f9d80e686c749ae95292e225d8
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
@@ -988,7 +988,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_indications.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_musiconhold.so
