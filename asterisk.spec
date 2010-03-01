@@ -7,10 +7,10 @@
 # - make package for moh sound files
 # - likely odbc and imap broken:
 #   *** WARNING: identical binaries are copied, not linked:
-#        /usr/lib64/asterisk/modules/app_directory_odbc.so
+#     %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_odbc.so
 #   and  /usr/lib64/asterisk/modules/app_directory_imap.so
 #   *** WARNING: identical binaries are copied, not linked:
-#        /usr/lib64/asterisk/modules/app_directory_plain.so
+#     %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_plain.so
 #   and  /usr/lib64/asterisk/modules/app_directory_imap.so
 # - ncurses dep gone for good (replaced by libedit)?
 # - missing/failed features:
@@ -19,23 +19,6 @@
 #   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
 #   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
-#   /etc/asterisk/cli_aliases.conf
-#   /etc/asterisk/cli_permissions.conf
-#   /etc/asterisk/res_config_sqlite.conf
-#   /usr/lib64/asterisk/modules/app_confbridge.so
-#   /usr/lib64/asterisk/modules/app_originate.so
-#   /usr/lib64/asterisk/modules/app_playtones.so
-#   /usr/lib64/asterisk/modules/bridge_builtin_features.so
-#   /usr/lib64/asterisk/modules/bridge_multiplexed.so
-#   /usr/lib64/asterisk/modules/bridge_simple.so
-#   /usr/lib64/asterisk/modules/bridge_softmix.so
-#   /usr/lib64/asterisk/modules/chan_bridge.so
-#   /usr/lib64/asterisk/modules/format_siren14.so
-#   /usr/lib64/asterisk/modules/format_siren7.so
-#   /usr/lib64/asterisk/modules/func_aes.so
-#   /usr/lib64/asterisk/modules/func_sprintf.so
-#   /usr/lib64/asterisk/modules/res_clialiases.so
-#   /usr/lib64/asterisk/modules/res_timing_timerfd.so
 #   /usr/share/asterisk/documentation/appdocsxml.dtd
 #   /usr/share/asterisk/documentation/core-en_US.xml
 #
@@ -50,7 +33,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.1
+%define		rel	0.2
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -842,6 +825,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_manager.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_aliases.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_permissions.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/codecs.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/dnsmgr.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/dsp.conf
@@ -887,6 +872,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_chanisavail.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_channelredirect.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_chanspy.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_confbridge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_controlplayback.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_db.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dial.so
@@ -907,8 +893,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_morsecode.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_mp3.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_nbscat.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_originate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_parkandannounce.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_playback.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_playtones.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_privacy.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_queue.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_read.so
@@ -935,10 +923,15 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_waituntil.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_while.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_zapateller.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/bridge_builtin_features.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/bridge_multiplexed.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/bridge_simple.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/bridge_softmix.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_csv.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_manager.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_agent.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_local.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
@@ -958,10 +951,13 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_jpeg.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_pcm.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_siren14.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_siren7.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_sln.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_sln16.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_vox.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_aes.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_audiohookinherit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_base64.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_blacklist.so
@@ -989,6 +985,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sha1.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_shell.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_sprintf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_strings.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sysinfo.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_timeout.so
@@ -1004,6 +1001,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_adsi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ael_share.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_agi.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
@@ -1015,6 +1013,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_smdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_speech.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_dlinklists.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_heap.so
 
@@ -1246,6 +1245,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files sqlite
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_sqlite3_custom.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
