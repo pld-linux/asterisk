@@ -19,6 +19,25 @@
 #   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
 #   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
+#   /etc/asterisk/cli_aliases.conf
+#   /etc/asterisk/cli_permissions.conf
+#   /etc/asterisk/res_config_sqlite.conf
+#   /usr/lib64/asterisk/modules/app_confbridge.so
+#   /usr/lib64/asterisk/modules/app_originate.so
+#   /usr/lib64/asterisk/modules/app_playtones.so
+#   /usr/lib64/asterisk/modules/bridge_builtin_features.so
+#   /usr/lib64/asterisk/modules/bridge_multiplexed.so
+#   /usr/lib64/asterisk/modules/bridge_simple.so
+#   /usr/lib64/asterisk/modules/bridge_softmix.so
+#   /usr/lib64/asterisk/modules/chan_bridge.so
+#   /usr/lib64/asterisk/modules/format_siren14.so
+#   /usr/lib64/asterisk/modules/format_siren7.so
+#   /usr/lib64/asterisk/modules/func_aes.so
+#   /usr/lib64/asterisk/modules/func_sprintf.so
+#   /usr/lib64/asterisk/modules/res_clialiases.so
+#   /usr/lib64/asterisk/modules/res_timing_timerfd.so
+#   /usr/share/asterisk/documentation/appdocsxml.dtd
+#   /usr/share/asterisk/documentation/core-en_US.xml
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -31,16 +50,16 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	1
+%define		rel	0.1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.6.2.1
+Version:	1.6.2.5
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	8fbc60f9d80e686c749ae95292e225d8
+# Source0-md5:	9d1f7bcf6833605ced4b2740d14bd576
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
