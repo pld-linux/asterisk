@@ -911,9 +911,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_playback.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_privacy.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_queue.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_read.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_readexten.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_readfile.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_read.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_record.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sayunixtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_senddtmf.so
@@ -944,9 +944,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_phone.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_sip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_adpcm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
@@ -958,8 +958,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_jpeg.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_pcm.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/format_sln16.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_sln.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_sln16.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_vox.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_audiohookinherit.so
@@ -1087,12 +1087,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/meetme.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_dahdi.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_flash.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_meetme.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_page.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdibarge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiras.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiscan.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_flash.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_meetme.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_page.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_dahdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_dahdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_dahdi.so
