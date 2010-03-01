@@ -64,7 +64,7 @@ start() {
 	if [ $AST_CONFIG ]; then
 		AST_ARGS="$AST_ARGS -C $AST_CONFIG"
 	fi
-	daemon /usr/sbin/asterisk $AST_ARGS $ASTERISK_OPTS
+	daemon /usr/sbin/asterisk -F $AST_ARGS $ASTERISK_OPTS
 
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
