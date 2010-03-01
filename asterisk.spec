@@ -19,8 +19,6 @@
 #   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
 #   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
-#   /usr/share/asterisk/documentation/appdocsxml.dtd
-#   /usr/share/asterisk/documentation/core-en_US.xml
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -750,6 +748,9 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 %if %{with apidocs}
 find doc/api/html -name '*.map' -size 0 -delete
 %endif
+
+rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/appdocsxml.dtd
+rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/core-en_US.xml
 
 %clean
 rm -rf $RPM_BUILD_ROOT
