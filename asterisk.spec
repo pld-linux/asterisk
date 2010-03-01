@@ -33,7 +33,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.2
+%define		rel	0.3
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -181,13 +181,6 @@ Header files for Asterisk development platform.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe platformy programistycznej Asterisk.
-
-%package apidocs
-Summary:	API documentation for Asterisk
-Group:		Documentation
-
-%description apidocs
-API documentation for Asterisk.
 
 %package ais
 Summary:	Modules for Asterisk that use OpenAIS
@@ -520,6 +513,14 @@ Requires:	%{name} = %{version}-%{release}
 
 %description vorbis
 Ogg Vorbis format support.
+
+# define apidocs as last package, as it is the biggest one
+%package apidocs
+Summary:	API documentation for Asterisk
+Group:		Documentation
+
+%description apidocs
+API documentation for Asterisk.
 
 %prep
 %setup -q
