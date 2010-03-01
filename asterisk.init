@@ -95,8 +95,8 @@ condrestart() {
 
 reload() {
 	if [ ! -f /var/lock/subsys/asterisk ]; then
-		RETVAL=1
 		msg_not_running "Asterisk"
+		RETVAL=1
 		return
 	fi
 
