@@ -1,12 +1,12 @@
-/var/log/asterisk/* /var/log/asterisk/*/* {
-	create 640 root logs	
-        daily
-        missingok
+/var/log/asterisk/* {
+	create 640 asterisk asterisk
+	daily
+	missingok
 	compress
 	delaycompress
-        rotate 30
-        sharedscripts
-        postrotate
-                /sbin/service asterisk logger-reload
-        endscript
+	rotate 30
+	sharedscripts
+	postrotate
+		/sbin/service asterisk logger-reload
+	endscript
 }
