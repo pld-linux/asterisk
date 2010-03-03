@@ -1,4 +1,9 @@
-/var/log/asterisk/* {
+/var/log/asterisk/*_log
+/var/log/asterisk/debug
+/var/log/asterisk/console
+/var/log/asterisk/messages
+/var/log/asterisk/full
+{
 	create 640 asterisk asterisk
 	daily
 	missingok
