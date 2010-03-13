@@ -83,6 +83,7 @@ BuildRequires:	freetds-devel >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	gmime22-devel
+BuildRequires:	gtk+2-devel
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-devel
 BuildRequires:	jack-audio-connection-kit-devel
@@ -92,6 +93,7 @@ BuildRequires:	libgsm-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libresample-devel
 BuildRequires:	libvorbis-devel
+BuildRequires:	libxml2-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
 BuildRequires:	mISDNuser-devel
