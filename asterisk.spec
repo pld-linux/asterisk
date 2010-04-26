@@ -45,9 +45,9 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_txfax.c
-# Source10-md5:	9bb9a4b904f47de0ef8caf1670df9952
+# Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_rxfax.c
-# Source11-md5:	f2f060c287e145dad29167e8ef116d0e
+# Source11-md5:	ab6983b51c412883545b36993d704999
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
