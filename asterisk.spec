@@ -31,23 +31,23 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.3
+%define		rel	1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.6.2.5
+Version:	1.6.2.6
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	9d1f7bcf6833605ced4b2740d14bd576
+# Source0-md5:	f068ef2433eebdc7f6dd635986f36d77
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_txfax.c
-# Source10-md5:	8c8fcb263b76897022b4c28052a7b439
+# Source10-md5:	9bb9a4b904f47de0ef8caf1670df9952
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_rxfax.c
-# Source11-md5:	ab6983b51c412883545b36993d704999
+# Source11-md5:	f2f060c287e145dad29167e8ef116d0e
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
@@ -68,6 +68,7 @@ Patch14:	%{name}-bristuff-build.patch
 Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
+Patch18:	bug-17017.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel
 BuildRequires:	SDL_image-devel
@@ -552,6 +553,7 @@ cp %{SOURCE11} .
 %endif
 %patch16 -p1
 %patch17 -p1
+%patch18 -p0
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
