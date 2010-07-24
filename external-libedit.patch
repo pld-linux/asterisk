@@ -19,9 +19,9 @@ Index: configure.ac
  AST_EXT_LIB_SETUP([JACK], [Jack Audio Connection Kit], [jack])
  AST_EXT_LIB_SETUP([LDAP], [OpenLDAP], [ldap])
 +AST_EXT_LIB_SETUP([LIBEDIT], [NetBSD Editline library], [libedit])
+ AST_LIBCURL_CHECK_CONFIG([], [7.10.1])
  AST_EXT_LIB_SETUP([LIBXML2], [LibXML2], [libxml2])
  AST_EXT_LIB_SETUP([LTDL], [libtool], [ltdl])
- AST_EXT_LIB_SETUP([LUA], [Lua], [lua])
 @@ -1593,6 +1594,27 @@
  AST_EXT_LIB_CHECK([SDL_IMAGE], [SDL_image], [IMG_Load], [SDL_image.h], [${SDL_LIB}], [${SDL_INCLUDE}])
  AST_EXT_LIB_CHECK([FFMPEG], [avcodec], [sws_getContext], [ffmpeg/avcodec.h], [-lpthread -lz -lm])

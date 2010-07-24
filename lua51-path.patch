@@ -1,29 +1,18 @@
---- asterisk-1.6.1.12/configure.ac~	2009-12-30 19:53:27.000000000 +0200
-+++ asterisk-1.6.1.12/configure.ac	2009-12-30 20:01:28.604197217 +0200
-@@ -1400,9 +1400,9 @@
+--- asterisk-1.6.2.10/configure.ac~	2010-06-08 00:13:04.000000000 +0200
++++ asterisk-1.6.2.10/configure.ac	2010-07-24 11:23:03.842706054 +0200
+@@ -1559,12 +1559,12 @@
  		[${PWLIB_INCLUDE}], [${PWLIB_LIB}])
  fi
  
 -AST_EXT_LIB_CHECK([LUA], [lua5.1], [luaL_newstate], [lua5.1/lua.h], [-lm]) 
 +AST_EXT_LIB_CHECK([LUA], [lua51], [luaL_newstate], [lua51/lua.h], [-lm]) 
  if test "x${PBX_LUA}" = "x1" ; then
--	AC_DEFINE_UNQUOTED([LUA51_PREFIX], [1], [Define to 1 if lua is found with a lua5.1 prefix])
-+	AC_DEFINE_UNQUOTED([LUA51_PREFIX], [1], [Define to 1 if lua is found with a lua51 prefix])
+ 	if test x"${LUA_DIR}" = x; then
+-		LUA_INCLUDE="${LUA_INCLUDE} -I/usr/include/lua5.1"
++		LUA_INCLUDE="${LUA_INCLUDE} -I/usr/include/lua51"
+ 	else
+-		LUA_INCLUDE="${LUA_INCLUDE} -I${LUA_DIR}/lua5.1"
++		LUA_INCLUDE="${LUA_INCLUDE} -I${LUA_DIR}/lua51"
+ 	fi
  fi
  	
- # Some distributions (like SuSE) remove the 5.1 suffix.
---- asterisk-1.6.1.12/pbx/pbx_lua.c~	2009-11-25 17:44:45.000000000 +0200
-+++ asterisk-1.6.1.12/pbx/pbx_lua.c	2009-12-30 20:01:48.084048158 +0200
-@@ -43,9 +43,9 @@
- #include "asterisk/hashtab.h"
- 
- #ifdef LUA51_PREFIX
--#include <lua5.1/lua.h>
--#include <lua5.1/lauxlib.h>
--#include <lua5.1/lualib.h>
-+#include <lua51/lua.h>
-+#include <lua51/lauxlib.h>
-+#include <lua51/lualib.h>
- #else
- #include <lua.h>
- #include <lauxlib.h>

@@ -43,9 +43,9 @@
 --- asterisk-1.6.1.12/menuselect/menuselect.c~	2009-06-03 02:21:48.000000000 +0300
 +++ asterisk-1.6.1.12/menuselect/menuselect.c	2009-12-30 23:18:45.881616815 +0200
 @@ -29,8 +29,8 @@
- #include <string.h>
  #include <unistd.h>
  #include <stdarg.h>
+ #include <getopt.h>
 +#include <mxml.h>
  
 -#include "mxml/mxml.h"
