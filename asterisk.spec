@@ -5,6 +5,13 @@
 # - fix bluetooth patch
 # - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
 # - make package for moh sound files
+# - likely odbc and imap broken (identical code, some #define not working, etc):
+#   *** WARNING: identical binaries are copied, not linked:
+#     %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_odbc.so
+#   and  /usr/lib64/asterisk/modules/app_directory_imap.so
+#   *** WARNING: identical binaries are copied, not linked:
+#     %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_plain.so
+#   and  /usr/lib64/asterisk/modules/app_directory_imap.so
 # - ncurses dep gone for good (replaced by libedit)?
 # - missing/failed features:
 # $ grep =0 build_tools/menuselect-deps
