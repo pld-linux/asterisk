@@ -3,7 +3,6 @@
 # - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
 # - CFLAGS passing
 # - fix bluetooth patch
-# - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
 # - make package for moh sound files
 # - likely odbc and imap broken (identical code, some #define not working, etc):
 #   *** WARNING: identical binaries are copied, not linked:
@@ -31,7 +30,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	1
+%define		rel	2
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -68,6 +67,7 @@ Patch14:	%{name}-bristuff-build.patch
 Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
+Patch18:	Fix-history-loading-when-using-external-libedit.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel
 BuildRequires:	SDL_image-devel
@@ -552,6 +552,7 @@ cp %{SOURCE11} .
 %endif
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
