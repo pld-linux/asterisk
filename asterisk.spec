@@ -760,12 +760,6 @@ if [ "$1" = 0 ]; then
 	%groupremove asterisk
 fi
 
-%pre dahdi
-/usr/sbin/usermod -a -G dahdi asterisk
-
-%pre misdn
-/usr/sbin/usermod -a -G misdn asterisk
-
 %post
 /sbin/chkconfig --add asterisk
 # use -n (NOOP) as restart would be breaking all current calls.
