@@ -752,9 +752,6 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 find doc/api/html -name '*.map' -size 0 -delete
 %endif
 
-rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/appdocsxml.dtd
-rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/core-en_US.xml
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
