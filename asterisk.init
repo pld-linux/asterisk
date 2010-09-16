@@ -111,14 +111,32 @@ reload() {
 	fi
 }
 
+ael-reload() {
+	local res
+	res=$(aelparse -n -q | grep -F Error)
+	if [ "$res" ]; then
+		echo >&2 "$res"
+		RETVAL=1
+		return
+	fi
+
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		msg_not_running "Asterisk"
+		RETVAL=1
+		return
+	fi
+
+	/usr/sbin/asterisk -rx "ael reload"
+}
+
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   restart)
 	stop
@@ -128,13 +146,13 @@ case "$1" in
 	condrestart 0
 	;;
   reload|force-reload)
-  	reload
+	reload
 	;;
   dialplan-reload)
 	/usr/sbin/asterisk -rx "dialplan reload"
 	;;
   ael-reload)
-	/usr/sbin/asterisk -rx "ael reload"
+	ael-reload
 	;;
   logger-reload)
 	/usr/sbin/asterisk -rx "logger reload"
