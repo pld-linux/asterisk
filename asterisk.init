@@ -1,0 +1,169 @@
+#!/bin/sh
+#
+# asterix	This shell script takes care of starting and stopping
+#		Asterisk PBX
+#
+# chkconfig:	345 90 10
+#
+# description:	Asterisk is an Open Source PBX and telephony development platform that \ \
+#		can both replace a conventional PBX and act as a platform for \
+#		developing custom telephony applications for delivering dynamic \
+#		content over a telephone similarly to how one can deliver dynamic \
+#		content through a web browser using CGI and a web server.
+#
+# pidfile:	/var/run/asterisk/asterisk.pid
+# config:	/etc/asterisk/asterisk.conf
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Specify the configuration file
+AST_CONFIG=/etc/asterisk/asterisk.conf
+
+# The user that Asterisk will run as.
+AST_USER="asterisk"
+
+# If a user is specified above, Asterisk will change the group it runs
+# as to the primary group of the user, as well as initialize the
+# supplementary groups.  If you want to run Asterisk as a different
+# group, set AST_GROUP to the group that Asterisk should run as.  Note
+# that this may break DAHDI devices as supplementary groups will not
+# be initialized.
+#AST_GROUP="asterisk"
+
+# Get service config
+[ -f /etc/sysconfig/asterisk ] && . /etc/sysconfig/asterisk
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down "Asterisk"
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/asterisk ]; then
+		msg_already_running "Asterisk"
+		return
+	fi
+
+	msg_starting "Asterisk"
+	if [ $AST_USER ] ; then
+		AST_ARGS="-U $AST_USER"
+	fi
+	if [ $AST_GROUP ] ; then
+		AST_ARGS="$AST_ARGS -G $AST_GROUP"
+	fi
+	if [ $AST_CONFIG ]; then
+		AST_ARGS="$AST_ARGS -C $AST_CONFIG"
+	fi
+	daemon /usr/sbin/asterisk -F $AST_ARGS $ASTERISK_OPTS
+
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/asterisk
+}
+
+stop() {
+	# Stop daemons.
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		msg_not_running "Asterisk"
+		return
+	fi
+
+	msg_stopping "Asterisk"
+	killproc asterisk
+	rm -f /var/lock/subsys/asterisk >/dev/null 2>&1
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		msg_not_running "Asterisk"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
+reload() {
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		msg_not_running "Asterisk"
+		RETVAL=1
+		return
+	fi
+
+	msg_reloading "Asterisk"; busy
+	/usr/sbin/asterisk -rx reload > /dev/null 2>&1
+	RETVAL=$?
+	if [ $RETVAL -eq 0 ]; then
+	   	touch /var/lock/subsys/asterisk
+		ok
+	else
+		fail
+	fi
+}
+
+ael-reload() {
+	local res
+	res=$(aelparse -n -q | grep -F Error)
+	if [ "$res" ]; then
+		echo >&2 "$res"
+		RETVAL=1
+		return
+	fi
+
+	if [ ! -f /var/lock/subsys/asterisk ]; then
+		msg_not_running "Asterisk"
+		RETVAL=1
+		return
+	fi
+
+	/usr/sbin/asterisk -rx "ael reload"
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  reload|force-reload)
+	reload
+	;;
+  dialplan-reload)
+	/usr/sbin/asterisk -rx "dialplan reload"
+	;;
+  ael-reload)
+	ael-reload
+	;;
+  logger-reload)
+	/usr/sbin/asterisk -rx "logger reload"
+	;;
+  status)
+	status asterisk
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|dialplan-reload|ael-reload|logger-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL
