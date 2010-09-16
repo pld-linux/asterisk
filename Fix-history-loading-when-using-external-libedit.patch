@@ -4,19 +4,13 @@ Date: Mon, 8 Mar 2010 12:38:56 -0600
 Subject: [PATCH 2/2] Use the library function for loading command history rather than
  implementing our own.
 
----
- main/asterisk.c |   21 ++-------------------
- 1 files changed, 2 insertions(+), 19 deletions(-)
-
-diff --git a/main/asterisk.c b/main/asterisk.c
-index e27f685..b8176c5 100644
---- a/main/asterisk.c
-+++ b/main/asterisk.c
-@@ -2567,29 +2567,12 @@ static int ast_el_write_history(char *filename)
+--- asterisk-1.6.1.12/main/asterisk.c~	2010-09-16 17:31:01.000000000 +0300
++++ asterisk-1.6.1.12/main/asterisk.c	2010-09-16 17:32:29.551700797 +0300
+@@ -2431,30 +2431,12 @@
  
  static int ast_el_read_history(char *filename)
  {
--	char buf[MAX_HISTORY_COMMAND_LENGTH];
+-	char buf[256];
 -	FILE *f;
 -	int ret = -1;
 +	HistEvent ev;
@@ -28,8 +22,9 @@ index e27f685..b8176c5 100644
 -		return ret;
 -
 -	while (!feof(f)) {
--		if (!fgets(buf, sizeof(buf), f))
--			break;
+-		if (!fgets(buf, sizeof(buf), f)) {
+-			continue;
+-		}
 -		if (!strcmp(buf, "_HiStOrY_V2_\n"))
 -			continue;
 -		if (ast_all_zeros(buf))
@@ -44,6 +39,3 @@ index e27f685..b8176c5 100644
  }
  
  static void ast_remotecontrol(char *data)
--- 
-1.6.6.1
-
