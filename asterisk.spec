@@ -3,7 +3,6 @@
 # - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
 # - CFLAGS passing
 # - fix bluetooth patch
-# - ~/.asterisk_history gets encoded with \xxx on exit, each time yet again
 # - make package for moh sound files
 # - likely odbc and imap broken:
 #   *** WARNING: identical binaries are copied, not linked:
@@ -31,16 +30,16 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	0.44
+%define		rel		0.1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.6.1.12
+Version:	1.6.1.20
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	d6bc1448b8fa274a2acaef1b15f4d485
+# Source0-md5:	7295e6a34bb2e26985ef02608347f5f3
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
@@ -68,6 +67,7 @@ Patch14:	%{name}-bristuff-build.patch
 Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
+Patch18:	Fix-history-loading-when-using-external-libedit.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel
 BuildRequires:	SDL_image-devel
@@ -83,6 +83,7 @@ BuildRequires:	freetds-devel >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	gmime22-devel
+BuildRequires:	gtk+2-devel
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-devel
 BuildRequires:	jack-audio-connection-kit-devel
@@ -92,6 +93,7 @@ BuildRequires:	libgsm-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libresample-devel
 BuildRequires:	libvorbis-devel
+BuildRequires:	libxml2-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
 BuildRequires:	mISDNuser-devel
@@ -179,13 +181,6 @@ Header files for Asterisk development platform.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe platformy programistycznej Asterisk.
-
-%package apidocs
-Summary:	API documentation for Asterisk
-Group:		Documentation
-
-%description apidocs
-API documentation for Asterisk.
 
 %package ais
 Summary:	Modules for Asterisk that use OpenAIS
@@ -519,6 +514,14 @@ Requires:	%{name} = %{version}-%{release}
 %description vorbis
 Ogg Vorbis format support.
 
+# define apidocs as last package, as it is the biggest one
+%package apidocs
+Summary:	API documentation for Asterisk
+Group:		Documentation
+
+%description apidocs
+API documentation for Asterisk.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -549,6 +552,7 @@ cp %{SOURCE11} .
 %endif
 %patch16 -p1
 %patch17 -p1
+%patch18 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
@@ -748,6 +752,9 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 find doc/api/html -name '*.map' -size 0 -delete
 %endif
 
+rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/appdocsxml.dtd
+rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/core-en_US.xml
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -760,12 +767,6 @@ if [ "$1" = 0 ]; then
 	%userremove asterisk
 	%groupremove asterisk
 fi
-
-%pre dahdi
-/usr/sbin/usermod -a -G dahdi asterisk
-
-%pre misdn
-/usr/sbin/usermod -a -G misdn asterisk
 
 %post
 /sbin/chkconfig --add asterisk
