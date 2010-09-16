@@ -133,6 +133,9 @@ case "$1" in
   dialplan-reload)
 	/usr/sbin/asterisk -rx "dialplan reload"
 	;;
+  ael-reload)
+	/usr/sbin/asterisk -rx "ael reload"
+	;;
   logger-reload)
 	/usr/sbin/asterisk -rx "logger reload"
 	;;
@@ -141,7 +144,7 @@ case "$1" in
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|dialplan-reload|logger-reload|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|dialplan-reload|ael-reload|logger-reload|status}"
 	exit 3
 esac
 
