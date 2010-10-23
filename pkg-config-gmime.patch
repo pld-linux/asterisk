@@ -1,12 +1,11 @@
 Index: configure.ac
-===================================================================
---- configure.ac	(revision 221084)
-+++ configure.ac	(working copy)
-@@ -1520,7 +1520,17 @@
-     AST_CHECK_OSPTK([3], [5], [0])
+--- configure.ac.orig	2010-10-23 12:47:26.000000000 +0300
++++ configure.ac	2010-10-23 12:51:26.460817000 +0300
+@@ -1968,7 +1968,17 @@
+     CFLAGS="${saved_cflags}"
  fi
  
--AST_EXT_TOOL_CHECK([GMIME], [gmime], [], [], [#include <gmime/gmime.h>], [gboolean q = g_mime_check_version(0,0,0);])
+-AST_EXT_TOOL_CHECK([GMIME], [gmime-config], [], [], [#include <gmime/gmime.h>], [gboolean q = g_mime_check_version(0,0,0);])
 +PBX_GMIME=0
 +AC_CHECK_TOOL(PKGCONFIG, pkg-config, No)
 +if test ! "x${PKGCONFIG}" = xNo; then
