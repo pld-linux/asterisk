@@ -40,15 +40,14 @@
  
  ifdef C_OBJS
  menuselect_curses.o: CFLAGS+=$(C_INCLUDE)
---- asterisk-1.6.1.12/menuselect/menuselect.c~	2009-06-03 02:21:48.000000000 +0300
-+++ asterisk-1.6.1.12/menuselect/menuselect.c	2009-12-30 23:18:45.881616815 +0200
-@@ -29,8 +29,8 @@
- #include <unistd.h>
- #include <stdarg.h>
+--- asterisk-1.8.0/menuselect/menuselect.c.orig	2010-08-25 04:42:41.000000000 +0300
++++ asterisk-1.8.0/menuselect/menuselect.c	2010-10-23 12:10:31.077483673 +0300
+@@ -32,7 +32,7 @@
  #include <getopt.h>
-+#include <mxml.h>
  
+ #include "autoconfig.h"
 -#include "mxml/mxml.h"
++#include "mxml.h"
  #include "linkedlists.h"
  #include "menuselect.h"
  

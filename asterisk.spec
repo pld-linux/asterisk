@@ -30,23 +30,23 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	2
+%define		rel	0.1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.6.2.10
+Version:	1.8.0
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	50412a90942ae7306fb8dcc31a05c2ce
+# Source0-md5:	83203b43aaf12f36bdc953d6b04d18a4
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_txfax.c
-# Source10-md5:	8c8fcb263b76897022b4c28052a7b439
+# Source10-md5:	9bb9a4b904f47de0ef8caf1670df9952
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_rxfax.c
-# Source11-md5:	ab6983b51c412883545b36993d704999
+# Source11-md5:	f2f060c287e145dad29167e8ef116d0e
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
 Patch2:		%{name}-no_k6_on_sparc.patch

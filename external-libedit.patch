@@ -1,15 +1,15 @@
 Index: build_tools/menuselect-deps.in
 ===================================================================
---- build_tools/menuselect-deps.in	(revision 226061)
-+++ build_tools/menuselect-deps.in	(working copy)
-@@ -17,6 +17,7 @@
- IXJUSER=@PBX_IXJUSER@
+--- build_tools/menuselect-deps.in.orig	2010-07-28 01:30:38.000000000 +0300
++++ build_tools/menuselect-deps.in	2010-10-23 12:28:17.140817003 +0300
+@@ -23,6 +23,7 @@
  JACK=@PBX_JACK@
+ KQUEUE=@PBX_KQUEUE@
  LDAP=@PBX_LDAP@
 +LIBEDIT=@PBX_LIBEDIT@
+ LIBXML2=@PBX_LIBXML2@
  LTDL=@PBX_LTDL@
  LUA=@PBX_LUA@
- MISDN=@PBX_MISDN@
 Index: configure.ac
 ===================================================================
 --- configure.ac	(revision 226061)
@@ -50,9 +50,21 @@ Index: configure.ac
  # possible places for video4linux version 1
  AC_CHECK_HEADER([linux/videodev.h],
  	[AC_DEFINE_UNQUOTED([HAVE_VIDEODEV_H], 1, [Define to 1 if your system has linux/videodev.h.])])
---- main/Makefile~	2010-04-26 14:11:33.000000000 +0300
-+++ main/Makefile	2010-04-26 14:14:24.419527855 +0300
-@@ -129,6 +129,8 @@
+--- main/Makefile.orig	2010-08-02 17:41:46.000000000 +0300
++++ main/Makefile	2010-10-23 12:25:20.520816998 +0300
+@@ -103,9 +103,9 @@
+ 
+ CHECK_SUBDIR:	# do nothing, just make sure that we recurse in the subdir/
+ 
+-editline/libedit.a: CHECK_SUBDIR
++$(LIBEDIT_OBJ): CHECK_SUBDIR
+ 	cd editline && test -f config.h || CFLAGS="$(PTHREAD_CFLAGS) $(subst $(ASTTOPDIR),../../,$(_ASTCFLAGS:-Werror=) $(ASTCFLAGS))" LDFLAGS="$(_ASTLDFLAGS) $(ASTLDFLAGS)" ./configure --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-ncurses=$(NCURSES_DIR) --with-curses=$(CURSES_DIR) --with-termcap=$(TERMCAP_DIR) --with-tinfo=$(TINFO_DIR)
+-	$(MAKE) -C editline libedit.a
++	$(MAKE) -C editline $(LIBEDIT_OBJ)
+ 
+ db1-ast/libdb1.a: CHECK_SUBDIR
+ 	_ASTCFLAGS="$(_ASTCFLAGS) -Wno-strict-aliasing" ASTCFLAGS="$(ASTCFLAGS)" $(MAKE) -C db1-ast libdb1.a
+@@ -139,6 +139,8 @@
  	$(CC) -g -o testexpr2 ast_expr2f.o ast_expr2.o -lm
  	rm ast_expr2.o ast_expr2f.o 
  
@@ -61,22 +73,24 @@ Index: configure.ac
  ifneq ($(findstring ENABLE_UPLOADS,$(MENUSELECT_CFLAGS)),)
  http.o: _ASTCFLAGS+=$(GMIME_INCLUDE)
  endif
-@@ -176,13 +176,13 @@
- GMIMELDFLAGS+=$(GMIME_LIB)
- endif
+@@ -173,13 +175,13 @@
+ 
+ $(OBJS): _ASTCFLAGS+=-DAST_MODULE=\"core\"
  
 -$(MAIN_TGT): $(OBJS) editline/libedit.a db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS)
 +$(MAIN_TGT): $(OBJS) $(LIBEDIT_OBJ) db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS)
  	@$(CC) -c -o buildinfo.o $(_ASTCFLAGS) buildinfo.c $(ASTCFLAGS)
- 	$(ECHO_PREFIX) echo "   [LD] $^ -> $@"
+-	$(ECHO_PREFIX) echo "   [LD] $(OBJS) editline/libedit.a db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS) -> $@"
++	$(ECHO_PREFIX) echo "   [LD] $(OBJS) $(LIBEDIT_OBJ) db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS) -> $@"
  ifneq ($(findstring chan_h323,$(MENUSELECT_CHANNELS)),)
--	$(CMD_PREFIX) $(CC) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(_ASTLDFLAGS) $(ASTLDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(GMIMELDFLAGS)
-+	$(CMD_PREFIX) $(CC) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(_ASTLDFLAGS) $(ASTLDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(GMIMELDFLAGS) $(LIBEDIT_LIB)
+-	$(CMD_PREFIX) $(CC) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(_ASTLDFLAGS) $(ASTLDFLAGS) $(OBJS) editline/libedit.a db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS) buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(GMIMELDFLAGS)
++	$(CMD_PREFIX) $(CC) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(_ASTLDFLAGS) $(ASTLDFLAGS) $(OBJS) $(LIBEDIT_OBJ) db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS) buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(GMIMELDFLAGS) $(LIBEDIT_LIB)
  else
--	$(CMD_PREFIX) $(CXX) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(_ASTLDFLAGS) $(ASTLDFLAGS) $(H323LDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(H323LDLIBS) $(GMIMELDFLAGS)
-+	$(CMD_PREFIX) $(CXX) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(_ASTLDFLAGS) $(ASTLDFLAGS) $(H323LDFLAGS) $^ buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(H323LDLIBS) $(GMIMELDFLAGS) $(LIBEDIT_LIB)
+-	$(CMD_PREFIX) $(CXX) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(_ASTLDFLAGS) $(ASTLDFLAGS) $(H323LDFLAGS) $(OBJS) editline/libedit.a db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS) buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(H323LDLIBS) $(GMIMELDFLAGS)
++	$(CMD_PREFIX) $(CXX) $(STATIC_BUILD) -o $@ $(ASTLINK) $(AST_EMBED_LDFLAGS) $(_ASTLDFLAGS) $(ASTLDFLAGS) $(H323LDFLAGS) $(OBJS) $(LIBEDIT_OBJ) db1-ast/libdb1.a $(AST_EMBED_LDSCRIPTS) buildinfo.o $(AST_LIBS) $(AST_EMBED_LIBS) $(H323LDLIBS) $(GMIMELDFLAGS) $(LIBEDIT_LIB)
  endif
- 	$(CMD_PREFIX) $(ASTTOPDIR)/build_tools/strip_nonapi $@ || rm $@
+ 
+ ifeq ($(GNU_LD),1)
  
 Index: main/cli.c
 ===================================================================
