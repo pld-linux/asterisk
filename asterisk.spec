@@ -18,6 +18,9 @@
 #   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
 #   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
+# - app_{rx,tx}fax seems to b replaced by app_fax alongside latest spanddsp
+#   See: http://sourceforge.net/projects/agx-ast-addons/
+#        https://agx-ast-addons.svn.sourceforge.net/svnroot/agx-ast-addons/trunk/attic/
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
@@ -43,10 +46,10 @@ Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.ta
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
-Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_txfax.c
-# Source10-md5:	9bb9a4b904f47de0ef8caf1670df9952
-Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/app_rxfax.c
-# Source11-md5:	f2f060c287e145dad29167e8ef116d0e
+Source10:	app_txfax.c
+# Source10-md5:	4418c3dd99b86644df9c80b7344bbbae
+Source11:	app_rxfax.c
+# Source11-md5:	81d9e3d7edbe0a1125769d1a8a9415cd
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
