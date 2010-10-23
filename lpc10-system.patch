@@ -41,9 +41,9 @@
  
  $(LIBILBC):
  	@$(MAKE) -C ilbc all _ASTCFLAGS="$(filter-out -Wmissing-prototypes -Wmissing-declarations -Wshadow,$(_ASTCFLAGS)) $(AST_NO_STRICT_OVERFLOW)"
---- asterisk-1.6.1.12/makeopts.in~	2009-12-31 11:15:37.000000000 +0200
-+++ asterisk-1.6.1.12/makeopts.in	2009-12-31 13:02:52.623760100 +0200
-@@ -96,6 +96,10 @@
+--- asterisk-1.8.0/makeopts.in.orig	2010-10-23 13:03:13.000000000 +0300
++++ asterisk-1.8.0/makeopts.in	2010-10-23 13:10:09.850817002 +0300
+@@ -131,6 +131,10 @@
  GSM_INCLUDE=@GSM_INCLUDE@
  GSM_LIB=@GSM_LIB@
  
@@ -51,20 +51,20 @@
 +LPC10_INCLUDE=@LPC10_INCLUDE@
 +LPC10_LIB=@LPC10_LIB@
 +
- GTK_INCLUDE=@GTK_INCLUDE@
- GTK_LIB=@GTK_LIB@
+ GTK2_INCLUDE=@GTK2_INCLUDE@
+ GTK2_LIB=@GTK2_LIB@
  
---- asterisk-1.6.1.12/configure.ac~	2009-12-31 11:15:37.000000000 +0200
-+++ asterisk-1.6.1.12/configure.ac	2009-12-31 13:09:33.900041134 +0200
-@@ -237,6 +237,7 @@
- AST_EXT_LIB_SETUP([DAHDI], [DAHDI], [dahdi])
+--- asterisk-1.8.0/configure.ac.orig	2010-10-23 13:03:13.547483666 +0300
++++ asterisk-1.8.0/configure.ac	2010-10-23 13:07:06.384150337 +0300
+@@ -373,6 +373,7 @@
  AST_EXT_LIB_SETUP([BKTR], [Stack Backtrace], [execinfo])
  AST_EXT_LIB_SETUP([GSM], [External GSM], [gsm], [, use 'internal' GSM otherwise])
-+AST_EXT_LIB_SETUP([LPC10], [External lpc10 library], [lpc10], [, use 'internal' lpc10 otherwise])
- AST_EXT_LIB_SETUP([GTK], [gtk], [gtk])
  AST_EXT_LIB_SETUP([GTK2], [gtk2], [gtk2])
- AST_EXT_LIB_SETUP([GMIME], [GMime library], [gmime])
-@@ -712,6 +713,72 @@
++AST_EXT_LIB_SETUP([LPC10], [External lpc10 library], [lpc10], [, use 'internal' lpc10 otherwise])
+ AST_EXT_LIB_SETUP([GMIME], [GMime], [gmime])
+ AST_EXT_LIB_SETUP([OPENH323], [OpenH323], [h323])
+ AST_EXT_LIB_SETUP([HOARD], [Hoard Memory Allocator], [hoard])
+@@ -1095,6 +1096,72 @@
     fi
  fi
  
