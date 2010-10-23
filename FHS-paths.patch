@@ -1,8 +1,8 @@
 Index: pbx/ael/ael-test/ref.ael-vtest13
 ===================================================================
---- pbx/ael/ael-test/ref.ael-vtest13	(revision 222649)
-+++ pbx/ael/ael-test/ref.ael-vtest13	(working copy)
-@@ -2107,7 +2107,7 @@
+--- pbx/ael/ael-test/ref.ael-vtest13.orig	2010-10-05 02:23:11.000000000 +0300
++++ pbx/ael/ael-test/ref.ael-vtest13	2010-10-23 12:56:19.047483668 +0300
+@@ -2182,7 +2182,7 @@
  
  
  [callerid-liar]
@@ -11,34 +11,34 @@ Index: pbx/ael/ael-test/ref.ael-vtest13
  exten => s,2,Background(priv-liar)
  exten => s,3,Hangup()
  exten => s,4,Return()
-@@ -2142,7 +2142,7 @@
- exten => s,4,Zapateller(nocallerid)
- exten => s,5,PrivacyManager()
- exten => s,6,GotoIf($["${PRIVACYMGRSTATUS}" = "FAILED" ]?7:11)
--exten => s,7,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/privmanfailed.gsm)
-+exten => s,7,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/privmanfailed.gsm)
- exten => s,8,Gosub(std-priv-exten,s,1(Zap/3r1&Zap/5r1,2,25,mtw,telemarket,telemarket))
- exten => s,9,Hangup()
- exten => s,10,Return()
-@@ -2168,7 +2168,7 @@
- exten => s,30,verbose(direct is XXX#${direct}XXXX)
- exten => s,31,Playback(greetings/direct)
- exten => s,32,Playback(/var/spool/asterisk/voicemail/default/${direct}/greet)
--exten => s,33,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => s,33,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => s,34,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/${direct}/greet.wav&)
- exten => s,35,Goto(sw-92-${direct},10)
- exten => s,36,NoOp(Finish switch-if-homeline-91-92)
-@@ -2247,7 +2247,7 @@
- exten => sw-92-2,11,Goto(s,loopback)
- exten => sw-92-1,10,Gosub(std-priv-exten,s,1(Zap/6r3&Sip/murf,1,25,mpA(beep)tw,telemarket,telemarket))
- exten => sw-92-1,11,Goto(s,loopback)
+@@ -2218,7 +2218,7 @@
+ exten => s,5,Zapateller(nocallerid)
+ exten => s,6,PrivacyManager()
+ exten => s,7,GotoIf($["${PRIVACYMGRSTATUS}" = "FAILED" ]?8:12)
+-exten => s,8,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/privmanfailed.gsm)
++exten => s,8,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/privmanfailed.gsm)
+ exten => s,9,Gosub(std-priv-exten,s,1(Zap/3r1&Zap/5r1,2,25,mtw,telemarket,telemarket))
+ exten => s,10,Hangup()
+ exten => s,11,Return()
+@@ -2244,7 +2244,7 @@
+ exten => s,31,verbose(direct is XXX#${direct}XXXX)
+ exten => s,32,Playback(greetings/direct)
+ exten => s,33,Playback(/var/spool/asterisk/voicemail/default/${direct}/greet)
+-exten => s,34,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => s,34,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => s,35,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/${direct}/greet.wav&)
+ exten => s,36,Goto(sw_92_${direct},10)
+ exten => s,37,NoOp(Finish switch_if_homeline_91_92)
+@@ -2323,7 +2323,7 @@
+ exten => sw_92_2,11,Goto(s,loopback)
+ exten => sw_92_1,10,Gosub(std-priv-exten,s,1(Zap/6r3&Sip/murf,1,25,mpA(beep)tw,telemarket,telemarket))
+ exten => sw_92_1,11,Goto(s,loopback)
 -exten => 1,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
 +exten => 1,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
  exten => 1,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/2/greet.wav&)
  exten => 1,3,Gosub(std-priv-exten,s,1(Zap/3r1&Zap/5r1,2,25,mtw,telemarket,telemarket))
  exten => 1,4,Goto(s,loopback)
-@@ -2324,31 +2324,31 @@
+@@ -2400,31 +2400,31 @@
  
  [homeline-kids]
  exten => s,1(begin),Background(murphy-homeline-kids)
@@ -77,7 +77,7 @@ Index: pbx/ael/ael-test/ref.ael-vtest13
  exten => 7,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/9/greet.wav&)
  exten => 7,3,Gosub(std-priv-exten,s,1(Zap/3r2&Zap/5r2,9,35,mtw,telemarket,telemarket))
  exten => 7,4,Goto(homeline,s,loopback)
-@@ -2376,7 +2376,7 @@
+@@ -2452,7 +2452,7 @@
  exten => s,6,TrySystem(/usr/local/bin/who-is-it ${CALLERID(num)} "${CALLERID(name)}"&)
  exten => s,7(loopback),Background(greetings/greeting)
  exten => s,8,Background(murphy-office-intro1)
@@ -86,7 +86,7 @@ Index: pbx/ael/ael-test/ref.ael-vtest13
  exten => 1,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/1/greet.wav&)
  exten => 1,3,Gosub(std-priv-exten,s,1(Zap/6&Sip/murf,1,30,mtw,telemarket,telemarket))
  exten => 1,4,Goto(s,loopback)
-@@ -2502,7 +2502,7 @@
+@@ -2578,7 +2578,7 @@
  exten => 760,1,DateTime()
  exten => 760,2,Goto(s,loopback)
  exten => 761,1,Record(announcement:gsm)
@@ -553,12 +553,12 @@ Index: configs/phoneprov.conf.sample
 +setvar => CUSTOM_CONFIG=/usr/share/asterisk/phoneprov/configs/custom.cfg  ; Custom variable
 Index: configs/musiconhold.conf.sample
 ===================================================================
---- configs/musiconhold.conf.sample	(revision 222649)
-+++ configs/musiconhold.conf.sample	(working copy)
+--- configs/musiconhold.conf.sample.orig	2010-10-16 13:47:00.000000000 +0300
++++ configs/musiconhold.conf.sample	2010-10-23 13:01:47.124150334 +0300
 @@ -32,7 +32,7 @@
  ; The path specified can be either an absolute path (starts with '/'),
  ; or a relative path; relative paths are interpreted as being relative
- ; to the 'astvarlibdir' in asterisk.conf, which defaults to
+ ; to the 'astdatalibdir' in asterisk.conf, which defaults to
 -; /var/lib/asterisk.
 +; /usr/share/asterisk.
  ;
@@ -582,19 +582,19 @@ Index: configs/musiconhold.conf.sample
  ;application=/site/sw/bin/madplay -Q -o raw:- --mono -R 8000 -a -12
 Index: configs/osp.conf.sample
 ===================================================================
---- configs/osp.conf.sample	(revision 222649)
-+++ configs/osp.conf.sample	(working copy)
-@@ -36,8 +36,8 @@
+--- configs/osp.conf.sample.orig	2010-07-12 07:16:18.000000000 +0300
++++ configs/osp.conf.sample	2010-10-23 13:00:01.017483668 +0300
+@@ -45,8 +45,8 @@
  ;source=domain name or [IP address in brackets]
  ;
  ; Define path and file name of crypto files.
--; The default path for crypto file is /var/lib/asterisk/keys.  If no path is 
+-; The default path for crypto file is /var/lib/asterisk/keys.  If no path is
 -; defined, crypto files will in /var/lib/asterisk/keys directory.
-+; The default path for crypto file is /usr/share/asterisk/keys.  If no path is 
-+; defined, crypto files will in /usr/share/asterisk/keys directory.
++; The default path for crypto file is /user/share/asterisk/keys.  If no path is
++; defined, crypto files will in /user/share/asterisk/keys directory.
  ;
- ; Specify the private key file name.  
- ; If this parameter is unspecified or not present, the default name will be the 
+ ; Specify the private key file name.
+ ; If this parameter is unspecified or not present, the default name will be the
 Index: configs/res_config_sqlite.conf.sample
 ===================================================================
 --- configs/res_config_sqlite.conf.sample	(revision 222649)
