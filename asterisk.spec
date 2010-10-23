@@ -47,9 +47,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
 Source10:	app_txfax.c
-# Source10-md5:	4418c3dd99b86644df9c80b7344bbbae
 Source11:	app_rxfax.c
-# Source11-md5:	81d9e3d7edbe0a1125769d1a8a9415cd
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
