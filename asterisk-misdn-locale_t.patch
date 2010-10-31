@@ -1,0 +1,10 @@
+--- asterisk-1.8/channels/misdn/ie.c	(revision 292666)
++++ asterisk-1.8/channels/misdn/ie.c	(revision 292667)
+@@ -24,6 +24,7 @@
+   if qi is not NULL (TE-mode), offset is set
+ */
+ 
++#include "asterisk.h"
+ 
+ #include <string.h>
+ 
