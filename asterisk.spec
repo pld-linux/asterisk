@@ -69,6 +69,7 @@ Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
 Patch18:	Fix-history-loading-when-using-external-libedit.patch
+Patch19:	%{name}-misdn-locale_t.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel
 BuildRequires:	SDL_image-devel
@@ -80,6 +81,7 @@ BuildRequires:	bison
 BuildRequires:	curl-devel
 BuildRequires:	dahdi-linux-devel
 BuildRequires:	dahdi-tools-devel >= 2.0.0
+BuildRequires:	doxygen
 BuildRequires:	freetds-devel >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
@@ -554,6 +556,7 @@ cp %{SOURCE11} .
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
