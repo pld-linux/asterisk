@@ -788,7 +788,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files
 %defattr(644,root,root,755)
-%doc README* *.txt ChangeLog BUGS CREDITS configs
+%doc README *.txt ChangeLog BUGS CREDITS configs
 %doc doc/{asterisk.sgml,PEERING} doc/{backtrace,callfiles,externalivr,macroexclusive,manager_1_1,modules,queue}.txt
 %doc doc/{rtp-packetization,siptls,smdi,sms,speechrec,ss7,video}.txt
 
