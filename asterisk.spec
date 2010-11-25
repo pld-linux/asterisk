@@ -1209,7 +1209,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_pgsql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pgsql.conf
-%doc contrib/scripts/realtime_pgsql.sql
+%doc contrib/realtime/postgresql/realtime.sql
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_pgsql.so
 
