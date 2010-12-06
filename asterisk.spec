@@ -688,7 +688,7 @@ install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/e
 
 export ASTCFLAGS="%{rpmcflags}"
 
-%{__make} install \
+%{__make} -j1 install \
 	DEBUG= \
 	OPTIMIZE= \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -697,7 +697,7 @@ export ASTCFLAGS="%{rpmcflags}"
 	ASTVARLIBDIR=%{_datadir}/asterisk \
 	ASTDBDIR=%{_localstatedir}/spool/asterisk
 
-%{__make} samples \
+%{__make} -j1 samples \
 	DEBUG= \
 	OPTIMIZE= \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -796,18 +796,18 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %doc doc/{asterisk.sgml,PEERING} doc/{backtrace,callfiles,externalivr,macroexclusive,manager_1_1,modules,queue}.txt
 %doc doc/{rtp-packetization,siptls,smdi,sms,speechrec,ss7,video}.txt
 
-%attr(755,root,root) %{_sbindir}/aelparse
+#%attr(755,root,root) %{_sbindir}/aelparse
 %attr(755,root,root) %{_sbindir}/astcanary
 %attr(755,root,root) %{_sbindir}/asterisk
 %attr(755,root,root) %{_sbindir}/astgenkey
 %attr(755,root,root) %{_sbindir}/autosupport
-%attr(755,root,root) %{_sbindir}/conf2ael
-%attr(755,root,root) %{_sbindir}/muted
+#%attr(755,root,root) %{_sbindir}/conf2ael
+#%attr(755,root,root) %{_sbindir}/muted
 %attr(755,root,root) %{_sbindir}/rasterisk
-%attr(755,root,root) %{_sbindir}/refcounter
-%attr(755,root,root) %{_sbindir}/smsq
-%attr(755,root,root) %{_sbindir}/stereorize
-%attr(755,root,root) %{_sbindir}/streamplayer
+#%attr(755,root,root) %{_sbindir}/refcounter
+#%attr(755,root,root) %{_sbindir}/smsq
+#%attr(755,root,root) %{_sbindir}/stereorize
+#%attr(755,root,root) %{_sbindir}/streamplayer
 %{_mandir}/man8/asterisk.8*
 %{_mandir}/man8/astgenkey.8*
 %{_mandir}/man8/autosupport.8*
@@ -818,7 +818,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %attr(750,root,asterisk) %dir %{_sysconfdir}/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/adsi.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/adtranvofr.conf
+#%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/adtranvofr.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/agents.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alarmreceiver.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/amd.conf
@@ -1029,7 +1029,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %dir %{_datadir}/asterisk/sounds
 %dir %attr(750,root,asterisk) %{_datadir}/asterisk/keys
 # no need to protect publicly downloaded and packaged .pub
-%{_datadir}/asterisk/keys/*.pub
+#%{_datadir}/asterisk/keys/*.pub
 %{_datadir}/asterisk/images/*.jpg
 %{_datadir}/asterisk/phoneprov
 %{_datadir}/asterisk/licenses
@@ -1073,9 +1073,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alsa.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_alsa.so
 
-%files astman
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_sbindir}/astman
+#%files astman
+#%defattr(644,root,root,755)
+#%attr(755,root,root) %{_sbindir}/astman
 
 %files curl
 %defattr(644,root,root,755)
@@ -1091,7 +1091,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_dahdi.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdibarge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiras.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiscan.so
+#%attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiscan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_flash.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_meetme.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_page.so
@@ -1105,7 +1105,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files fax
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_fax.so
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_fax.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_fax.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_fax_spandsp.so
 
 %files festival
 %defattr(644,root,root,755)
@@ -1194,10 +1196,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc.so
 
-%files osp
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/osp.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_osplookup.so
+#%files osp
+#%defattr(644,root,root,755)
+#%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/osp.conf
+#%attr(755,root,root) %{_libdir}/asterisk/modules/app_osplookup.so
 
 %files oss
 %defattr(644,root,root,755)
