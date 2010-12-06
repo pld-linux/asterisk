@@ -825,9 +825,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/amd.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/asterisk.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/asterisk.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ccss.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_manager.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_syslog.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli.conf
@@ -1103,6 +1105,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %doc contrib/scripts/dbsep.cgi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/dbsep.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_curl.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_curl.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_curl.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_curl.so
@@ -1210,10 +1213,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_adaptive_odbc.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_odbc.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_odbc.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/func_odbc.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_odbc.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_adaptive_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_odbc.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/cel_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc.so
@@ -1236,14 +1241,17 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files postgresql
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_pgsql.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_pgsql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pgsql.conf
 %doc contrib/realtime/postgresql/realtime.sql
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_pgsql.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/cel_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_pgsql.so
 
 %files radius
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_radius.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/cel_radius.so
 
 %files resample
 %defattr(644,root,root,755)
@@ -1272,15 +1280,19 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files sqlite
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_sqlite3_custom.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_sqlite3_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/cel_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
 
 %files tds
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_tds.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_tds.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_tds.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/cel_tds.so
 
 %files unistim
 %defattr(644,root,root,755)
