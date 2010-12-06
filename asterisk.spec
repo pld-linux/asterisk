@@ -71,7 +71,7 @@ Patch17:	gsm-libpoison.patch
 Patch18:	Fix-history-loading-when-using-external-libedit.patch
 Patch19:	%{name}-misdn-locale_t.patch
 URL:		http://www.asterisk.org/
-BuildRequires:	OSPToolkit-devel
+BuildRequires:	OSPToolkit-devel >= 3.6.1
 BuildRequires:	SDL_image-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
@@ -792,7 +792,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files
 %defattr(644,root,root,755)
-%doc README* *.txt ChangeLog BUGS CREDITS configs
+%doc README *.txt ChangeLog BUGS CREDITS configs
 %doc doc/{asterisk.sgml,PEERING} doc/{backtrace,callfiles,externalivr,macroexclusive,manager_1_1,modules,queue}.txt
 %doc doc/{rtp-packetization,siptls,smdi,sms,speechrec,ss7,video}.txt
 
@@ -1196,10 +1196,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc.so
 
-#%files osp
-#%defattr(644,root,root,755)
-#%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/osp.conf
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_osplookup.so
+%files osp
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/osp.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_osplookup.so
 
 %files oss
 %defattr(644,root,root,755)
@@ -1215,7 +1215,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_pgsql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pgsql.conf
-%doc contrib/scripts/realtime_pgsql.sql
+%doc contrib/realtime/postgresql/realtime.sql
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_pgsql.so
 
