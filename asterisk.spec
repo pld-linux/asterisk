@@ -21,12 +21,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.4.34
+Version:	1.4.37
 Release:	1%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	26c324f537a77fcd962110261d4be630
+# Source0-md5:	af787c4dead1d7ada9315e6b19c5231a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	http://downloads.digium.com/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.4.6.tar.gz
@@ -57,6 +57,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 %{?with_bluetooth:BuildRequires: bluez-devel}
+BuildRequires:	dahdi-linux-devel
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
@@ -70,7 +71,6 @@ BuildRequires:	sed >= 4.0
 %{?with_rxfax:BuildRequires:	spandsp-devel-%{_spandsp_version}}
 BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
-BuildRequires:	zaptel-devel >= 1.2.10
 BuildRequires:	zlib-devel
 %if %{with h323}
 BuildRequires:	openh323-devel
@@ -188,8 +188,9 @@ rm -f pbx/.depend
 CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
 %endif
 %configure \
-	--with-zaptel=%{_prefix} \
-	--without-dahdi \
+	--with-dahdi=%{_prefix} \
+	--without-zaptel \
+	--without-osptk \
 	%{!?with_h323:--without-h323} \
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap="`pwd`"/imap
