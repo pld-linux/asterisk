@@ -1154,9 +1154,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_gsm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav_gsm.so
 
+%if %{with h323}
 %files h323
 %defattr(644,root,root,755)
-%if %{with h323}
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/h323.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_h323.so
 %endif
