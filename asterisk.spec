@@ -29,6 +29,7 @@
 %bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
+%bcond_without	h323		# with h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
@@ -107,7 +108,9 @@ BuildRequires:	neon-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
 BuildRequires:	openais-devel
+%if %{with h323}
 BuildRequires:	openh323-devel >= 1.19.0
+%endif
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
@@ -115,7 +118,9 @@ BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 BuildRequires:	portaudio-devel >= 19
 BuildRequires:	postgresql-devel
+%if %{with h323}
 BuildRequires:	pwlib-devel
+%endif
 BuildRequires:	radiusclient-ng-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	sed >= 4.0
@@ -594,6 +599,7 @@ cd ..
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap=system \
 	--with-gsm=/usr \
+	%{!?with_h3232:--without-h323} \
 	--with-lpc10=/usr \
 	--with-libedit=yes
 
@@ -602,9 +608,11 @@ cd ..
 
 cp -f .cleancount .lastclean
 
+%if %{with h323}
 # included conditionally, so make sure its there first
 %{__make} -C channels/h323 Makefile.ast \
 	%{?with_verbose:NOISY_BUILD=yes} \
+%endif
 
 %{__make} DEBUG= \
 	OPTIMIZE= \
@@ -1148,8 +1156,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files h323
 %defattr(644,root,root,755)
+%if %{with h323}
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/h323.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_h323.so
+%endif
 
 %files http
 %defattr(644,root,root,755)
