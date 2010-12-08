@@ -9,6 +9,7 @@
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx :-D) fax
 %bcond_with	bluetooth	# without bluetooth support (NFT)
+%bcond_without	h323		# With H.323 support
 %bcond_with	zhone 		# zhone hack
 %bcond_with	zhone_hack 	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
@@ -71,8 +72,10 @@ BuildRequires:	speex-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	zaptel-devel >= 1.2.10
 BuildRequires:	zlib-devel
+%if %{with h323}
 BuildRequires:	openh323-devel
 BuildRequires:	pwlib-devel
+%endif
 %if %{with bristuff}
 BuildRequires:	libgsmat-devel
 BuildRequires:	libpri-bristuff-devel >= 1.2.4
@@ -81,8 +84,10 @@ BuildRequires:  libpri-devel >= 1.2.4
 %endif
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
+%if %{with h323}
 %requires_eq	openh323
 %requires_eq	pwlib
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -179,12 +184,16 @@ rm -f pbx/.depend
 %{__autoheader}
 %{__autoconf}
 
+%if %{with h323}
 CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
+%endif
 %configure \
 	--with-zaptel=%{_prefix} \
 	--without-dahdi \
+	%{!?with_h323:--without-h323} \
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap="`pwd`"/imap
+
 
 # safe checks
 %{?with_bristuff:grep '^#define HAVE_GSMAT 1' include/asterisk/autoconfig.h || exit 1}
