@@ -38,12 +38,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.8.0
+Version:	1.8.1.1
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	83203b43aaf12f36bdc953d6b04d18a4
+# Source0-md5:	489440fe1172af8c06323f470d600670
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
@@ -70,7 +70,6 @@ Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
 Patch18:	Fix-history-loading-when-using-external-libedit.patch
-Patch19:	%{name}-misdn-locale_t.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 3.6.1
 BuildRequires:	SDL_image-devel
@@ -539,7 +538,7 @@ API documentation for Asterisk.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p0
-%patch6 -p0
+#%patch6 -p0
 %patch7 -p0
 %patch8 -p1
 %patch9 -p1
@@ -562,7 +561,6 @@ cp %{SOURCE11} .
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
-%patch19 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
@@ -727,8 +725,6 @@ install -D -p apps/app_voicemail_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/mod
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 cp -a %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install -D -p doc/asterisk-mib.txt $RPM_BUILD_ROOT%{_datadir}/mibs/ASTERISK-MIB.txt
-install -D -p doc/digium-mib.txt $RPM_BUILD_ROOT%{_datadir}/mibs/DIGIUM-MIB.txt
 
 # create some directories that need to be packaged
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/moh
@@ -768,6 +764,10 @@ find doc/api/html -name '*.map' -size 0 -delete
 rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/appdocsxml.dtd
 rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/core-en_US.xml
 
+#fixme
+rm  $RPM_BUILD_ROOT/etc/asterisk/{app_mysql,calendar,cdr_mysql,chan_mobile,chan_ooh323,h323,res_config_mysql,res_pktccops}.conf
+rm -fr $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -802,8 +802,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files
 %defattr(644,root,root,755)
 %doc README *.txt ChangeLog BUGS CREDITS configs
-%doc doc/{asterisk.sgml,PEERING} doc/{backtrace,callfiles,externalivr,macroexclusive,manager_1_1,modules,queue}.txt
-%doc doc/{rtp-packetization,siptls,smdi,sms,speechrec,ss7,video}.txt
+%doc doc/asterisk.sgml
 
 #%attr(755,root,root) %{_sbindir}/aelparse
 %attr(755,root,root) %{_sbindir}/astcanary
@@ -1030,7 +1029,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ael_share.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_agi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_ews.so
+#%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_ews.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
@@ -1084,7 +1083,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files devel
 %defattr(644,root,root,755)
-%doc doc/{CODING-GUIDELINES,{datastores,modules,valgrind}.txt}
 %dir %{_includedir}/asterisk
 %{_includedir}/asterisk/*.h
 %{_includedir}/asterisk.h
@@ -1174,8 +1172,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files jabber
 %defattr(644,root,root,755)
-%doc doc/jabber.txt
-%doc doc/jingle.txt
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/gtalk.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/jabber.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/jingle.conf
@@ -1194,7 +1190,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files ldap
 %defattr(644,root,root,755)
-%doc doc/ldap.txt
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_ldap.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_ldap.so
 
@@ -1274,13 +1269,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files snmp
 %defattr(644,root,root,755)
-%doc doc/asterisk-mib.txt
-%doc doc/digium-mib.txt
-%doc doc/snmp.txt
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_snmp.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_snmp.so
-%{_datadir}/mibs/ASTERISK-MIB.txt
-%{_datadir}/mibs/DIGIUM-MIB.txt
 
 %files speex
 %defattr(644,root,root,755)
@@ -1306,7 +1296,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files unistim
 %defattr(644,root,root,755)
-%doc doc/unistim.txt
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/unistim.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_unistim.so
 
@@ -1327,7 +1316,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files voicemail-odbc
 %defattr(644,root,root,755)
-%doc doc/voicemail_odbc_postgresql.txt
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_odbc.so
 
