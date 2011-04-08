@@ -761,9 +761,6 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 find doc/api/html -name '*.map' -size 0 -delete
 %endif
 
-rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/appdocsxml.dtd
-rm $RPM_BUILD_ROOT%{_datadir}/asterisk/documentation/core-en_US.xml
-
 #fixme
 rm  $RPM_BUILD_ROOT/etc/asterisk/{app_mysql,calendar,cdr_mysql,chan_mobile,chan_ooh323,h323,res_config_mysql,res_pktccops}.conf
 rm -fr $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
@@ -1064,6 +1061,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %{_datadir}/asterisk/images/*.jpg
 %{_datadir}/asterisk/phoneprov
 %{_datadir}/asterisk/licenses
+
+%dir %{_datadir}/asterisk/documentation
+%{_datadir}/asterisk/documentation/appdocsxml.dtd
+%{_datadir}/asterisk/documentation/core-en_US.xml
 
 %attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
 %dir %attr(750,root,asterisk) %{_localstatedir}/lib/asterisk/licenses
