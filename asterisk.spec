@@ -127,6 +127,7 @@ BuildRequires:	spandsp-devel >= 0.0.5
 BuildRequires:	speex-devel
 BuildRequires:	sqlite-devel
 BuildRequires:	sqlite3-devel
+BuildRequires:	srtp-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
@@ -1042,6 +1043,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_security_log.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_smdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_speech.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_srtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stun_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
