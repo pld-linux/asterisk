@@ -29,6 +29,7 @@
 %bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
+%bcond_without	misdn		# chan_misdn requires ancient mISDN (1.x)
 %bcond_without	h323		# with h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
@@ -99,7 +100,10 @@ BuildRequires:	libvorbis-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
-BuildRequires:	mISDNuser-devel
+%if %{with misdn}
+BuildRequires:	mISDNuser-devel >= 1.2
+BuildConflicts:	mISDNuser-devel >= 2.0
+%endif
 BuildRequires:	mxml-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
@@ -1212,10 +1216,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/minivm.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_minivm.so
 
+%if %{with misdn}
 %files misdn
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/misdn.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_misdn.so
+%endif
 
 %files odbc
 %defattr(644,root,root,755)
