@@ -10,6 +10,7 @@
 %bcond_with	rxfax		# without rx (also tx :-D) fax
 %bcond_with	bluetooth	# without bluetooth support (NFT)
 %bcond_without	h323		# With H.323 support
+%bcond_with	zaptel		# zaptel instead of dahdi
 %bcond_with	zhone 		# zhone hack
 %bcond_with	zhone_hack 	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
@@ -57,7 +58,11 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 %{?with_bluetooth:BuildRequires: bluez-devel}
+%if %{with zaptel}
+BuildRequires:	zaptel-devel >= 1.2.10
+%else
 BuildRequires:	dahdi-linux-devel
+%endif
 BuildRequires:	freetds >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
@@ -188,8 +193,13 @@ rm -f pbx/.depend
 CPPFLAGS="-I/usr/include/openh323"; export CPPFLAGS
 %endif
 %configure \
+%if %{with zaptel}
+	--with-zaptel=%{_prefix} \
+	--without-dahdi \
+%else
 	--with-dahdi=%{_prefix} \
 	--without-zaptel \
+%endif
 	--without-osptk \
 	%{!?with_h323:--without-h323} \
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
