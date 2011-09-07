@@ -30,7 +30,7 @@
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
 %bcond_with	misdn		# chan_misdn requires ancient mISDN (1.x)
-%bcond_without	h323		# with h323 support
+%bcond_without	h323		# without h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
@@ -39,12 +39,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.8.3.3
+Version:	1.8.6.0
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	800684984c394ded3effe5096b579488
+# Source0-md5:	58f1635d1f9b851717c3fec9e67b5da7
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
@@ -544,7 +544,7 @@ API documentation for Asterisk.
 %patch4 -p1
 %patch5 -p0
 #%patch6 -p0
-%patch7 -p0
+%patch7 -p1
 %patch8 -p1
 %patch9 -p1
 %if %{with zhone}
@@ -602,7 +602,7 @@ cd ..
 	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap=system \
 	--with-gsm=/usr \
-	%{!?with_h3232:--without-h323} \
+	%{!?with_h323:--without-h323} \
 	--with-lpc10=/usr \
 	--with-libedit=yes
 
@@ -767,7 +767,8 @@ find doc/api/html -name '*.map' -size 0 -delete
 %endif
 
 #fixme
-rm  $RPM_BUILD_ROOT/etc/asterisk/{app_mysql,calendar,cdr_mysql,chan_mobile,chan_ooh323,h323,res_config_mysql,res_pktccops}.conf
+rm  $RPM_BUILD_ROOT/etc/asterisk/{app_mysql,cdr_mysql,chan_mobile,chan_ooh323,misdn%{!?with_h323:,h323},res_config_mysql,res_pktccops}.conf
+
 rm -fr $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
 
 %clean
@@ -834,6 +835,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/amd.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/asterisk.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/asterisk.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/calendar.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ccss.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_custom.conf
@@ -1031,7 +1033,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ael_share.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_agi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_ews.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_caldav.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_ews.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_exchange.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_icalendar.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so

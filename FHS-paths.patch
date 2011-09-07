@@ -1,105 +1,233 @@
-Index: pbx/ael/ael-test/ref.ael-vtest13
-===================================================================
---- pbx/ael/ael-test/ref.ael-vtest13.orig	2010-12-22 20:05:02.000000000 +0000
-+++ pbx/ael/ael-test/ref.ael-vtest13	2011-04-17 18:23:22.190000784 +0000
-@@ -2182,7 +2182,7 @@
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/UPGRADE-1.4.txt asterisk-1.8.6.0/UPGRADE-1.4.txt
+--- asterisk-1.8.6.0.orig/UPGRADE-1.4.txt	2009-08-18 22:29:37.000000000 +0200
++++ asterisk-1.8.6.0/UPGRADE-1.4.txt	2011-09-07 14:09:30.000000000 +0200
+@@ -92,7 +92,7 @@
+ WARNING: Asterisk 1.4 supports a new layout for sound files in multiple languages;
+ instead of the alternate-language files being stored in subdirectories underneath
+ the existing files (for French, that would be digits/fr, letters/fr, phonetic/fr,
+-etc.) the new layout creates one directory under /var/lib/asterisk/sounds for the
++etc.) the new layout creates one directory under /usr/share/asterisk/sounds for the
+ language itself, then places all the sound files for that language under that
+ directory and its subdirectories. This is the layout that will be created if you
+ select non-English languages to be installed via menuselect, HOWEVER Asterisk does
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/agi/DialAnMp3.agi asterisk-1.8.6.0/agi/DialAnMp3.agi
+--- asterisk-1.8.6.0.orig/agi/DialAnMp3.agi	2006-02-14 20:14:15.000000000 +0100
++++ asterisk-1.8.6.0/agi/DialAnMp3.agi	2011-09-07 14:09:30.000000000 +0200
+@@ -17,7 +17,7 @@
+ 	print STDERR " -- $i = $AGI{$i}\n";
+ }
+ 
+-dbmopen(%DIGITS, "/var/lib/asterisk/mp3list", 0644) || die("Unable to open mp3list");;
++dbmopen(%DIGITS, "/usr/share/asterisk/mp3list", 0644) || die("Unable to open mp3list");;
+ 
+ sub checkresult {
+ 	my ($res) = @_;
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/agi/jukebox.agi asterisk-1.8.6.0/agi/jukebox.agi
+--- asterisk-1.8.6.0.orig/agi/jukebox.agi	2006-03-07 00:45:37.000000000 +0100
++++ asterisk-1.8.6.0/agi/jukebox.agi	2011-09-07 14:09:30.000000000 +0200
+@@ -17,7 +17,7 @@
+ #
+ # Uses festival to list off all your MP3 music files over a channel in
+ # a hierarchical fashion.  Put this file in your agi-bin folder which
+-# is located at: /var/lib/asterisk/agi-bin  Be sure to chmod +x it!
++# is located at: /usr/share/asterisk/agi-bin  Be sure to chmod +x it!
+ #
+ # Invocation Example:
+ #   exten => 68742,1,Answer()
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/agi/numeralize asterisk-1.8.6.0/agi/numeralize
+--- asterisk-1.8.6.0.orig/agi/numeralize	2006-02-14 20:14:15.000000000 +0100
++++ asterisk-1.8.6.0/agi/numeralize	2011-09-07 14:09:30.000000000 +0200
+@@ -6,7 +6,7 @@
+ 
+ $mp3dir="/usr/media/mpeg3";
+ 
+-dbmopen(%DIGITS, "/var/lib/asterisk/mp3list", 0644) || die("Unable to open mp3list");;
++dbmopen(%DIGITS, "/usr/share/asterisk/mp3list", 0644) || die("Unable to open mp3list");;
+ sub process_dir {
+ 	my ($dir) = @_;
+ 	my $file;
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/apps/app_rpt.c asterisk-1.8.6.0/apps/app_rpt.c
+--- asterisk-1.8.6.0.orig/apps/app_rpt.c	2011-07-14 22:13:06.000000000 +0200
++++ asterisk-1.8.6.0/apps/app_rpt.c	2011-09-07 14:09:30.000000000 +0200
+@@ -242,7 +242,7 @@
+ #define	TONEMACRO "tonemacro"
+ #define	FUNCCHAR '*'
+ #define	ENDCHAR '#'
+-#define	EXTNODEFILE "/var/lib/asterisk/rpt_extnodes"
++#define	EXTNODEFILE "/usr/share/asterisk/rpt_extnodes"
+ #define	NODENAMES "rpt/nodenames"
+ #define	PARROTFILE "/tmp/parrot_%s_%u"
+ 
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/configs/festival.conf.sample asterisk-1.8.6.0/configs/festival.conf.sample
+--- asterisk-1.8.6.0.orig/configs/festival.conf.sample	2009-05-28 16:39:21.000000000 +0200
++++ asterisk-1.8.6.0/configs/festival.conf.sample	2011-09-07 14:09:30.000000000 +0200
+@@ -21,7 +21,7 @@
+ ; THIS DIRECTORY *MUST* EXIST and must be writable from the asterisk process.
+ ; Defaults to /tmp/
+ ;
+-;cachedir=/var/lib/asterisk/festivalcache/
++;cachedir=/var/spool/asterisk/festival/
+ ;
+ ; Festival command to send to the server.
+ ; Defaults to: (tts_textasterisk "%s" 'file)(quit)\n
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/configs/http.conf.sample asterisk-1.8.6.0/configs/http.conf.sample
+--- asterisk-1.8.6.0.orig/configs/http.conf.sample	2011-04-21 20:24:05.000000000 +0200
++++ asterisk-1.8.6.0/configs/http.conf.sample	2011-09-07 14:09:30.000000000 +0200
+@@ -5,7 +5,7 @@
+ ; Note about Asterisk documentation:
+ ;   If Asterisk was installed from a tarball, then the HTML documentation should
+ ;   be installed in the static-http/docs directory which is
+-;   (/var/lib/asterisk/static-http/docs) on linux by default.  If the Asterisk
++;   (/usr/share/asterisk/static-http/docs) on linux by default.  If the Asterisk
+ ;   HTTP server is enabled in this file by setting the "enabled", "bindaddr",
+ ;   and "bindport" options, then you should be able to view the documentation
+ ;   remotely by browsing to:
+@@ -74,6 +74,6 @@
+ ;[post_mappings]
+ ;
+ ; In this example, if the prefix option is set to "asterisk", then using the
+-; POST URL: /asterisk/uploads will put files in /var/lib/asterisk/uploads/.
+-;uploads = /var/lib/asterisk/uploads/
++; POST URL: /asterisk/uploads will put files in /var/spool/asterisk/uploads/.
++;uploads = /var/spool/asterisk/uploads/
+ ;
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/configs/iax.conf.sample asterisk-1.8.6.0/configs/iax.conf.sample
+--- asterisk-1.8.6.0.orig/configs/iax.conf.sample	2011-02-02 20:27:19.000000000 +0100
++++ asterisk-1.8.6.0/configs/iax.conf.sample	2011-09-07 14:09:30.000000000 +0200
+@@ -456,8 +456,8 @@
+ ; authentication is used, "inkeys" is a list of acceptable public keys on the
+ ; local system that can be used to authenticate the remote peer, separated by
+ ; the ":" character.  "outkey" is a single, private key to use to authenticate
+-; to the other side.  Public keys are named /var/lib/asterisk/keys/<name>.pub
+-; while private keys are named /var/lib/asterisk/keys/<name>.key.  Private
++; to the other side.  Public keys are named /usr/share/asterisk/keys/<name>.pub
++; while private keys are named /usr/share/asterisk/keys/<name>.key.  Private
+ ; keys should always be 3DES encrypted.
+ ;
+ ;
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/configs/musiconhold.conf.sample asterisk-1.8.6.0/configs/musiconhold.conf.sample
+--- asterisk-1.8.6.0.orig/configs/musiconhold.conf.sample	2010-10-16 12:47:00.000000000 +0200
++++ asterisk-1.8.6.0/configs/musiconhold.conf.sample	2011-09-07 14:09:30.000000000 +0200
+@@ -32,7 +32,7 @@
+ ; The path specified can be either an absolute path (starts with '/'),
+ ; or a relative path; relative paths are interpreted as being relative
+ ; to the 'astdatalibdir' in asterisk.conf, which defaults to
+-; /var/lib/asterisk.
++; /usr/share/asterisk.
+ ;
+ ; NOTE:
+ ; If you are not using "autoload" in modules.conf, then you
+@@ -68,7 +68,7 @@
+ ;mode=custom
+ ; Note that with mode=custom, a directory is not required, such as when reading
+ ; from a stream.
+-;directory=/var/lib/asterisk/mohmp3
++;directory=/usr/share/asterisk/mohmp3
+ ;application=/usr/bin/mpg123 -q -r 8000 -f 8192 -b 2048 --mono -s
+ 
+ ;[ulawstream]
+@@ -80,5 +80,5 @@
+ ; choice
+ ;[solaris]
+ ;mode=custom
+-;directory=/var/lib/asterisk/mohmp3
++;directory=/usr/share/asterisk/mohmp3
+ ;application=/site/sw/bin/madplay -Q -o raw:- --mono -R 8000 -a -12
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/configs/osp.conf.sample asterisk-1.8.6.0/configs/osp.conf.sample
+--- asterisk-1.8.6.0.orig/configs/osp.conf.sample	2010-07-12 06:16:18.000000000 +0200
++++ asterisk-1.8.6.0/configs/osp.conf.sample	2011-09-07 14:09:30.000000000 +0200
+@@ -45,8 +45,8 @@
+ ;source=domain name or [IP address in brackets]
+ ;
+ ; Define path and file name of crypto files.
+-; The default path for crypto file is /var/lib/asterisk/keys.  If no path is
+-; defined, crypto files will in /var/lib/asterisk/keys directory.
++; The default path for crypto file is /user/share/asterisk/keys.  If no path is
++; defined, crypto files will in /user/share/asterisk/keys directory.
+ ;
+ ; Specify the private key file name.
+ ; If this parameter is unspecified or not present, the default name will be the
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/configs/phoneprov.conf.sample asterisk-1.8.6.0/configs/phoneprov.conf.sample
+--- asterisk-1.8.6.0.orig/configs/phoneprov.conf.sample	2011-02-03 16:50:35.000000000 +0100
++++ asterisk-1.8.6.0/configs/phoneprov.conf.sample	2011-09-07 14:10:47.000000000 +0200
+@@ -130,7 +130,7 @@
+ ${MAC}-phone.cfg => 000000000000-phone.cfg   ; (relative to AST_DATA_DIR/phoneprov)
+ config/${MAC} => polycom.xml                 ; Dynamic Filename => template file
+ ${MAC}-directory.xml => 000000000000-directory.xml
+-setvar => CUSTOM_CONFIG=/var/lib/asterisk/phoneprov/configs/custom.cfg  ; Custom variable
++setvar => CUSTOM_CONFIG=/usr/share/asterisk/phoneprov/configs/custom.cfg  ; Custom variable
+ 
+ ;snom 300, 320, 360, 370, 820, 821, 870 support
+ snom-${MAC}.xml => snom-mac.xml
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/configs/res_config_sqlite.conf.sample asterisk-1.8.6.0/configs/res_config_sqlite.conf.sample
+--- asterisk-1.8.6.0.orig/configs/res_config_sqlite.conf.sample	2009-06-30 19:22:16.000000000 +0200
++++ asterisk-1.8.6.0/configs/res_config_sqlite.conf.sample	2011-09-07 14:09:30.000000000 +0200
+@@ -1,7 +1,7 @@
+ [general]
+ 
+ ; The database file.
+-dbfile => /var/lib/asterisk/sqlite.db
++dbfile => /var/spool/asterisk/sqlite.db
+ 
+ ; Both config_table and cdr_table are optional. If config_table is omitted,
+ ; you must specify it in extconfig.conf. If it is both provided here and in
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/contrib/scripts/astgenkey asterisk-1.8.6.0/contrib/scripts/astgenkey
+--- asterisk-1.8.6.0.orig/contrib/scripts/astgenkey	2006-02-14 20:14:15.000000000 +0100
++++ asterisk-1.8.6.0/contrib/scripts/astgenkey	2011-09-07 14:09:30.000000000 +0200
+@@ -29,7 +29,7 @@
+ 	echo "in PEM format for use by Asterisk.  You will be asked to"
+ 	echo "enter a passcode for your key multiple times.  Please"
+ 	echo "enter the same code each time.  The resulting files will"
+-	echo "need to be moved to /var/lib/asterisk/keys if you want"
++	echo "need to be moved to /usr/share/asterisk/keys if you want"
+ 	echo "to use them, and any private keys (.key files) will"
+ 	echo "need to be initialized at runtime either by running"
+ 	echo "Asterisk with the '-i' option, or with the 'init keys'"
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/contrib/scripts/astgenkey.8 asterisk-1.8.6.0/contrib/scripts/astgenkey.8
+--- asterisk-1.8.6.0.orig/contrib/scripts/astgenkey.8	2010-04-10 10:33:57.000000000 +0200
++++ asterisk-1.8.6.0/contrib/scripts/astgenkey.8	2011-09-07 14:09:30.000000000 +0200
+@@ -87,7 +87,7 @@
+ .RE
+ 
+ Those files should be copied to 
+-.I /var/lib/asterisk/keys
++.I /usr/share/asterisk/keys
+ 
+ (The private key: on your system. The public key: on other systems)
+ 
+@@ -121,10 +121,10 @@
+ And then make the key accessible to Asterisk (assuming you run it as
+ user "asterisk").
+ 
+-  chown asterisk /var/lib/asterisk/keys/yourname.*
++  chown asterisk /usr/share/asterisk/keys/yourname.*
+ 
+ .SH FILES
+-.I /var/lib/asterisk/keys
++.I /usr/share/asterisk/keys
+ .RS
+ .RE
+ 
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/contrib/utils/README.rawplayer asterisk-1.8.6.0/contrib/utils/README.rawplayer
+--- asterisk-1.8.6.0.orig/contrib/utils/README.rawplayer	2006-02-14 20:14:15.000000000 +0100
++++ asterisk-1.8.6.0/contrib/utils/README.rawplayer	2011-09-07 14:09:30.000000000 +0200
+@@ -16,11 +16,11 @@
+ sox -c 1 track01.wav -t raw -r 8000 -c 1 -s -w track01.raw
  
  
- [callerid-liar]
--exten => ~~s~~,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/priv-callerintros/LIAR.gsm&)
-+exten => ~~s~~,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/priv-callerintros/LIAR.gsm&)
- exten => ~~s~~,2,Background(priv-liar)
- exten => ~~s~~,3,Hangup()
- exten => ~~s~~,4,Return()
-@@ -2217,7 +2217,7 @@
- exten => s,4,Zapateller(nocallerid)
- exten => s,5,PrivacyManager()
- exten => s,6,GotoIf($["${PRIVACYMGRSTATUS}" = "FAILED" ]?7:11)
--exten => s,7,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/privmanfailed.gsm)
-+exten => s,7,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/privmanfailed.gsm)
- exten => s,8,Gosub(std-priv-exten,~~s~~,1(Zap/3r1&Zap/5r1,2,25,mtw,telemarket,telemarket))
- exten => s,9,Hangup()
- exten => s,10,Return()
-@@ -2243,7 +2243,7 @@
- exten => s,30,verbose(direct is XXX#${direct}XXXX)
- exten => s,31,Playback(greetings/direct)
- exten => s,32,Playback(/var/spool/asterisk/voicemail/default/${direct}/greet)
--exten => s,33,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => s,33,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => s,34,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/${direct}/greet.wav&)
- exten => s,35,Goto(sw_92_${direct},10)
- exten => s,36,NoOp(Finish switch_if_homeline_91_92)
-@@ -2322,7 +2322,7 @@
- exten => sw_92_2,11,Goto(s,loopback)
- exten => sw_92_1,10,Gosub(std-priv-exten,~~s~~,1(Zap/6r3&Sip/murf,1,25,mpA(beep)tw,telemarket,telemarket))
- exten => sw_92_1,11,Goto(s,loopback)
--exten => 1,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 1,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 1,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/2/greet.wav&)
- exten => 1,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r1&Zap/5r1,2,25,mtw,telemarket,telemarket))
- exten => 1,4,Goto(s,loopback)
-@@ -2399,31 +2399,31 @@
+-Once you have the raw files put them in any dir on your system (eg /var/lib/asterisk/holdmusic_raw).
++Once you have the raw files put them in any dir on your system (eg /usr/share/asterisk/holdmusic_raw).
+ and set up a class in musiconhold.conf like so:
  
- [homeline-kids]
- exten => s,1(begin),Background(murphy-homeline-kids)
--exten => 1,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 1,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 1,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/3/greet.wav&)
- exten => 1,3,Gosub(std-priv-exten,~~s~~,1(IAX2/seaniax&Zap/5r2,3,35,mtw,telemarket,telemarket))
- exten => 1,4,Goto(homeline,s,loopback)
--exten => 2,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 2,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 2,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/4/greet.wav&)
- exten => 2,3,Voicemail(u4)
- exten => 2,4,Goto(homeline,s,loopback)
--exten => 3,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 3,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 3,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/5/greet.wav&)
- exten => 3,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,5,35,mtw,telemarket,telemarket))
- exten => 3,4,Goto(homeline,s,loopback)
--exten => 4,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 4,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 4,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/6/greet.wav&)
- exten => 4,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,6,35,mtw,telemarket,telemarket))
- exten => 4,4,Goto(homeline,s,loopback)
--exten => 5,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 5,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 5,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/7/greet.wav&)
- exten => 5,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,7,35,mtw,telemarket,telemarket))
- exten => 5,4,Goto(homeline,s,loopback)
--exten => 6,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 6,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 6,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/8/greet.wav&)
- exten => 6,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,8,35,mtw,telemarket,telemarket))
- exten => 6,4,Goto(homeline,s,loopback)
--exten => 7,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 7,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 7,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/9/greet.wav&)
- exten => 7,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,9,35,mtw,telemarket,telemarket))
- exten => 7,4,Goto(homeline,s,loopback)
-@@ -2451,7 +2451,7 @@
- exten => s,6,TrySystem(/usr/local/bin/who-is-it ${CALLERID(num)} "${CALLERID(name)}"&)
- exten => s,7(loopback),Background(greetings/greeting)
- exten => s,8,Background(murphy-office-intro1)
--exten => 1,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
-+exten => 1,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
- exten => 1,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/1/greet.wav&)
- exten => 1,3,Gosub(std-priv-exten,~~s~~,1(Zap/6&Sip/murf,1,30,mtw,telemarket,telemarket))
- exten => 1,4,Goto(s,loopback)
-@@ -2577,7 +2577,7 @@
- exten => 760,1,DateTime()
- exten => 760,2,Goto(s,loopback)
- exten => 761,1,Record(announcement:gsm)
--exten => 761,2,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/announcement.gsm&)
-+exten => 761,2,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/announcement.gsm&)
- exten => 761,3,Goto(s,loopback)
- exten => 762,1,agi(tts-riddle.agi)
- exten => 762,2,Background(gsm/what-time-it-is2)
-
-Index: pbx/ael/ael-test/ael-test3/extensions.ael
-===================================================================
---- pbx/ael/ael-test/ael-test3/extensions.ael	(revision 222649)
-+++ pbx/ael/ael-test/ael-test3/extensions.ael	(working copy)
+ [classes]
+-default => custom:/var/lib/asterisk/holdmusic_raw,/usr/bin/rawplayer
++default => custom:/usr/share/asterisk/holdmusic_raw,/usr/bin/rawplayer
+ 
+ 
+ This is the most efficient way to implement moh because no cpu usage is required to 
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/pbx/ael/ael-test/ael-test3/extensions.ael asterisk-1.8.6.0/pbx/ael/ael-test/ael-test3/extensions.ael
+--- asterisk-1.8.6.0.orig/pbx/ael/ael-test/ael-test3/extensions.ael	2007-11-27 00:15:53.000000000 +0100
++++ asterisk-1.8.6.0/pbx/ael/ael-test/ael-test3/extensions.ael	2011-09-07 14:09:30.000000000 +0200
 @@ -2049,7 +2049,7 @@
  
  macro callerid-liar()
@@ -214,10 +342,9 @@ Index: pbx/ael/ael-test/ael-test3/extensions.ael
  		goto s|loopback;
  	}
  	762 => {
-Index: pbx/ael/ael-test/ael-vtest13/extensions.ael
-===================================================================
---- pbx/ael/ael-test/ael-vtest13/extensions.ael	(revision 222649)
-+++ pbx/ael/ael-test/ael-vtest13/extensions.ael	(working copy)
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/pbx/ael/ael-test/ael-vtest13/extensions.ael asterisk-1.8.6.0/pbx/ael/ael-test/ael-vtest13/extensions.ael
+--- asterisk-1.8.6.0.orig/pbx/ael/ael-test/ael-vtest13/extensions.ael	2007-11-27 00:15:53.000000000 +0100
++++ asterisk-1.8.6.0/pbx/ael/ael-test/ael-vtest13/extensions.ael	2011-09-07 14:09:30.000000000 +0200
 @@ -2048,7 +2048,7 @@
  
  macro callerid-liar()
@@ -332,180 +459,106 @@ Index: pbx/ael/ael-test/ael-vtest13/extensions.ael
  		goto s|loopback;
  	}
  	762 => {
-Index: agi/jukebox.agi
-===================================================================
---- agi/jukebox.agi	(revision 222649)
-+++ agi/jukebox.agi	(working copy)
-@@ -17,7 +17,7 @@
- #
- # Uses festival to list off all your MP3 music files over a channel in
- # a hierarchical fashion.  Put this file in your agi-bin folder which
--# is located at: /var/lib/asterisk/agi-bin  Be sure to chmod +x it!
-+# is located at: /usr/share/asterisk/agi-bin  Be sure to chmod +x it!
- #
- # Invocation Example:
- #   exten => 68742,1,Answer()
-Index: agi/DialAnMp3.agi
-===================================================================
---- agi/DialAnMp3.agi	(revision 222649)
-+++ agi/DialAnMp3.agi	(working copy)
-@@ -17,7 +17,7 @@
- 	print STDERR " -- $i = $AGI{$i}\n";
- }
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/pbx/ael/ael-test/ref.ael-vtest13 asterisk-1.8.6.0/pbx/ael/ael-test/ref.ael-vtest13
+--- asterisk-1.8.6.0.orig/pbx/ael/ael-test/ref.ael-vtest13	2010-12-22 21:05:02.000000000 +0100
++++ asterisk-1.8.6.0/pbx/ael/ael-test/ref.ael-vtest13	2011-09-07 14:09:30.000000000 +0200
+@@ -2182,7 +2182,7 @@
  
--dbmopen(%DIGITS, "/var/lib/asterisk/mp3list", 0644) || die("Unable to open mp3list");;
-+dbmopen(%DIGITS, "/usr/share/asterisk/mp3list", 0644) || die("Unable to open mp3list");;
  
- sub checkresult {
- 	my ($res) = @_;
-Index: agi/numeralize
-===================================================================
---- agi/numeralize	(revision 222649)
-+++ agi/numeralize	(working copy)
-@@ -6,7 +6,7 @@
+ [callerid-liar]
+-exten => ~~s~~,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/priv-callerintros/LIAR.gsm&)
++exten => ~~s~~,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/priv-callerintros/LIAR.gsm&)
+ exten => ~~s~~,2,Background(priv-liar)
+ exten => ~~s~~,3,Hangup()
+ exten => ~~s~~,4,Return()
+@@ -2217,7 +2217,7 @@
+ exten => s,4,Zapateller(nocallerid)
+ exten => s,5,PrivacyManager()
+ exten => s,6,GotoIf($["${PRIVACYMGRSTATUS}" = "FAILED" ]?7:11)
+-exten => s,7,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/privmanfailed.gsm)
++exten => s,7,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/privmanfailed.gsm)
+ exten => s,8,Gosub(std-priv-exten,~~s~~,1(Zap/3r1&Zap/5r1,2,25,mtw,telemarket,telemarket))
+ exten => s,9,Hangup()
+ exten => s,10,Return()
+@@ -2243,7 +2243,7 @@
+ exten => s,30,verbose(direct is XXX#${direct}XXXX)
+ exten => s,31,Playback(greetings/direct)
+ exten => s,32,Playback(/var/spool/asterisk/voicemail/default/${direct}/greet)
+-exten => s,33,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => s,33,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => s,34,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/${direct}/greet.wav&)
+ exten => s,35,Goto(sw_92_${direct},10)
+ exten => s,36,NoOp(Finish switch_if_homeline_91_92)
+@@ -2322,7 +2322,7 @@
+ exten => sw_92_2,11,Goto(s,loopback)
+ exten => sw_92_1,10,Gosub(std-priv-exten,~~s~~,1(Zap/6r3&Sip/murf,1,25,mpA(beep)tw,telemarket,telemarket))
+ exten => sw_92_1,11,Goto(s,loopback)
+-exten => 1,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 1,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 1,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/2/greet.wav&)
+ exten => 1,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r1&Zap/5r1,2,25,mtw,telemarket,telemarket))
+ exten => 1,4,Goto(s,loopback)
+@@ -2399,31 +2399,31 @@
  
- $mp3dir="/usr/media/mpeg3";
- 
--dbmopen(%DIGITS, "/var/lib/asterisk/mp3list", 0644) || die("Unable to open mp3list");;
-+dbmopen(%DIGITS, "/usr/share/asterisk/mp3list", 0644) || die("Unable to open mp3list");;
- sub process_dir {
- 	my ($dir) = @_;
- 	my $file;
-Index: apps/app_rpt.c
-===================================================================
---- apps/app_rpt.c	(revision 222649)
-+++ apps/app_rpt.c	(working copy)
-@@ -241,7 +241,7 @@
- #define	TONEMACRO "tonemacro"
- #define	FUNCCHAR '*'
- #define	ENDCHAR '#'
--#define	EXTNODEFILE "/var/lib/asterisk/rpt_extnodes"
-+#define	EXTNODEFILE "/usr/share/asterisk/rpt_extnodes"
- #define	NODENAMES "rpt/nodenames"
- #define	PARROTFILE "/tmp/parrot_%s_%u"
- 
-Index: configs/iax.conf.sample
-===================================================================
---- configs/iax.conf.sample	(revision 222649)
-+++ configs/iax.conf.sample	(working copy)
-@@ -412,8 +412,8 @@
- ; authentication is used, "inkeys" is a list of acceptable public keys on the 
- ; local system that can be used to authenticate the remote peer, separated by
- ; the ":" character.  "outkey" is a single, private key to use to authenticate
--; to the other side.  Public keys are named /var/lib/asterisk/keys/<name>.pub
--; while private keys are named /var/lib/asterisk/keys/<name>.key.  Private
-+; to the other side.  Public keys are named /usr/share/asterisk/keys/<name>.pub
-+; while private keys are named /usr/share/asterisk/keys/<name>.key.  Private
- ; keys should always be 3DES encrypted.
- ;
- ;
-Index: configs/festival.conf.sample
-===================================================================
---- configs/festival.conf.sample	(revision 222649)
-+++ configs/festival.conf.sample	(working copy)
-@@ -21,7 +21,7 @@
- ; THIS DIRECTORY *MUST* EXIST and must be writable from the asterisk process.
- ; Defaults to /tmp/
- ;
--;cachedir=/var/lib/asterisk/festivalcache/
-+;cachedir=/var/spool/asterisk/festival/
- ;
- ; Festival command to send to the server.
- ; Defaults to: (tts_textasterisk "%s" 'file)(quit)\n
-Index: configs/http.conf.sample
-===================================================================
---- configs/http.conf.sample	(revision 222649)
-+++ configs/http.conf.sample	(working copy)
-@@ -5,7 +5,7 @@
- ; Note about Asterisk documentation:
- ;   If Asterisk was installed from a tarball, then the HTML documentation should
- ;   be installed in the static-http/docs directory which is
--;   (/var/lib/asterisk/static-http/docs) on linux by default.  If the Asterisk
-+;   (/usr/share/asterisk/static-http/docs) on linux by default.  If the Asterisk
- ;   HTTP server is enabled in this file by setting the "enabled", "bindaddr",
- ;   and "bindport" options, then you should be able to view the documentation
- ;   remotely by browsing to:
-@@ -66,6 +66,6 @@
- ;[post_mappings]
- ;
- ; In this example, if the prefix option is set to "asterisk", then using the
--; POST URL: /asterisk/uploads will put files in /var/lib/asterisk/uploads/.
--;uploads = /var/lib/asterisk/uploads/
-+; POST URL: /asterisk/uploads will put files in /var/spool/asterisk/uploads/.
-+;uploads = /var/spool/asterisk/uploads/
- ;
-Index: configs/phoneprov.conf.sample
-===================================================================
---- configs/phoneprov.conf.sample	(revision 222649)
-+++ configs/phoneprov.conf.sample	(working copy)
-@@ -114,4 +114,4 @@
- ${MAC}-phone.cfg => 000000000000-phone.cfg   ; (relative to AST_DATA_DIR/phoneprov)
- config/${MAC} => polycom.xml                 ; Dynamic Filename => template file 
- ${MAC}-directory.xml => 000000000000-directory.xml
--setvar => CUSTOM_CONFIG=/var/lib/asterisk/phoneprov/configs/custom.cfg  ; Custom variable
-+setvar => CUSTOM_CONFIG=/usr/share/asterisk/phoneprov/configs/custom.cfg  ; Custom variable
-Index: configs/musiconhold.conf.sample
-===================================================================
---- configs/musiconhold.conf.sample.orig	2010-10-16 13:47:00.000000000 +0300
-+++ configs/musiconhold.conf.sample	2010-10-23 13:01:47.124150334 +0300
-@@ -32,7 +32,7 @@
- ; The path specified can be either an absolute path (starts with '/'),
- ; or a relative path; relative paths are interpreted as being relative
- ; to the 'astdatalibdir' in asterisk.conf, which defaults to
--; /var/lib/asterisk.
-+; /usr/share/asterisk.
- ;
- ; NOTE:
- ; If you are not using "autoload" in modules.conf, then you
-@@ -68,7 +68,7 @@
- ;mode=custom
- ; Note that with mode=custom, a directory is not required, such as when reading
- ; from a stream.
--;directory=/var/lib/asterisk/mohmp3
-+;directory=/usr/share/asterisk/mohmp3
- ;application=/usr/bin/mpg123 -q -r 8000 -f 8192 -b 2048 --mono -s
- 
- ;[ulawstream]
-@@ -80,5 +80,5 @@
- ; choice
- ;[solaris]
- ;mode=custom
--;directory=/var/lib/asterisk/mohmp3
-+;directory=/usr/share/asterisk/mohmp3
- ;application=/site/sw/bin/madplay -Q -o raw:- --mono -R 8000 -a -12
-Index: configs/osp.conf.sample
-===================================================================
---- configs/osp.conf.sample.orig	2010-07-12 07:16:18.000000000 +0300
-+++ configs/osp.conf.sample	2010-10-23 13:00:01.017483668 +0300
-@@ -45,8 +45,8 @@
- ;source=domain name or [IP address in brackets]
- ;
- ; Define path and file name of crypto files.
--; The default path for crypto file is /var/lib/asterisk/keys.  If no path is
--; defined, crypto files will in /var/lib/asterisk/keys directory.
-+; The default path for crypto file is /user/share/asterisk/keys.  If no path is
-+; defined, crypto files will in /user/share/asterisk/keys directory.
- ;
- ; Specify the private key file name.
- ; If this parameter is unspecified or not present, the default name will be the
-Index: configs/res_config_sqlite.conf.sample
-===================================================================
---- configs/res_config_sqlite.conf.sample	(revision 222649)
-+++ configs/res_config_sqlite.conf.sample	(working copy)
-@@ -1,7 +1,7 @@
- [general]
- 
- ; The database file.
--dbfile => /var/lib/asterisk/sqlite.db
-+dbfile => /var/spool/asterisk/sqlite.db
- 
- ; Both config_table and cdr_table are optional. If config_table is omitted,
- ; you must specify it in extconfig.conf. If it is both provided here and in
-Index: utils/ael_main.c
-===================================================================
---- utils/ael_main.c	(revision 222649)
-+++ utils/ael_main.c	(working copy)
-@@ -496,7 +496,7 @@
+ [homeline-kids]
+ exten => s,1(begin),Background(murphy-homeline-kids)
+-exten => 1,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 1,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 1,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/3/greet.wav&)
+ exten => 1,3,Gosub(std-priv-exten,~~s~~,1(IAX2/seaniax&Zap/5r2,3,35,mtw,telemarket,telemarket))
+ exten => 1,4,Goto(homeline,s,loopback)
+-exten => 2,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 2,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 2,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/4/greet.wav&)
+ exten => 2,3,Voicemail(u4)
+ exten => 2,4,Goto(homeline,s,loopback)
+-exten => 3,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 3,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 3,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/5/greet.wav&)
+ exten => 3,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,5,35,mtw,telemarket,telemarket))
+ exten => 3,4,Goto(homeline,s,loopback)
+-exten => 4,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 4,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 4,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/6/greet.wav&)
+ exten => 4,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,6,35,mtw,telemarket,telemarket))
+ exten => 4,4,Goto(homeline,s,loopback)
+-exten => 5,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 5,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 5,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/7/greet.wav&)
+ exten => 5,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,7,35,mtw,telemarket,telemarket))
+ exten => 5,4,Goto(homeline,s,loopback)
+-exten => 6,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 6,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 6,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/8/greet.wav&)
+ exten => 6,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,8,35,mtw,telemarket,telemarket))
+ exten => 6,4,Goto(homeline,s,loopback)
+-exten => 7,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 7,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 7,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/9/greet.wav&)
+ exten => 7,3,Gosub(std-priv-exten,~~s~~,1(Zap/3r2&Zap/5r2,9,35,mtw,telemarket,telemarket))
+ exten => 7,4,Goto(homeline,s,loopback)
+@@ -2451,7 +2451,7 @@
+ exten => s,6,TrySystem(/usr/local/bin/who-is-it ${CALLERID(num)} "${CALLERID(name)}"&)
+ exten => s,7(loopback),Background(greetings/greeting)
+ exten => s,8,Background(murphy-office-intro1)
+-exten => 1,1,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/call-for.gsm)
++exten => 1,1,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/call-for.gsm)
+ exten => 1,2,TrySystem(/usr/bin/play /var/spool/asterisk/voicemail/default/1/greet.wav&)
+ exten => 1,3,Gosub(std-priv-exten,~~s~~,1(Zap/6&Sip/murf,1,30,mtw,telemarket,telemarket))
+ exten => 1,4,Goto(s,loopback)
+@@ -2577,7 +2577,7 @@
+ exten => 760,1,DateTime()
+ exten => 760,2,Goto(s,loopback)
+ exten => 761,1,Record(announcement:gsm)
+-exten => 761,2,TrySystem(/usr/bin/play /var/lib/asterisk/sounds/announcement.gsm&)
++exten => 761,2,TrySystem(/usr/bin/play /usr/share/asterisk/sounds/announcement.gsm&)
+ exten => 761,3,Goto(s,loopback)
+ exten => 762,1,agi(tts-riddle.agi)
+ exten => 762,2,Background(gsm/what-time-it-is2)
+diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/utils/ael_main.c asterisk-1.8.6.0/utils/ael_main.c
+--- asterisk-1.8.6.0.orig/utils/ael_main.c	2011-07-14 22:13:06.000000000 +0200
++++ asterisk-1.8.6.0/utils/ael_main.c	2011-09-07 14:09:30.000000000 +0200
+@@ -503,7 +503,7 @@
  		strcpy(config_dir, "/etc/asterisk");
  		localized_use_conf_dir();
  	}
@@ -514,73 +567,3 @@ Index: utils/ael_main.c
  	
  	if( dump_extensions ) {
  		dumpfile = fopen("extensions.conf.aeldump","w");
-Index: contrib/scripts/astgenkey.8
-===================================================================
---- contrib/scripts/astgenkey.8	(revision 222649)
-+++ contrib/scripts/astgenkey.8	(working copy)
-@@ -88,7 +88,7 @@
- .RE
- 
- Those files should be copied to 
--.I /var/lib/asterisk/keys
-+.I /usr/share/asterisk/keys
- 
- (The private key: on your system. The public key: on other systems)
- 
-@@ -122,10 +122,10 @@
- And then make the key accessible to Asterisk (assuming you run it as
- user "asterisk").
- 
--  chown asterisk /var/lib/asterisk/keys/yourname.*
-+  chown asterisk /usr/share/asterisk/keys/yourname.*
- 
- .SH FILES
--.I /var/lib/asterisk/keys
-+.I /usr/share/asterisk/keys
- .RS
- .RE
- 
-Index: contrib/scripts/astgenkey
-===================================================================
---- contrib/scripts/astgenkey	(revision 222649)
-+++ contrib/scripts/astgenkey	(working copy)
-@@ -29,7 +29,7 @@
- 	echo "in PEM format for use by Asterisk.  You will be asked to"
- 	echo "enter a passcode for your key multiple times.  Please"
- 	echo "enter the same code each time.  The resulting files will"
--	echo "need to be moved to /var/lib/asterisk/keys if you want"
-+	echo "need to be moved to /usr/share/asterisk/keys if you want"
- 	echo "to use them, and any private keys (.key files) will"
- 	echo "need to be initialized at runtime either by running"
- 	echo "Asterisk with the '-i' option, or with the 'init keys'"
-Index: contrib/utils/README.rawplayer
-===================================================================
---- contrib/utils/README.rawplayer	(revision 222649)
-+++ contrib/utils/README.rawplayer	(working copy)
-@@ -16,11 +16,11 @@
- sox -c 1 track01.wav -t raw -r 8000 -c 1 -s -w track01.raw
- 
- 
--Once you have the raw files put them in any dir on your system (eg /var/lib/asterisk/holdmusic_raw).
-+Once you have the raw files put them in any dir on your system (eg /usr/share/asterisk/holdmusic_raw).
- and set up a class in musiconhold.conf like so:
- 
- [classes]
--default => custom:/var/lib/asterisk/holdmusic_raw,/usr/bin/rawplayer
-+default => custom:/usr/share/asterisk/holdmusic_raw,/usr/bin/rawplayer
- 
- 
- This is the most efficient way to implement moh because no cpu usage is required to 
-Index: UPGRADE-1.4.txt
-===================================================================
---- UPGRADE-1.4.txt	(revision 222649)
-+++ UPGRADE-1.4.txt	(working copy)
-@@ -92,7 +92,7 @@
- WARNING: Asterisk 1.4 supports a new layout for sound files in multiple languages;
- instead of the alternate-language files being stored in subdirectories underneath
- the existing files (for French, that would be digits/fr, letters/fr, phonetic/fr,
--etc.) the new layout creates one directory under /var/lib/asterisk/sounds for the
-+etc.) the new layout creates one directory under /usr/share/asterisk/sounds for the
- language itself, then places all the sound files for that language under that
- directory and its subdirectories. This is the layout that will be created if you
- select non-English languages to be installed via menuselect, HOWEVER Asterisk does
