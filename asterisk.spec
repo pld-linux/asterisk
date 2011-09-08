@@ -94,6 +94,7 @@ BuildRequires:	jack-audio-connection-kit-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libgsm-devel
+BuildRequires:	libical-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libresample-devel
 BuildRequires:	libvorbis-devel
