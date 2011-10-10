@@ -30,16 +30,16 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel		0.1
+%define		rel		1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.6.1.20
+Version:	1.6.1.25
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	7295e6a34bb2e26985ef02608347f5f3
+# Source0-md5:	0f197d7a32164fa2103c1d72d5fbfc76
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
