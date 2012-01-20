@@ -2,7 +2,6 @@
 # - cgi-bin package - separate, because of suid-root
 # - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
 # - CFLAGS passing
-# - fix bluetooth patch
 # - make package for moh sound files
 # - likely odbc and imap broken (identical code, some #define not working, etc):
 #   *** WARNING: identical binaries are copied, not linked:
@@ -24,7 +23,6 @@
 #
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
-%bcond_with	bluetooth	# without bluetooth support (NFT)
 %bcond_with	zhone		# zhone hack
 %bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
@@ -35,21 +33,24 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	1	
+%define		rel	1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.8.7.2
+Version:	10.0.1
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	27ab62d75be35e623e4798d58a0959fc
+# Source0-md5:	b8eaff7832fe46fc764030ed46df617c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source5:	%{name}.logrotate
 Source10:	app_txfax.c
 Source11:	app_rxfax.c
+# menuselect.* -> make menuconfig; choose options; copy resulting files here
+Source12:	menuselect.makedeps
+Source13:	menuselect.makeopts
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
@@ -62,7 +63,6 @@ Patch8:		libedit-history.patch
 Patch9:		pld-banner.patch
 # http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
-Patch11:	%{name}-chan_bluetooth.patch
 Patch12:	%{name}-zhone.patch
 # http://svn.debian.org/wsvn/pkg-voip/asterisk/trunk/debian/patches/bristuff
 Patch13:	%{name}-bristuff.patch
@@ -78,7 +78,7 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
-%{?with_bluetooth:BuildRequires: bluez-devel}
+BuildRequires:	bluez-libs-devel
 BuildRequires:	curl-devel
 BuildRequires:	dahdi-linux-devel
 BuildRequires:	dahdi-tools-devel >= 2.0.0
@@ -557,7 +557,6 @@ cd apps
 cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
-%{?with_bluetooth:%patch11 -p1}
 %{?with_zhonehack:%patch12 -p1}
 %if %{with bristuff}
 %patch13 -p1
@@ -574,6 +573,13 @@ cp %{SOURCE11} .
 
 # avoid using these
 rm -rf imap menuselect/mxml main/editline codecs/gsm codecs/lpc10
+
+install %{SOURCE12} .
+install %{SOURCE13} .
+
+%if %{without h323}
+sed -i -e 's#\(MENUSELECT_ADDONS=.*\)#\1 chan_ooh323#g' menuselect.makeopts
+%endif
 
 %build
 rm -f pbx/.depend
@@ -611,12 +617,6 @@ cd ..
 %{?with_bristuff:grep '^#define HAVE_GSMAT 1' include/asterisk/autoconfig.h || exit 1}
 
 cp -f .cleancount .lastclean
-
-%if %{with h323}
-# included conditionally, so make sure its there first
-%{__make} -C channels/h323 Makefile.ast \
-	%{?with_verbose:NOISY_BUILD=yes} \
-%endif
 
 %{__make} DEBUG= \
 	OPTIMIZE= \
@@ -670,27 +670,6 @@ touch apps/app_voicemail.so apps/app_directory.so
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
 %endif
-
-%{__make} \
-	DEBUG= \
-	OPTIMIZE= \
-	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
-	ASTDATADIR=%{_datadir}/asterisk \
-	ASTVARLIBDIR=%{_datadir}/asterisk \
-	ASTDBDIR=%{_localstatedir}/spool/asterisk \
-	%{?with_verbose:NOISY_BUILD=yes} \
-	CHANNEL_LIBS+=chan_bluetooth.so || :
-
-# rerun needed; asterisk wants that
-%{__make} \
-	DEBUG= \
-	OPTIMIZE= \
-	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
-	ASTDATADIR=%{_datadir}/asterisk \
-	ASTVARLIBDIR=%{_datadir}/asterisk \
-	ASTDBDIR=%{_localstatedir}/spool/asterisk \
-	%{?with_verbose:NOISY_BUILD=yes} \
-	CHANNEL_LIBS+=chan_bluetooth.so
 
 # safe checks
 %{?with_bristuff:objdump -p channels/chan_zap.so | grep -qE 'NEEDED +libgsmat\.so' || exit 1}
@@ -768,7 +747,7 @@ find doc/api/html -name '*.map' -size 0 -delete
 %endif
 
 #fixme
-rm  $RPM_BUILD_ROOT/etc/asterisk/{app_mysql,cdr_mysql,chan_mobile,chan_ooh323,misdn%{!?with_h323:,h323},res_config_mysql,res_pktccops}.conf
+rm  $RPM_BUILD_ROOT/etc/asterisk/{app_mysql,cdr_mysql,chan_mobile,misdn%{!?with_h323:,chan_ooh323},res_pktccops,h323}.conf
 
 rm -fr $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
 
@@ -810,6 +789,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 #%attr(755,root,root) %{_sbindir}/aelparse
 %attr(755,root,root) %{_sbindir}/astcanary
+%attr(755,root,root) %{_sbindir}/astdb2bdb
+%attr(755,root,root) %{_sbindir}/astdb2sqlite3
 %attr(755,root,root) %{_sbindir}/asterisk
 %attr(755,root,root) %{_sbindir}/astgenkey
 %attr(755,root,root) %{_sbindir}/autosupport
@@ -848,6 +829,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_aliases.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_permissions.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/codecs.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/confbridge.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/dnsmgr.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/dsp.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/dundi.conf
@@ -870,6 +852,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phoneprov.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queuerules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_mysql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_stun_monitor.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/rpt.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/rtp.conf
@@ -923,12 +906,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_queue.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_read.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_readexten.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_readfile.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_record.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sayunixtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_senddtmf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sendtext.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_setcallerid.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sms.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_softhangup.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_speech_utils.so
@@ -960,6 +941,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_local.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_mobile.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_multicast_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_phone.so
@@ -982,7 +964,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_siren14.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_siren7.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_sln.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/format_sln16.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_vox.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_aes.so
@@ -1006,6 +987,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_global.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_groupcount.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_iconv.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_jitterbuffer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_lock.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_logic.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_math.so
@@ -1038,10 +1020,13 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_ews.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_exchange.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_icalendar.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_config_mysql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_celt.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_silk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mutestream.so
@@ -1133,7 +1118,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/meetme.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_dahdi.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdibarge.so
+#%attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdibarge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiras.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiscan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_flash.so
@@ -1168,8 +1153,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %if %{with h323}
 %files h323
 %defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/h323.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_h323.so
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_ooh323.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_ooh323.so
 %endif
 
 %files http
@@ -1298,7 +1283,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_sqlite3_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite3_custom.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite.so
+#%attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
 
@@ -1317,7 +1302,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files usbradio
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/usbradio.conf
-#%attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 
 %files voicemail
 %defattr(644,root,root,755)
