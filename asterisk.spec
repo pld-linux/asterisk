@@ -33,7 +33,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	1
+%define		rel	2
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -45,6 +45,7 @@ Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.ta
 # Source0-md5:	b8eaff7832fe46fc764030ed46df617c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
+Source3:	%{name}.tmpfiles
 Source5:	%{name}.logrotate
 Source10:	app_txfax.c
 Source11:	app_rxfax.c
@@ -676,7 +677,8 @@ touch apps/app_voicemail.so apps/app_directory.so
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}}
+install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 export ASTCFLAGS="%{rpmcflags}"
 
@@ -710,6 +712,8 @@ install -D -p apps/app_voicemail_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/mod
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 cp -a %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+
+install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 # create some directories that need to be packaged
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/moh
@@ -1044,6 +1048,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_dlinklists.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/test_heap.so
+/usr/lib/tmpfiles.d/%{name}.conf
 
 %dir %{_datadir}/asterisk
 %dir %{_datadir}/asterisk/agi-bin
