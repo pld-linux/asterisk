@@ -4,6 +4,7 @@
 /var/log/asterisk/messages
 /var/log/asterisk/full
 {
+	su root asterisk
 	create 640 asterisk asterisk
 	daily
 	missingok

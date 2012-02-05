@@ -33,7 +33,7 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	3
+%define		rel	4
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
@@ -137,28 +137,29 @@ BuildRequires:	srtp-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
-Requires(pre):	/bin/id
-Requires(pre):	/usr/bin/getgid
-Requires(pre):	/usr/sbin/groupadd
-Requires(pre):	/usr/sbin/useradd
-Provides:	group(asterisk)
-Provides:	user(asterisk)
 %if %{with bristuff}
 BuildRequires:	libgsmat-devel
 BuildRequires:	libpri-bristuff-devel >= 1.2.4
 %else
 BuildRequires:	libpri-devel >= 1.4.6
 %endif
-Requires(post,preun):	/sbin/chkconfig
 %if %{with fc}
 BuildRequires:	libss7-devel >= 1.0.1
 BuildRequires:	libtool-ltdl-devel
 BuildRequires:	libusb-devel
 BuildRequires:	lm_sensors-devel
 %endif
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
 Requires:	rc-scripts
+Provides:	group(asterisk)
+Provides:	user(asterisk)
+Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
