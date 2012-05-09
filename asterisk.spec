@@ -29,7 +29,7 @@
 %bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
-%bcond_with	misdn		# chan_misdn requires ancient mISDN (1.x)
+%bcond_with	misdn		# chan_misdn
 %bcond_without	h323		# without h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
@@ -96,6 +96,7 @@ BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libgsm-devel
 BuildRequires:	libical-devel
+BuildRequires:	libilbc-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libresample-devel
 BuildRequires:	libvorbis-devel
@@ -103,7 +104,7 @@ BuildRequires:	libxml2-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
 %if %{with misdn}
-BuildRequires:	mISDNuser-devel >= 1.2
+BuildRequires:	mISDNuser-devel >= 1.1
 BuildConflicts:	mISDNuser-devel >= 2.0
 %endif
 BuildRequires:	mxml-devel
@@ -973,6 +974,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g719.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g723.so
