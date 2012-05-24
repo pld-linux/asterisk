@@ -46,18 +46,6 @@ diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/agi/numeralize asterisk-1
  sub process_dir {
  	my ($dir) = @_;
  	my $file;
-diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/apps/app_rpt.c asterisk-1.8.6.0/apps/app_rpt.c
---- asterisk-1.8.6.0.orig/apps/app_rpt.c	2011-07-14 22:13:06.000000000 +0200
-+++ asterisk-1.8.6.0/apps/app_rpt.c	2011-09-07 14:09:30.000000000 +0200
-@@ -242,7 +242,7 @@
- #define	TONEMACRO "tonemacro"
- #define	FUNCCHAR '*'
- #define	ENDCHAR '#'
--#define	EXTNODEFILE "/var/lib/asterisk/rpt_extnodes"
-+#define	EXTNODEFILE "/usr/share/asterisk/rpt_extnodes"
- #define	NODENAMES "rpt/nodenames"
- #define	PARROTFILE "/tmp/parrot_%s_%u"
- 
 diff -dur -x '*.orig' -x '*.rej' asterisk-1.8.6.0.orig/configs/festival.conf.sample asterisk-1.8.6.0/configs/festival.conf.sample
 --- asterisk-1.8.6.0.orig/configs/festival.conf.sample	2009-05-28 16:39:21.000000000 +0200
 +++ asterisk-1.8.6.0/configs/festival.conf.sample	2011-09-07 14:09:30.000000000 +0200
