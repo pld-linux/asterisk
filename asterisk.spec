@@ -17,7 +17,6 @@
 #   NBS=0 AST_EXT_LIB_SETUP([NBS], [Network Broadcast Sound], [nbs])
 #   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
 #   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
-# - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 # - app_{rx,tx}fax seems to b replaced by app_fax alongside latest spanddsp
 #   See: http://sourceforge.net/projects/agx-ast-addons/
 #        https://agx-ast-addons.svn.sourceforge.net/svnroot/agx-ast-addons/trunk/attic/
@@ -39,12 +38,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.8.12.0
+Version:	1.8.14.1
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	73d1da06da61f652a6c83f2604350df5
+# Source0-md5:	b60ea1459613fc1d6f0ebc06c6fb4175
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -53,7 +52,6 @@ Source10:	app_txfax.c
 Source11:	app_rxfax.c
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
-Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Patch4:		%{name}-ppc.patch
 Patch5:		external-libedit.patch
@@ -470,14 +468,6 @@ Requires:	%{name} = %{version}-%{release}
 %description unistim
 Unistim channel for Asterisk
 
-%package usbradio
-Summary:	USB radio channel for Asterisk
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description usbradio
-Unistim channel for Asterisk
-
 %package voicemail
 Summary:	Common Voicemail Modules for Asterisk
 Group:		Applications/Networking
@@ -542,7 +532,6 @@ API documentation for Asterisk.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p0
@@ -876,7 +865,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queuerules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_stun_monitor.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/rpt.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/rtp.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/say.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/sip*.conf
@@ -1320,11 +1308,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/unistim.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_unistim.so
-
-%files usbradio
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/usbradio.conf
-#%attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 
 %files voicemail
 %defattr(644,root,root,755)

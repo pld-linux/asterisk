@@ -1,9 +1,10 @@
---- asterisk-1.6.1.12/menuselect/Makefile~	2008-12-11 00:00:19.000000000 +0200
-+++ asterisk-1.6.1.12/menuselect/Makefile	2009-12-30 23:14:47.201686543 +0200
+diff -dur asterisk-1.8.14.1.orig/menuselect/Makefile asterisk-1.8.14.1/menuselect/Makefile
+--- asterisk-1.8.14.1.orig/menuselect/Makefile	2012-05-09 21:57:43.000000000 +0200
++++ asterisk-1.8.14.1/menuselect/Makefile	2012-07-23 14:06:28.000000000 +0200
 @@ -23,6 +23,7 @@
  # Basic set of sources and flags/libraries/includes
  OBJS:=menuselect.o strcompat.o
- CFLAGS:=-g -c -D_GNU_SOURCE -Wall
+ CFLAGS+=-g -D_GNU_SOURCE -Wall
 +MXML_LIB:=$(shell pkg-config --libs mxml)
  
  ifeq ($(MENUSELECT_DEBUG),yes)
@@ -33,15 +34,16 @@
  all: $(ALL_TGTS)
 @@ -66,7 +68,7 @@
  makeopts autoconfig.h: autoconfig.h.in makeopts.in
- 	@./configure $(CONFIGURE_SILENT) CC= LD= AR= CFLAGS=
+ 	@./configure $(CONFIGURE_SILENT)
  
 -$(ALL_TGTS): mxml/libmxml.a
 +$(ALL_TGTS):
  
  ifdef C_OBJS
  menuselect_curses.o: CFLAGS+=$(C_INCLUDE)
---- asterisk-1.8.0/menuselect/menuselect.c.orig	2010-08-25 04:42:41.000000000 +0300
-+++ asterisk-1.8.0/menuselect/menuselect.c	2010-10-23 12:10:31.077483673 +0300
+diff -dur asterisk-1.8.14.1.orig/menuselect/menuselect.c asterisk-1.8.14.1/menuselect/menuselect.c
+--- asterisk-1.8.14.1.orig/menuselect/menuselect.c	2011-11-09 23:22:13.000000000 +0100
++++ asterisk-1.8.14.1/menuselect/menuselect.c	2012-07-23 14:06:10.000000000 +0200
 @@ -32,7 +32,7 @@
  #include <getopt.h>
  
