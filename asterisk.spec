@@ -39,6 +39,7 @@ Patch0:		%{name}-m4.patch
 Patch1:		%{name}-configure.patch
 Patch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
+Patch4:		%{name}-external-libedit.patch
 Source10:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_txfax.c
 # Source10-md5:	8c8fcb263b76897022b4c28052a7b439
 Source11:	http://soft-switch.org/downloads/spandsp/spandsp-%{_spandsp_version}/asterisk-1.2.x/app_rxfax.c
@@ -68,6 +69,7 @@ BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-static
+BuildRequires:	libedit-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -156,6 +158,7 @@ Pliki przykładowe dla centralki Asterisk.
 #%patch6 -p1
 #%patch7 -p1
 #%patch9 -p1
+%patch4 -p1
 
 %if %{with rxfax}
 cd apps
