@@ -28,6 +28,7 @@
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
 %bcond_with	misdn		# chan_misdn requires ancient mISDN (1.x)
+%bcond_with	openais		# openais is dead project
 %bcond_without	h323		# without h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
@@ -112,7 +113,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	neon-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
-BuildRequires:	openais-devel
+%{?with_openais:BuildRequires:	openais-devel}
 %if %{with h323}
 BuildRequires:	openh323-devel >= 1.19.0
 %endif
@@ -1097,10 +1098,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %doc doc/api/html/*
 %endif
 
+%if %{with openais}
 %files ais
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ais.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ais.so
+%endif
 
 %files alsa
 %defattr(644,root,root,755)
