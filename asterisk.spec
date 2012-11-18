@@ -115,7 +115,7 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
 %{?with_openais:BuildRequires:	openais-devel}
 %if %{with h323}
-BuildRequires:	openh323-devel >= 1.19.0
+BuildRequires:	h323plus-devel >= 1.24.0
 %endif
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -125,7 +125,7 @@ BuildRequires:	popt-devel
 BuildRequires:	portaudio-devel >= 19
 BuildRequires:	postgresql-devel
 %if %{with h323}
-BuildRequires:	pwlib-devel
+BuildRequires:	ptlib-devel
 %endif
 BuildRequires:	radiusclient-ng-devel
 BuildRequires:	rpmbuild(macros) >= 1.268
