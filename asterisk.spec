@@ -73,6 +73,7 @@ Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
 Patch18:	Fix-history-loading-when-using-external-libedit.patch
+Patch19:	ptlib-check.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 3.6.1
 BuildRequires:	SDL_image-devel
@@ -569,6 +570,7 @@ cp %{SOURCE11} .
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
@@ -942,7 +944,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_syslog.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_manager.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/cel_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_agent.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
@@ -1136,10 +1137,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_dahdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_dahdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_dahdi.so
-
-%dir %{_includedir}/asterisk
-%{_includedir}/asterisk.h
-%{_includedir}/asterisk/*.h
 
 %files fax
 %defattr(644,root,root,755)

@@ -1,0 +1,11 @@
+--- asterisk-10.0.1/configure.ac~	2012-11-18 11:14:49.723296429 +0100
++++ asterisk-10.0.1/configure.ac	2012-11-18 11:21:06.196616485 +0100
+@@ -1978,8 +1978,6 @@
+ 		PWLIBDIR="${PWLIB_DIR}"
+ 	fi
+ 	AST_CHECK_PWLIB()
+-	AST_CHECK_PWLIB_VERSION([PWLib], [PWLIB], [ptbuildopts.h], [1], [9], [2], [P[[WT]]LIB_VERSION])
+-		
+ 	if test "${HAS_PWLIB:-unset}" != "unset"; then
+ 		AST_CHECK_PWLIB_PLATFORM()
+ 
