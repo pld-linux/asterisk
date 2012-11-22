@@ -29,6 +29,7 @@
 				# issuing pulse-dialled calls to weird numbers
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
 %bcond_with	misdn		# chan_misdn
+%bcond_with	openais		# openais is dead project
 %bcond_without	h323		# without h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
@@ -38,12 +39,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.8.14.1
+Version:	1.8.18.0
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	b60ea1459613fc1d6f0ebc06c6fb4175
+# Source0-md5:	b08ea4a605b6a1cac51f0504b1a96680
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -111,7 +112,7 @@ BuildRequires:	ncurses-devel
 BuildRequires:	neon-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
-BuildRequires:	openais-devel
+%{?with_openais:BuildRequires:	openais-devel}
 %if %{with h323}
 BuildRequires:	openh323-devel >= 1.19.0
 %endif
@@ -948,7 +949,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_syslog.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_manager.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/cel_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_agent.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
@@ -1101,10 +1101,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %doc doc/api/html/*
 %endif
 
+%if %{with openais}
 %files ais
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ais.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ais.so
+%endif
 
 %files alsa
 %defattr(644,root,root,755)
@@ -1137,10 +1139,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_dahdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_dahdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_dahdi.so
-
-%dir %{_includedir}/asterisk
-%{_includedir}/asterisk.h
-%{_includedir}/asterisk/*.h
 
 %files fax
 %defattr(644,root,root,755)
