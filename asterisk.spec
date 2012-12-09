@@ -34,16 +34,16 @@
 %bcond_without	verbose		# verbose build
 
 %define		spandsp_version 0.0.2pre26
-%define		rel	6
+%define		rel	1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	10.0.1
+Version:	10.10.1
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	b8eaff7832fe46fc764030ed46df617c
+# Source0-md5:	6ce8e2c9f6a5589e8b77059e3e70031f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -55,7 +55,7 @@ Source12:	menuselect.makedeps
 Source13:	menuselect.makeopts
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
-Patch2:		%{name}-no_k6_on_sparc.patch
+#atch2:		%{name}-no_k6_on_sparc.patch
 Patch3:		%{name}-lib.patch
 Patch4:		%{name}-ppc.patch
 Patch5:		external-libedit.patch
@@ -472,14 +472,6 @@ Requires:	%{name} = %{version}-%{release}
 %description unistim
 Unistim channel for Asterisk
 
-%package usbradio
-Summary:	USB radio channel for Asterisk
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description usbradio
-Unistim channel for Asterisk
-
 %package voicemail
 Summary:	Common Voicemail Modules for Asterisk
 Group:		Applications/Networking
@@ -544,7 +536,7 @@ API documentation for Asterisk.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
+#patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p0
@@ -568,7 +560,7 @@ cp %{SOURCE11} .
 %patch15 -p1
 %endif
 %patch16 -p1
-%patch17 -p1
+#%patch17 -p1
 %patch18 -p1
 %patch19 -p1
 
@@ -862,7 +854,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_mysql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_stun_monitor.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/rpt.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/rtp.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/say.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/sip*.conf
@@ -958,6 +949,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g719.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g723.so
@@ -1039,6 +1031,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mutestream.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_musiconhold.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_phoneprov.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pktccops.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_asterisk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_multicast.so
@@ -1305,10 +1298,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/unistim.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_unistim.so
 
-%files usbradio
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/usbradio.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 
 %files voicemail
 %defattr(644,root,root,755)
