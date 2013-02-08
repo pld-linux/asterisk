@@ -432,7 +432,6 @@ Modules for Asterisk that support the SCCP/Skinny protocol.
 Summary:	Module that enables SNMP monitoring of Asterisk
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
-Requires:	mibs-dirs
 
 %description snmp
 Module that enables SNMP monitoring of Asterisk.
