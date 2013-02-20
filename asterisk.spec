@@ -30,7 +30,7 @@
 %bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
 %bcond_with	misdn		# chan_misdn
 %bcond_with	openais		# openais is dead project
-%bcond_without	h323		# without h323 support
+%bcond_with	h323		# without h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
@@ -39,12 +39,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.8.18.1
+Version:	1.8.20.1
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	0928d6f823bc89f3b769662c9beacd82
+# Source0-md5:	99204257de80a42c4e287fc93dfe714a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -95,7 +95,7 @@ BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libgsm-devel
 BuildRequires:	libical-devel
-BuildRequires:	libilbc-devel
+BuildRequires:	pkgconfig(libilbc)
 BuildRequires:	libogg-devel
 BuildRequires:	libresample-devel
 BuildRequires:	libvorbis-devel
