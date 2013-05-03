@@ -528,6 +528,9 @@ Ogg Vorbis format support.
 %package apidocs
 Summary:	API documentation for Asterisk
 Group:		Documentation
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description apidocs
 API documentation for Asterisk.
