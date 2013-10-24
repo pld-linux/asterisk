@@ -19,14 +19,14 @@
  			}
  			snprintf(buf, sizeof(buf), "_COMMAND MATCHESARRAY \"%s\" \"%s\"", lf->buffer, ptr); 
 @@ -2303,7 +2303,7 @@
- 					/* Every step increment buffer 1024 bytes */
- 					maxmbuf += 1024;					
- 					if (!(mbuf = ast_realloc(mbuf, maxmbuf))) {
+ 					new_mbuf = ast_realloc(mbuf, maxmbuf);
+ 					if (!new_mbuf) {
+ 						ast_free(mbuf);
 -						lf->cursor[0] = savechr;
 +//						lf->cursor[0] = savechr; // this is readonly variable
  						return (char *)(CC_ERROR);
  					}
- 				}
+ 					mbuf = new_mbuf;
 @@ -2365,7 +2365,7 @@
  		ast_free(matches);
  	}
