@@ -1,4 +1,5 @@
 # TODO:
+# - check/fix build with our h323. Does anybody still use H.323, anyway?
 # - cgi-bin package - separate, because of suid-root
 # - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
 # - CFLAGS passing
@@ -19,7 +20,7 @@
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 #
 # Conditional build:
-%bcond_without	h323		# without h323 support
+%bcond_with	h323		# without h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
