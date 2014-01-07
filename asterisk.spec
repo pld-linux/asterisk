@@ -728,20 +728,13 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %doc README *.txt ChangeLog BUGS CREDITS configs
 %doc doc/asterisk.sgml
 
-#%attr(755,root,root) %{_sbindir}/aelparse
 %attr(755,root,root) %{_sbindir}/astcanary
 %attr(755,root,root) %{_sbindir}/astdb2bdb
 %attr(755,root,root) %{_sbindir}/astdb2sqlite3
 %attr(755,root,root) %{_sbindir}/asterisk
 %attr(755,root,root) %{_sbindir}/astgenkey
 %attr(755,root,root) %{_sbindir}/autosupport
-#%attr(755,root,root) %{_sbindir}/conf2ael
-#%attr(755,root,root) %{_sbindir}/muted
 %attr(755,root,root) %{_sbindir}/rasterisk
-#%attr(755,root,root) %{_sbindir}/refcounter
-#%attr(755,root,root) %{_sbindir}/smsq
-#%attr(755,root,root) %{_sbindir}/stereorize
-#%attr(755,root,root) %{_sbindir}/streamplayer
 %{_mandir}/man8/asterisk.8*
 %{_mandir}/man8/astgenkey.8*
 %{_mandir}/man8/autosupport.8*
@@ -752,7 +745,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %attr(750,root,asterisk) %dir %{_sysconfdir}/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/adsi.conf
-#%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/adtranvofr.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/agents.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alarmreceiver.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/amd.conf
@@ -979,8 +971,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stun_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/test_dlinklists.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/test_heap.so
 /usr/lib/tmpfiles.d/%{name}.conf
 
 %dir %{_datadir}/asterisk
@@ -1034,10 +1024,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alsa.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_alsa.so
 
-#%files astman
-#%defattr(644,root,root,755)
-#%attr(755,root,root) %{_sbindir}/astman
-
 %files curl
 %defattr(644,root,root,755)
 %doc contrib/scripts/dbsep.cgi
@@ -1051,9 +1037,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/meetme.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_dahdi.conf
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdibarge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiras.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiscan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_flash.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_meetme.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_page.so
@@ -1205,7 +1189,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_sqlite3_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite3_custom.so
-#%attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
 
