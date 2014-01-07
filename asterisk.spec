@@ -49,13 +49,14 @@ Patch4:		FHS-paths.patch
 Patch5:		pld-banner.patch
 Patch6:		lpc10-system.patch
 URL:		http://www.asterisk.org/
-BuildRequires:	OSPToolkit-devel >= 3.6.1
+BuildRequires:	OSPToolkit-devel >= 4.0.0
 BuildRequires:	SDL_image-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	bluez-libs-devel
+BuildRequires:	corosync-devel >= 2.0.0
 BuildRequires:	curl-devel
 BuildRequires:	dahdi-linux-devel
 BuildRequires:	dahdi-tools-devel >= 2.0.0
@@ -68,14 +69,17 @@ BuildRequires:	gtk+2-devel
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-devel
 BuildRequires:	jack-audio-connection-kit-devel
+BuildRequires:	jansson-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libgsm-devel
 BuildRequires:	libical-devel
 BuildRequires:	libogg-devel
 BuildRequires:	libresample-devel
+BuildRequires:	libuuid-devel
 BuildRequires:	libvorbis-devel
 BuildRequires:	libxml2-devel
+BuildRequires:	libxslt-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
 BuildRequires:	mxml-devel
@@ -90,6 +94,7 @@ BuildRequires:	h323plus-devel >= 1.24.0
 BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
+BuildRequires:	pjproject-devel
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 BuildRequires:	portaudio-devel >= 19
@@ -106,6 +111,7 @@ BuildRequires:	sqlite-devel
 BuildRequires:	sqlite3-devel
 BuildRequires:	srtp-devel
 BuildRequires:	unixODBC-devel
+BuildRequires:	uriparser-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
 BuildRequires:	libpri-devel >= 1.4.6
