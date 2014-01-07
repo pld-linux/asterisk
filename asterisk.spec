@@ -556,6 +556,7 @@ cd ..
 
 cp -f .cleancount .lastclean
 
+%{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=FILE_STORAGE/' menuselect.makeopts
 %{__make} DEBUG= \
 	OPTIMIZE= \
 	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
