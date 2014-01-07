@@ -42,18 +42,11 @@ Source12:	menuselect.makedeps
 Source13:	menuselect.makeopts
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
-#atch2:		%{name}-no_k6_on_sparc.patch
-Patch3:		%{name}-lib.patch
-Patch4:		%{name}-ppc.patch
-Patch5:		external-libedit.patch
-Patch6:		pkg-config-gmime.patch
-Patch7:		FHS-paths.patch
-Patch8:		libedit-history.patch
-Patch9:		pld-banner.patch
-Patch16:	lpc10-system.patch
-Patch17:	gsm-libpoison.patch
-Patch18:	Fix-history-loading-when-using-external-libedit.patch
-Patch19:	ptlib-check.patch
+Patch2:		%{name}-lib.patch
+Patch3:		%{name}-ppc.patch
+Patch4:		FHS-paths.patch
+Patch5:		pld-banner.patch
+Patch6:		lpc10-system.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 3.6.1
 BuildRequires:	SDL_image-devel
@@ -500,18 +493,11 @@ API documentation for Asterisk.
 %setup -q
 %patch0 -p1
 %patch1 -p1
-#patch2 -p1
+%patch2 -p1
 %patch3 -p1
 %patch4 -p1
-%patch5 -p0
-#%patch6 -p0
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch16 -p1
-#%patch17 -p1
-%patch18 -p1
-%patch19 -p1
+%patch5 -p1
+%patch6 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
@@ -555,8 +541,7 @@ cd ..
 	--with-imap=system \
 	--with-gsm=/usr \
 	%{!?with_h323:--without-h323} \
-	--with-lpc10=/usr \
-	--with-libedit=yes
+	--with-lpc10=/usr
 
 cp -f .cleancount .lastclean
 
