@@ -1,23 +1,7 @@
 # TODO:
 # - check/fix build with our h323. Does anybody still use H.323, anyway?
-# - cgi-bin package - separate, because of suid-root
 # - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
-# - CFLAGS passing
 # - make package for moh sound files
-# - likely odbc and imap broken (identical code, some #define not working, etc):
-#   *** WARNING: identical binaries are copied, not linked:
-#     %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_odbc.so
-#   and  /usr/lib64/asterisk/modules/app_directory_imap.so
-#   *** WARNING: identical binaries are copied, not linked:
-#     %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_plain.so
-#   and  /usr/lib64/asterisk/modules/app_directory_imap.so
-# - ncurses dep gone for good (replaced by libedit)?
-# - missing/failed features:
-# $ grep =0 build_tools/menuselect-deps
-#   NBS=0 AST_EXT_LIB_SETUP([NBS], [Network Broadcast Sound], [nbs])
-#   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
-#   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
-# - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 #
 # Conditional build:
 %bcond_with	h323		# without h323 support
