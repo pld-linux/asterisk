@@ -19,9 +19,6 @@
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 #
 # Conditional build:
-%bcond_with	zhone		# zhone hack
-%bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
-				# issuing pulse-dialled calls to weird numbers
 %bcond_with	misdn		# chan_misdn requires ancient mISDN (1.x)
 %bcond_with	openais		# openais is dead project
 %bcond_without	h323		# without h323 support
@@ -55,7 +52,6 @@ Patch6:		pkg-config-gmime.patch
 Patch7:		FHS-paths.patch
 Patch8:		libedit-history.patch
 Patch9:		pld-banner.patch
-Patch12:	%{name}-zhone.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
 Patch18:	Fix-history-loading-when-using-external-libedit.patch
@@ -528,10 +524,6 @@ API documentation for Asterisk.
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-%if %{with zhone}
-sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c
-%endif
-%{?with_zhonehack:%patch12 -p1}
 %patch16 -p1
 #%patch17 -p1
 %patch18 -p1
