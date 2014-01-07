@@ -839,7 +839,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_mp3.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_nbscat.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_originate.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_parkandannounce.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_playback.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_playtones.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_privacy.so
@@ -876,10 +875,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_syslog.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_manager.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_agent.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_local.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mobile.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_multicast_rtp.so
