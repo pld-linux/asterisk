@@ -19,7 +19,6 @@
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 #
 # Conditional build:
-%bcond_with	openais		# openais is dead project
 %bcond_without	h323		# without h323 support
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
@@ -91,7 +90,6 @@ BuildRequires:	ncurses-devel
 BuildRequires:	neon-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
-%{?with_openais:BuildRequires:	openais-devel}
 %if %{with h323}
 BuildRequires:	h323plus-devel >= 1.24.0
 %endif
@@ -1034,13 +1032,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files apidocs
 %defattr(644,root,root,755)
 %doc doc/api/html/*
-%endif
-
-%if %{with openais}
-%files ais
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ais.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_ais.so
 %endif
 
 %files alsa
