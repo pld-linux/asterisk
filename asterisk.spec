@@ -105,7 +105,7 @@ BuildRequires:	postgresql-devel
 BuildRequires:	ptlib-devel
 %endif
 BuildRequires:	radiusclient-ng-devel
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.583
 BuildRequires:	sed >= 4.0
 BuildRequires:	spandsp-devel >= 0.0.5
 BuildRequires:	speex-devel
@@ -135,6 +135,9 @@ Provides:	group(asterisk)
 Provides:	user(asterisk)
 Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+# references symbols in the asterisk binary
+%define		skip_post_check_so	libasteriskssl.so.*
 
 %description
 Asterisk is an Open Source PBX and telephony development platform that
@@ -684,11 +687,8 @@ rm -f $RPM_BUILD_ROOT%{_mandir}/man8/safe_asterisk.8*
 rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 
 %if %{with apidocs}
-find doc/api/html -name '*.map' -size 0 -delete
+find doc/api -name '*.map' -size 0 -delete
 %endif
-
-#fixme
-rm  $RPM_BUILD_ROOT/etc/asterisk/{app_mysql,cdr_mysql,chan_mobile,misdn%{!?with_h323:,chan_ooh323},res_pktccops,h323}.conf
 
 rm -fr $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
 
@@ -1030,7 +1030,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%doc doc/api/html/*
+%doc doc/api/*
 %endif
 
 %files alsa
