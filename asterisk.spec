@@ -26,7 +26,6 @@
 %bcond_with	zhone		# zhone hack
 %bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
-%bcond_with	bristuff	# BRIstuff (Junghanns.NET BRI adapters) support
 %bcond_with	misdn		# chan_misdn requires ancient mISDN (1.x)
 %bcond_with	openais		# openais is dead project
 %bcond_without	h323		# without h323 support
@@ -39,7 +38,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	12.0.0
-Release:	%{rel}%{?with_bristuff:.bristuff}
+Release:	%{rel}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -66,10 +65,6 @@ Patch9:		pld-banner.patch
 # http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
 Patch10:	%{name}-txfax-Makefile.patch
 Patch12:	%{name}-zhone.patch
-# http://svn.debian.org/wsvn/pkg-voip/asterisk/trunk/debian/patches/bristuff
-Patch13:	%{name}-bristuff.patch
-Patch14:	%{name}-bristuff-build.patch
-Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
 Patch18:	Fix-history-loading-when-using-external-libedit.patch
@@ -139,12 +134,7 @@ BuildRequires:	srtp-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
-%if %{with bristuff}
-BuildRequires:	libgsmat-devel
-BuildRequires:	libpri-bristuff-devel >= 1.2.4
-%else
 BuildRequires:	libpri-devel >= 1.4.6
-%endif
 %if %{with fc}
 BuildRequires:	libss7-devel >= 1.0.1
 BuildRequires:	libtool-ltdl-devel
@@ -557,11 +547,6 @@ cp %{SOURCE10} .
 cp %{SOURCE11} .
 %endif
 %{?with_zhonehack:%patch12 -p1}
-%if %{with bristuff}
-%patch13 -p1
-%patch14 -p1
-%patch15 -p1
-%endif
 %patch16 -p1
 #%patch17 -p1
 %patch18 -p1
@@ -606,15 +591,11 @@ cd menuselect
 cd ..
 
 %configure \
-	%{?with_bristuff:--with-gsmat=%{_prefix}} \
 	--with-imap=system \
 	--with-gsm=/usr \
 	%{!?with_h323:--without-h323} \
 	--with-lpc10=/usr \
 	--with-libedit=yes
-
-# safe checks
-%{?with_bristuff:grep '^#define HAVE_GSMAT 1' include/asterisk/autoconfig.h || exit 1}
 
 cp -f .cleancount .lastclean
 
@@ -670,9 +651,6 @@ touch apps/app_voicemail.so apps/app_directory.so
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
 %endif
-
-# safe checks
-%{?with_bristuff:objdump -p channels/chan_zap.so | grep -qE 'NEEDED +libgsmat\.so' || exit 1}
 
 %install
 rm -rf $RPM_BUILD_ROOT
