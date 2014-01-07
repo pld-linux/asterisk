@@ -5,7 +5,7 @@
 #
 # Conditional build:
 %bcond_with	h323		# without h323 support
-%bcond_with	verbose		# res_corosync module (broken in 12.0.0)
+%bcond_with	corosync	# res_corosync module (broken in 12.0.0)
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
