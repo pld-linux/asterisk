@@ -19,7 +19,6 @@
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
 #
 # Conditional build:
-%bcond_with	misdn		# chan_misdn requires ancient mISDN (1.x)
 %bcond_with	openais		# openais is dead project
 %bcond_without	h323		# without h323 support
 %bcond_without	apidocs		# disable apidocs building
@@ -86,10 +85,6 @@ BuildRequires:	libvorbis-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
-%if %{with misdn}
-BuildRequires:	mISDNuser-devel >= 1.2
-BuildConflicts:	mISDNuser-devel >= 2.0
-%endif
 BuildRequires:	mxml-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
@@ -326,15 +321,6 @@ Requires:	%{name} = %{version}-%{release}
 
 %description lpc10
 LPC-10 2400 bps Voice Codec support
-
-%package misdn
-Summary:	mISDN channel for Asterisk
-Group:		Applications/Networking
-Requires(pre):	/usr/sbin/usermod
-Requires:	%{name} = %{version}-%{release}
-
-%description misdn
-mISDN channel for Asterisk.
 
 %package minivm
 Summary:	MiniVM applicaton for Asterisk
@@ -1163,13 +1149,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions_minivm.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/minivm.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_minivm.so
-
-%if %{with misdn}
-%files misdn
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/misdn.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_misdn.so
-%endif
 
 %files odbc
 %defattr(644,root,root,755)
