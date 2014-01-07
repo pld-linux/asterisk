@@ -49,6 +49,7 @@ Patch3:		%{name}-ppc.patch
 Patch4:		FHS-paths.patch
 Patch5:		pld-banner.patch
 Patch6:		lpc10-system.patch
+Patch7:		%{name}-histedit.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 BuildRequires:	SDL_image-devel
@@ -506,6 +507,7 @@ API documentation for Asterisk.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
