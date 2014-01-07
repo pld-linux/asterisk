@@ -17,12 +17,8 @@
 #   SS7=0 AST_EXT_LIB_SETUP([SS7], [ISDN SS7], [ss7])
 #   VPBAPI=0 AST_EXT_LIB_SETUP([VPB], [Voicetronix API], [vpb])
 # - %attr(755,root,root) %{_libdir}/asterisk/modules/chan_usbradio.so
-# - app_{rx,tx}fax seems to b replaced by app_fax alongside latest spanddsp
-#   See: http://sourceforge.net/projects/agx-ast-addons/
-#        https://agx-ast-addons.svn.sourceforge.net/svnroot/agx-ast-addons/trunk/attic/
 #
 # Conditional build:
-%bcond_with	rxfax		# without rx (also tx:-D) fax
 %bcond_with	zhone		# zhone hack
 %bcond_with	zhone_hack	# huge hack workarounding broken zhone channel banks which start randomly
 				# issuing pulse-dialled calls to weird numbers
@@ -32,7 +28,6 @@
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
-%define		spandsp_version 0.0.2pre26
 %define		rel	0.1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
@@ -47,8 +42,6 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source5:	%{name}.logrotate
-Source10:	app_txfax.c
-Source11:	app_rxfax.c
 # menuselect.* -> make menuconfig; choose options; copy resulting files here
 Source12:	menuselect.makedeps
 Source13:	menuselect.makeopts
@@ -62,8 +55,6 @@ Patch6:		pkg-config-gmime.patch
 Patch7:		FHS-paths.patch
 Patch8:		libedit-history.patch
 Patch9:		pld-banner.patch
-# http://soft-switch.org/downloads/spandsp/spandsp-%{spandsp_version}/asterisk-1.2.x/apps_Makefile.patch
-Patch10:	%{name}-txfax-Makefile.patch
 Patch12:	%{name}-zhone.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
@@ -539,12 +530,6 @@ API documentation for Asterisk.
 %patch9 -p1
 %if %{with zhone}
 sed -i -e 's|.*#define.*ZHONE_HACK.*|#define ZHONE_HACK 1|g' channels/chan_zap.c
-%endif
-%if %{with rxfax}
-cd apps
-%patch10 -p0
-cp %{SOURCE10} .
-cp %{SOURCE11} .
 %endif
 %{?with_zhonehack:%patch12 -p1}
 %patch16 -p1
