@@ -21,6 +21,7 @@
 #
 # Conditional build:
 %bcond_with	h323		# without h323 support
+%bcond_with	verbose		# res_corosync module (broken in 12.0.0)
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
@@ -56,7 +57,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	bluez-libs-devel
-BuildRequires:	corosync-devel >= 2.0.0
+%{?with_corosync:BuildRequires:	corosync-devel >= 2.0.0}
 BuildRequires:	curl-devel
 BuildRequires:	dahdi-linux-devel
 BuildRequires:	dahdi-tools-devel >= 2.0.0
@@ -518,6 +519,9 @@ install %{SOURCE13} .
 
 %if %{without h323}
 sed -i -e 's#\(MENUSELECT_ADDONS=.*\)#\1 chan_ooh323#g' menuselect.makeopts
+%endif
+%if %{without corosync}
+sed -i -e 's#\(MENUSELECT_RES=.*\)#\1 res_corosync#g' menuselect.makeopts
 %endif
 
 %build
