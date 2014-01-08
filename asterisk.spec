@@ -754,6 +754,8 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/monitor
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/outgoing
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/uploads
 
+install utils/astman.1 $RPM_BUILD_ROOT%{_mandir}/man1/astman.1
+
 # We're not going to package any of the sample AGI scripts
 rm -f $RPM_BUILD_ROOT%{_datadir}/asterisk/agi-bin/*
 
@@ -1189,6 +1191,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %doc doc/api/*
 %endif
+
+%files astman
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/astman
+%{_mandir}/man1/astman.1*
 
 %files alsa
 %defattr(644,root,root,755)
