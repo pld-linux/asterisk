@@ -784,7 +784,7 @@ find doc/api -name '*.map' -size 0 -delete
 %endif
 
 # remove configuration files for components never built
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{acl,app_mysql,app_skel,cdr_mysql,config_test,misdn,test_sorcery}.conf
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{app_mysql,app_skel,cdr_mysql,config_test,misdn,test_sorcery}.conf
 
 # remove configuration files for disabled optional components
 %if %{without corosync}
@@ -888,6 +888,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %{systemdunitdir}/%{name}.service
 
 %attr(750,root,asterisk) %dir %{_sysconfdir}/asterisk
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/acl.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/adsi.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/agents.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alarmreceiver.conf
