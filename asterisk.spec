@@ -102,12 +102,6 @@ BuildRequires:	webrtc-libilbc-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
 BuildRequires:	libpri-devel >= 1.4.6
-%if %{with fc}
-BuildRequires:	libss7-devel >= 1.0.1
-BuildRequires:	libtool-ltdl-devel
-BuildRequires:	libusb-devel
-BuildRequires:	lm_sensors-devel
-%endif
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
