@@ -159,14 +159,6 @@ Header files for Asterisk development platform.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe platformy programistycznej Asterisk.
 
-%package ais
-Summary:	Modules for Asterisk that use OpenAIS
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description ais
-Modules for Asterisk that use OpenAIS.
-
 %package alsa
 Summary:	Modules for Asterisk that use Alsa sound drivers
 Group:		Applications/Networking
