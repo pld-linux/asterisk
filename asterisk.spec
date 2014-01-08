@@ -660,9 +660,8 @@ menuselect/menuselect --disable res_pjsip --disable chan_pjsip menuselect.makeop
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
 
-rm apps/app_voicemail.o apps/app_directory.o
+rm apps/app_voicemail.o
 mv apps/app_voicemail.so apps/app_voicemail_plain.so
-mv apps/app_directory.so apps/app_directory_plain.so
 
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=IMAP_STORAGE/' menuselect.makeopts
 %{__make} DEBUG= \
@@ -673,9 +672,8 @@ mv apps/app_directory.so apps/app_directory_plain.so
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
 
-rm apps/app_voicemail.o apps/app_directory.o
+rm apps/app_voicemail.o
 mv apps/app_voicemail.so apps/app_voicemail_imap.so
-mv apps/app_directory.so apps/app_directory_imap.so
 
 %if %{with odbc}
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=ODBC_STORAGE/' menuselect.makeopts
@@ -687,14 +685,13 @@ mv apps/app_directory.so apps/app_directory_imap.so
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
 
-rm apps/app_voicemail.o apps/app_directory.o
+rm apps/app_voicemail.o
 mv apps/app_voicemail.so apps/app_voicemail_odbc.so
-mv apps/app_directory.so apps/app_directory_odbc.so
 %endif
 
 # so that these modules don't get built again during the install phase
-touch apps/app_voicemail.o apps/app_directory.o
-touch apps/app_voicemail.so apps/app_directory.so
+touch apps/app_voicemail.o
+touch apps/app_voicemail.so
 
 %if %{with apidocs}
 %{__make} progdocs \
@@ -732,15 +729,11 @@ export ASTCFLAGS="%{rpmcflags}"
 	ASTVARLIBDIR=%{_datadir}/asterisk \
 	ASTDBDIR=%{_localstatedir}/spool/asterisk
 
-rm $RPM_BUILD_ROOT%{_libdir}/asterisk/modules/app_directory.so
 rm $RPM_BUILD_ROOT%{_libdir}/asterisk/modules/app_voicemail.so
-install -D -p apps/app_directory_imap.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 install -D -p apps/app_voicemail_imap.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 %if %{with odbc}
-install -D -p apps/app_directory_odbc.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 install -D -p apps/app_voicemail_odbc.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 %endif
-install -D -p apps/app_directory_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 install -D -p apps/app_voicemail_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
@@ -960,6 +953,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dial.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dictate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_directed_pickup.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_disa.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dumpchan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_echo.so
@@ -1485,19 +1479,16 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files voicemail-imap
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_imap.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_imap.so
 
 %if %{with odbc}
 %files voicemail-odbc
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_odbc.so
 %endif
 
 %files voicemail-plain
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_plain.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_plain.so
 
 %files vorbis
