@@ -52,7 +52,6 @@ BuildRequires:	freetds-devel >= 0.63
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	gmime22-devel
-BuildRequires:	gtk+2-devel
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-devel
 BuildRequires:	jack-audio-connection-kit-devel
@@ -588,6 +587,7 @@ cd menuselect
 cd ..
 
 %configure \
+	--without-gtk2 \
 	--with-imap=system \
 	--with-gsm=/usr \
 	%{!?with_h323:--without-h323} \
