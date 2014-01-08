@@ -723,6 +723,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_sbindir}/astgenkey
 %attr(755,root,root) %{_sbindir}/autosupport
 %attr(755,root,root) %{_sbindir}/rasterisk
+%{_mandir}/man8/astdb2bdb.8*
+%{_mandir}/man8/astdb2sqlite3.8*
 %{_mandir}/man8/asterisk.8*
 %{_mandir}/man8/astgenkey.8*
 %{_mandir}/man8/autosupport.8*
@@ -736,6 +738,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/agents.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alarmreceiver.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/amd.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ari.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/asterisk.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/asterisk.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/calendar.conf
@@ -746,6 +749,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_syslog.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_custom.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_mobile.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_aliases.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_permissions.conf
@@ -774,24 +778,32 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queuerules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_mysql.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_parking.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pktccops.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_stun_monitor.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/rtp.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/say.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/sip*.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/sla.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/smdi.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/sorcery.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/statsd.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/telcordia-1.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/udptl.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/users.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/vpb.conf
 
+%{_libdir}/libasteriskssl.so.1
+
 %dir %{_libdir}/asterisk
 %dir %{_libdir}/asterisk/modules
 
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_adsiprog.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_agent_pool.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_alarmreceiver.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_amd.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_authenticate.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_bridgewait.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_cdr.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_celgenuserevent.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_chanisavail.so
@@ -833,6 +845,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_softhangup.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_speech_utils.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_stack.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_stasis.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_system.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_talkdetect.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_test.so
@@ -846,6 +859,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_while.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_zapateller.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/bridge_builtin_features.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/bridge_builtin_interval_features.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/bridge_holding.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/bridge_native_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/bridge_simple.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/bridge_softmix.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_csv.so
@@ -854,6 +870,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_syslog.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_manager.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge_media.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mobile.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
@@ -901,6 +918,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_frame_trace.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_global.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_groupcount.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_hangupcause.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_iconv.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_jitterbuffer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_lock.so
@@ -909,6 +927,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_md5.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_module.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pitchshift.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_presencestate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_rand.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sha1.so
@@ -930,22 +949,40 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_adsi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ael_share.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_agi.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_applications.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_asterisk.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_bridges.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_channels.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_device_states.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_endpoints.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_events.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_model.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_playbacks.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_recordings.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_sounds.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_caldav.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_ews.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_exchange.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_icalendar.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_chan_stats.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_mysql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_celt.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_h263.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_h264.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_opus.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_silk.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_http_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mutestream.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_musiconhold.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_parking.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_phoneprov.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pktccops.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_realtime.so
@@ -953,11 +990,22 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_multicast.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_security_log.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_smdi.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_astdb.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_config.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_memory.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_speech.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_srtp.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_answer.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_device_state.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_playback.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_recording.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_snoop.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stun_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_statsd.so
 /usr/lib/tmpfiles.d/%{name}.conf
 
 %dir %{_datadir}/asterisk
@@ -976,7 +1024,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %dir %{_datadir}/asterisk/documentation
 %{_datadir}/asterisk/documentation/appdocsxml.dtd
+%{_datadir}/asterisk/documentation/appdocsxml.xslt
 %{_datadir}/asterisk/documentation/core-en_US.xml
+
+%dir %{_datadir}/asterisk/rest-api
+%{_datadir}/asterisk/rest-api/*.json
 
 %attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
 %dir %attr(750,root,asterisk) %{_localstatedir}/lib/asterisk/licenses
@@ -999,6 +1051,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %dir %{_includedir}/asterisk
 %{_includedir}/asterisk/*.h
 %{_includedir}/asterisk.h
+%{_libdir}/libasteriskssl.so
 
 %if %{with apidocs}
 %files apidocs
@@ -1073,9 +1126,13 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/gtalk.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/jabber.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/jingle.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/motif.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/xmpp.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_gtalk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_jingle.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_motif.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_jabber.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_xmpp.so
 
 %files jack
 %defattr(644,root,root,755)
@@ -1175,9 +1232,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_sqlite3_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_sqlite3_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite3.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite3.so
 
 %files tds
 %defattr(644,root,root,755)
