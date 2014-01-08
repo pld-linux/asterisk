@@ -125,6 +125,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # references symbols in the asterisk binary
 %define		skip_post_check_so	libasteriskssl.so.*
 
+%define _noautoprovfiles %{_libdir}/asterisk/modules/.*
+
 %description
 Asterisk is an Open Source PBX and telephony development platform that
 can both replace a conventional PBX and act as a platform for
