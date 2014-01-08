@@ -269,6 +269,14 @@ Conflicts:	asterisk < 1.4.18-1
 %description ices
 Stream audio from Asterisk to an IceCast server.
 
+%package ilbc
+Summary:	iLBC codec for Asterisk
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description ilbc
+Support iLBC audio encoding/decoding.
+
 %package jabber
 Summary:	Jabber/XMPP resources for Asterisk
 Group:		Applications/Networking
@@ -919,7 +927,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g719.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g723.so
@@ -927,7 +934,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g729.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_h263.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_h264.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/format_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_jpeg.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_pcm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_siren14.so
@@ -1167,6 +1173,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %doc contrib/asterisk-ices.xml
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_ices.so
+
+%files ilbc
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_ilbc.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_ilbc.so
 
 %files jabber
 %defattr(644,root,root,755)
