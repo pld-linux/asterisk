@@ -674,6 +674,18 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 find doc/api -name '*.map' -size 0 -delete
 %endif
 
+# remove configuration files for components never built
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{acl,app_mysql,app_skel,cdr_mysql,config_test,misdn,test_sorcery}.conf
+
+# remove configuration files for disabled optional components
+%if %{without corosync}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_corosync.conf
+%endif
+%if %{without h323}
+# I don't even know which one can be fixed
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{h323,ooh323}.conf
+%endif
+
 rm -fr $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
 
 %clean
