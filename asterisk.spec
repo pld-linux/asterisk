@@ -333,6 +333,16 @@ Requires:	%{name} = %{version}-%{release}
 %description oss
 Modules for Asterisk that use OSS sound drivers.
 
+%package pjsip
+Summary:	PJSIP Asterisk modules
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description pjsip
+The chan_pjsip and res_pjsip* modules provided by this package provide the new
+SIP driver for Asterisk, based on the PJSIP stack, to replace the old, badly designed
+and quite buggy chan_sip module.
+
 %package portaudio
 Summary:	Modules for Asterisk that use the portaudio library
 Group:		Applications/Networking
@@ -986,6 +996,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_phoneprov.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pktccops.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_realtime.so
+# res_rtp_asterisk.so pulls some pjproject libs, but it still looks like a core module
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_asterisk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_multicast.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_security_log.so
@@ -1187,6 +1198,43 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/oss.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_oss.so
+
+%files pjsip
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_notify.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_pjsip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_endpoint.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_acl.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_authenticator_digest.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_caller_id.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_diversion.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dtmf_info.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_anonymous.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_ip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_user.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_exten_state.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_header_funcs.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_log_forwarder.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_nat.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_notify.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_one_touch_record_info.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_authenticator_digest.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_registration.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pubsub.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_refer.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar_expire.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_rfc3326.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sdp_rtp.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
 
 %files portaudio
 %defattr(644,root,root,755)
