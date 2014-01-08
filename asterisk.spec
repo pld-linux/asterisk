@@ -35,11 +35,11 @@ Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.ta
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
-Source5:	%{name}.logrotate
-Source6:	%{name}.service
+Source4:	%{name}.logrotate
+Source5:	%{name}.service
 # menuselect.* -> make menuconfig; choose options; copy resulting files here
-Source12:	menuselect.makedeps
-Source13:	menuselect.makeopts
+Source6:	menuselect.makedeps
+Source7:	menuselect.makeopts
 Patch0:		mxml-system.patch
 Patch1:		lua51-path.patch
 Patch2:		%{name}-lib.patch
@@ -608,8 +608,8 @@ cp -f .cleancount .lastclean
 %{__make} menuselect/menuselect
 %{__make} menuselect-tree
 
-cp %{SOURCE12} .
-cp %{SOURCE13} .
+cp %{SOURCE6} .
+cp %{SOURCE7} .
 
 %if %{without h323}
 menuselect/menuselect --disable chan_ooh323 --disable chan_h323 menuselect.makeopts
@@ -741,8 +741,8 @@ install -D -p apps/app_voicemail_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/mod
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
-cp -a %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdunitdir}/%{name}.service
+cp -a %{SOURCE4} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install -p %{SOURCE5} $RPM_BUILD_ROOT%{systemdunitdir}/%{name}.service
 
 install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
