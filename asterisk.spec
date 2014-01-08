@@ -1,6 +1,5 @@
 # TODO:
 # - check/fix build with our h323. Does anybody still use H.323, anyway?
-# - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
 # - make package for moh sound files
 #
 # Conditional build:
@@ -98,6 +97,7 @@ BuildRequires:	sqlite3-devel
 BuildRequires:	srtp-devel
 BuildRequires:	unixODBC-devel
 BuildRequires:	uriparser-devel
+BuildRequires:	webrtc-libilbc-devel
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
 BuildRequires:	libpri-devel >= 1.4.6
