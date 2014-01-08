@@ -707,7 +707,7 @@ touch apps/app_voicemail.so
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}} \
-	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+	$RPM_BUILD_ROOT{/usr/lib/tmpfiles.d,%{_mandir}/man1}
 
 export ASTCFLAGS="%{rpmcflags}"
 
