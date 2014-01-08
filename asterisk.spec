@@ -842,7 +842,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_while.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_zapateller.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/bridge_builtin_features.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/bridge_multiplexed.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/bridge_simple.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/bridge_softmix.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_csv.so
