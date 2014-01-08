@@ -6,6 +6,18 @@
 %bcond_with	h323		# without h323 support
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
 %bcond_without	sqlite2		# build without old sqlite support
+%bcond_without	oss		# build without OSS audio support (SDL dependency)
+%bcond_without	tds		# build without TDS support
+%bcond_without	ilbc		# build without iLBC codec support
+%bcond_without	ldap		# build without LDAP support
+%bcond_without	portaudio	# build without PortAudio support
+%bcond_without	bluetooth	# build without PortAudio support
+%bcond_without	jack		# build without JACK support
+%bcond_without	mysql		# build without MySQL support
+%bcond_without	pgsql		# build without PostgreSQL support
+%bcond_without	odbc		# build without ODBC support
+%bcond_without	radius		# build without Radius support
+%bcond_without	pjsip		# build without PJSIP stack
 
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
@@ -37,24 +49,24 @@ Patch6:		lpc10-system.patch
 Patch7:		%{name}-histedit.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
-BuildRequires:	SDL_image-devel
+%{?with_oss:BuildRequires:	SDL_image-devel}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	bison
-BuildRequires:	bluez-libs-devel
+%{?with_bluetooth:BuildRequires:	bluez-libs-devel}
 %{?with_corosync:BuildRequires:	corosync-devel >= 2.0.0}
 BuildRequires:	curl-devel
 BuildRequires:	dahdi-linux-devel
 BuildRequires:	dahdi-tools-devel >= 2.0.0
 BuildRequires:	doxygen
-BuildRequires:	freetds-devel >= 0.63
+%{?with_tds:BuildRequires:	freetds-devel >= 0.63}
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
 BuildRequires:	gmime22-devel
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-devel
-BuildRequires:	jack-audio-connection-kit-devel
+%{?with_jack:BuildRequires:	jack-audio-connection-kit-devel}
 BuildRequires:	jansson-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
@@ -69,7 +81,7 @@ BuildRequires:	libxslt-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
 BuildRequires:	mxml-devel
-BuildRequires:	mysql-devel
+%{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	neon-devel
 BuildRequires:	net-snmp-devel
@@ -77,18 +89,18 @@ BuildRequires:	newt-devel
 %if %{with h323}
 BuildRequires:	h323plus-devel >= 1.24.0
 %endif
-BuildRequires:	openldap-devel
+%{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
-BuildRequires:	pjproject-devel
+%{?with_pjsip:BuildRequires:	pjproject-devel}
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
-BuildRequires:	portaudio-devel >= 19
-BuildRequires:	postgresql-devel
+%{?with_portaudio:BuildRequires:	portaudio-devel >= 19}
+%{?with_pgsql:BuildRequires:	postgresql-devel}
 %if %{with h323}
 BuildRequires:	ptlib-devel
 %endif
-BuildRequires:	radiusclient-ng-devel
+%{?with_radius:BuildRequires:	radiusclient-ng-devel}
 BuildRequires:	rpmbuild(macros) >= 1.583
 BuildRequires:	sed >= 4.0
 BuildRequires:	spandsp-devel >= 0.0.5
@@ -96,9 +108,9 @@ BuildRequires:	speex-devel
 %{?with_sqlite2:BuildRequires:	sqlite-devel}
 BuildRequires:	sqlite3-devel
 BuildRequires:	srtp-devel
-BuildRequires:	unixODBC-devel
+%{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRequires:	uriparser-devel
-BuildRequires:	webrtc-libilbc-devel
+%{?with_ilbc:BuildRequires:	webrtc-libilbc-devel}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
 BuildRequires:	libpri-devel >= 1.4.6
@@ -543,19 +555,6 @@ API documentation for Asterisk.
 # avoid using these
 rm -rf imap menuselect/mxml main/editline codecs/gsm codecs/lpc10
 
-install %{SOURCE12} .
-install %{SOURCE13} .
-
-%if %{without h323}
-sed -i -e 's#\(MENUSELECT_ADDONS=.*\)#\1 chan_ooh323 chan_h323#g' menuselect.makeopts
-%endif
-%if %{without corosync}
-sed -i -e 's#\(MENUSELECT_RES=.*\)#\1 res_corosync#g' menuselect.makeopts
-%endif
-%if %{without sqlite2}
-sed -i -e 's#\(MENUSELECT_RES=.*\)#\1 res_config_sqlite#g' menuselect.makeopts
-%endif
-
 %build
 rm -f pbx/.depend
 
@@ -584,10 +583,73 @@ cd ..
 	--without-gtk2 \
 	--with-imap=system \
 	--with-gsm=/usr \
-	%{!?with_h323:--without-h323} \
+	%{__without h323 h323} \
+	%{__without oss oss} \
+	%{__without oss sdl} \
+	%{__without oss SDL_image} \
+	%{__without tds tds} \
+	%{__without ilbc ilbc} \
+	%{__without ldap ldap} \
+	%{__without portaudio portaudio} \
+	%{__without bluetooth bluetooth} \
+	%{__without jack jack} \
+	%{__without mysql mysqlclient} \
+	%{__without pgsql postgres} \
+	%{__without odbc unixodbc} \
+	%{__without radius radius} \
+	%{__without pjsip pjproject} \
 	--with-lpc10=/usr
 
 cp -f .cleancount .lastclean
+
+%{__make} menuselect/menuselect
+%{__make} menuselect-tree
+
+cp %{SOURCE12} .
+cp %{SOURCE13} .
+
+%if %{without h323}
+menuselect/menuselect --disable chan_ooh323 --disable chan_h323 menuselect.makeopts
+%endif
+%if %{without corosync}
+menuselect/menuselect --disable res_corosync menuselect.makeopts
+%endif
+%if %{without sqlite2}
+menuselect/menuselect --disable res_config_sqlite menuselect.makeopts
+%endif
+%if %{without oss}
+menuselect/menuselect --disable chan_oss menuselect.makeopts
+%endif
+%if %{without tds}
+menuselect/menuselect --disable cdr_tds --disable cel_tds menuselect.makeopts
+%endif
+%if %{without ilbc}
+menuselect/menuselect --disable codec_ilbc --disable format_ilbc menuselect.makeopts
+%endif
+%if %{without ldap}
+menuselect/menuselect --disable res_config_ldap menuselect.makeopts
+%endif
+%if %{without bluetooth}
+menuselect/menuselect --disable chan_mobile menuselect.makeopts
+%endif
+%if %{without jack}
+menuselect/menuselect --disable app_jack menuselect.makeopts
+%endif
+%if %{without mysql}
+menuselect/menuselect --disable res_config_mysql --disable app_mysql --disable cdr_mysql menuselect.makeopts
+%endif
+%if %{without pgsql}
+menuselect/menuselect --disable res_config_pgsql --disable cdr_pgsql --disable cel_pgsql menuselect.makeopts
+%endif
+%if %{without odbc}
+menuselect/menuselect --disable res_odbc --disable res_config_odbc --disable cdr_odbc --disable cdr_adaptive_odbc --disable cel_odbc menuselect.makeopts
+%endif
+%if %{without radius}
+menuselect/menuselect --disable cdr_radius --disable cel_radius menuselect.makeopts
+%endif
+%if %{without pjsip}
+menuselect/menuselect --disable res_pjsip --disable chan_pjsip menuselect.makeopts
+%endif
 
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=FILE_STORAGE/' menuselect.makeopts
 %{__make} DEBUG= \
@@ -615,6 +677,7 @@ rm apps/app_voicemail.o apps/app_directory.o
 mv apps/app_voicemail.so apps/app_voicemail_imap.so
 mv apps/app_directory.so apps/app_directory_imap.so
 
+%if %{with odbc}
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=ODBC_STORAGE/' menuselect.makeopts
 %{__make} DEBUG= \
 	OPTIMIZE= \
@@ -627,6 +690,7 @@ mv apps/app_directory.so apps/app_directory_imap.so
 rm apps/app_voicemail.o apps/app_directory.o
 mv apps/app_voicemail.so apps/app_voicemail_odbc.so
 mv apps/app_directory.so apps/app_directory_odbc.so
+%endif
 
 # so that these modules don't get built again during the install phase
 touch apps/app_voicemail.o apps/app_directory.o
@@ -672,8 +736,10 @@ rm $RPM_BUILD_ROOT%{_libdir}/asterisk/modules/app_directory.so
 rm $RPM_BUILD_ROOT%{_libdir}/asterisk/modules/app_voicemail.so
 install -D -p apps/app_directory_imap.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 install -D -p apps/app_voicemail_imap.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
+%if %{with odbc}
 install -D -p apps/app_directory_odbc.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 install -D -p apps/app_voicemail_odbc.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
+%endif
 install -D -p apps/app_directory_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 install -D -p apps/app_voicemail_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 
@@ -728,6 +794,36 @@ rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_corosync.conf
 %if %{without h323}
 # I don't even know which one can be fixed
 rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{h323,ooh323}.conf
+%endif
+%if %{without sqlite2}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_config_sqlite.conf
+%endif
+%if %{without oss}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/oss.conf
+%endif
+%if %{without tds}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr,cel}_tds.conf
+%endif
+%if %{without ldap}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_ldap.conf
+%endif
+%if %{without portaudio}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/console.conf
+%endif
+%if %{without bluetooth}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/chan_mobile.conf
+%endif
+%if %{without mysql}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_config_mysql.conf
+%endif
+%if %{without pgsql}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr,cel,res}_pgsql.conf
+%endif
+%if %{without odbc}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr{,_adaptive},cel,func,res}_odbc.conf
+%endif
+%if %{without pjsip}
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/pjsip{,_notify}.conf
 %endif
 
 rm -fr $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
@@ -1105,10 +1201,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alsa.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_alsa.so
 
+%if %{with bluetooth}
 %files bluetooth
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_mobile.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mobile.so
+%endif
 
 %files calendar
 %defattr(644,root,root,755)
@@ -1176,10 +1274,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %doc contrib/asterisk-ices.xml
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_ices.so
 
+%if %{with ilbc}
 %files ilbc
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_ilbc.so
+%endif
 
 %files jabber
 %defattr(644,root,root,755)
@@ -1194,15 +1294,18 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_jabber.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_xmpp.so
 
+%if %{with jack}
 %files jack
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_jack.so
+%endif
 
 %files lua
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.lua
 %attr(755,root,root) %{_libdir}/asterisk/modules/pbx_lua.so
 
+%if %{with ldap}
 %files ldap
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_ldap.conf
@@ -1212,6 +1315,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files ldap-fds
 %defattr(644,root,root,755)
 %{_sysconfdir}/dirsrv/schema/99asterisk.ldif
+%endif
 %endif
 
 %files lpc10
@@ -1224,11 +1328,14 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/minivm.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_minivm.so
 
+%if %{with mysql}
 %files mysql
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_mysql.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_mysql.so
+%endif
 
+%if %{with odbc}
 %files odbc
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_adaptive_odbc.conf
@@ -1242,17 +1349,21 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc.so
+%endif
 
 %files osp
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/osp.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_osplookup.so
 
+%if %{with oss}
 %files oss
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/oss.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_oss.so
+%endif
 
+%if %{with pjsip}
 %files pjsip
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip.conf
@@ -1289,12 +1400,16 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
+%endif
 
+%if %{with portaudio}
 %files portaudio
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/console.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_console.so
+%endif
 
+%if %{with pgsql}
 %files postgresql
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_pgsql.conf
@@ -1304,11 +1419,14 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_pgsql.so
+%endif
 
+%if %{with radius}
 %files radius
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_radius.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_radius.so
+%endif
 
 %files resample
 %defattr(644,root,root,755)
@@ -1329,10 +1447,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_speex.so
 
+%if %{with sqlite2}
 %files sqlite2
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
+%endif
 
 %files sqlite3
 %defattr(644,root,root,755)
@@ -1343,12 +1463,14 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite3.so
 
+%if %{with tds}
 %files tds
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_tds.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_tds.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_tds.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_tds.so
+%endif
 
 %files unistim
 %defattr(644,root,root,755)
@@ -1366,10 +1488,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_imap.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_imap.so
 
+%if %{with odbc}
 %files voicemail-odbc
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_voicemail_odbc.so
+%endif
 
 %files voicemail-plain
 %defattr(644,root,root,755)
