@@ -177,6 +177,14 @@ Astman is a text mode Manager for Asterisk.
 Astman connects to Asterisk by TCP, so you can run Astman on a
 completely different computer than your Asterisk computer.
 
+%package calendar
+Summary:	Calendar modules for Asterisk
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description calendar
+Calendar modules for Asterisk.
+
 %package curl
 Summary:	Modules for Asterisk that use cURL
 Group:		Applications/Networking
@@ -751,7 +759,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ari.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/asterisk.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/asterisk.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/calendar.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ccss.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_custom.conf
@@ -971,11 +978,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_playbacks.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_recordings.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_sounds.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_caldav.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_ews.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_exchange.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_icalendar.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_chan_stats.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_mysql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
@@ -1074,6 +1076,15 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alsa.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_alsa.so
+
+%files calendar
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/calendar.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_caldav.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_ews.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_exchange.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_calendar_icalendar.so
 
 %files curl
 %defattr(644,root,root,755)
