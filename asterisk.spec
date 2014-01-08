@@ -179,6 +179,14 @@ Astman is a text mode Manager for Asterisk.
 Astman connects to Asterisk by TCP, so you can run Astman on a
 completely different computer than your Asterisk computer.
 
+%package bluetooth
+Summary:	chan_mobile – bluetooth mobile phone interface for Asterisk
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description bluetooth
+The chan_mobile Asterisk module allows one to pair a mobile phone with the Asterisk PBX.
+
 %package calendar
 Summary:	Calendar modules for Asterisk
 Group:		Applications/Networking
@@ -780,7 +788,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_syslog.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_custom.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_mobile.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_aliases.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_permissions.conf
@@ -903,7 +910,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_manager.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge_media.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_mobile.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_multicast_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_phone.so
@@ -1090,6 +1096,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alsa.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_alsa.so
+
+%files bluetooth
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_mobile.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_mobile.so
 
 %files calendar
 %defattr(644,root,root,755)
