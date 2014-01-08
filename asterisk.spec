@@ -507,7 +507,7 @@ install %{SOURCE12} .
 install %{SOURCE13} .
 
 %if %{without h323}
-sed -i -e 's#\(MENUSELECT_ADDONS=.*\)#\1 chan_ooh323#g' menuselect.makeopts
+sed -i -e 's#\(MENUSELECT_ADDONS=.*\)#\1 chan_ooh323 chan_h323#g' menuselect.makeopts
 %endif
 %if %{without corosync}
 sed -i -e 's#\(MENUSELECT_RES=.*\)#\1 res_corosync#g' menuselect.makeopts
