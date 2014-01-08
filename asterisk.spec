@@ -5,6 +5,8 @@
 # Conditional build:
 %bcond_with	h323		# without h323 support
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
+%bcond_without	sqlite2		# build without old sqlite support
+
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
@@ -92,7 +94,7 @@ BuildRequires:	rpmbuild(macros) >= 1.583
 BuildRequires:	sed >= 4.0
 BuildRequires:	spandsp-devel >= 0.0.5
 BuildRequires:	speex-devel
-BuildRequires:	sqlite-devel
+%{?with_sqlite2:BuildRequires:	sqlite-devel}
 BuildRequires:	sqlite3-devel
 BuildRequires:	srtp-devel
 BuildRequires:	unixODBC-devel
@@ -408,13 +410,22 @@ Requires:	%{name} = %{version}-%{release}
 %description speex
 Speex codec support.
 
-%package sqlite
+%package sqlite2
 Summary:	Sqlite modules for Asterisk
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
-%description sqlite
+%description sqlite2
 Sqlite modules for Asterisk.
+
+%package sqlite3
+Summary:	Sqlite3 modules for Asterisk
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	asterisk-sqlite < 12.0.0
+
+%description sqlite3
+Sqlite3 modules for Asterisk.
 
 %package tds
 Summary:	Modules for Asterisk that use FreeTDS
@@ -521,6 +532,9 @@ sed -i -e 's#\(MENUSELECT_ADDONS=.*\)#\1 chan_ooh323 chan_h323#g' menuselect.mak
 %endif
 %if %{without corosync}
 sed -i -e 's#\(MENUSELECT_RES=.*\)#\1 res_corosync#g' menuselect.makeopts
+%endif
+%if %{without sqlite2}
+sed -i -e 's#\(MENUSELECT_RES=.*\)#\1 res_config_sqlite#g' menuselect.makeopts
 %endif
 
 %build
@@ -1286,15 +1300,18 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_speex.so
 
-%files sqlite
+%files sqlite2
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
+
+%files sqlite3
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_sqlite3_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_sqlite3_custom.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite3.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_sqlite3_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_sqlite3_custom.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite3.so
 
 %files tds
