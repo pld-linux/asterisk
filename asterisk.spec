@@ -22,12 +22,11 @@
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
-%define		rel	0.1
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	12.0.0
-Release:	%{rel}
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
