@@ -335,6 +335,14 @@ Requires:	%{name} = %{version}-%{release}
 %description minivm
 MiniVM application for Asterisk.
 
+%package mysql
+Summary:	Asterisk modules that use MySQL
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description mysql
+Asterisk modules that use MySQL.
+
 %package odbc
 Summary:	Applications for Asterisk that use ODBC (except voicemail)
 Group:		Applications/Networking
@@ -823,7 +831,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phoneprov.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queuerules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_mysql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_parking.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pktccops.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_stun_monitor.conf
@@ -1005,7 +1012,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_recordings.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_sounds.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_chan_stats.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_config_mysql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
@@ -1221,6 +1227,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions_minivm.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/minivm.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_minivm.so
+
+%files mysql
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_mysql.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_config_mysql.so
 
 %files odbc
 %defattr(644,root,root,755)
