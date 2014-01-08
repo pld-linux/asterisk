@@ -1,3 +1,10 @@
+
+# NOTE:
+#  There is Asterisk 12 avaiable at the ASTERISK_12 branch, but it is not clear
+#  we are ready for it now.
+#  The ASTERISK_12 spec file is also cleaned up a lot, so think twice before
+#  making big changes here.
+
 # TODO:
 # - cgi-bin package - separate, because of suid-root
 # - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
@@ -20,7 +27,7 @@
 # - app_{rx,tx}fax seems to b replaced by app_fax alongside latest spanddsp
 #   See: http://sourceforge.net/projects/agx-ast-addons/
 #        https://agx-ast-addons.svn.sourceforge.net/svnroot/agx-ast-addons/trunk/attic/
-#
+
 # Conditional build:
 %bcond_with	rxfax		# without rx (also tx:-D) fax
 %bcond_with	zhone		# zhone hack
