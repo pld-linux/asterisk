@@ -36,6 +36,7 @@ Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
 Source5:	%{name}.logrotate
+Source6:	%{name}.service
 # menuselect.* -> make menuconfig; choose options; copy resulting files here
 Source12:	menuselect.makedeps
 Source13:	menuselect.makeopts
@@ -101,13 +102,15 @@ BuildRequires:	popt-devel
 BuildRequires:	ptlib-devel
 %endif
 %{?with_radius:BuildRequires:	radiusclient-ng-devel}
-BuildRequires:	rpmbuild(macros) >= 1.583
+BuildRequires:	rpmbuild(macros) >= 1.671
 BuildRequires:	sed >= 4.0
 BuildRequires:	spandsp-devel >= 0.0.5
 BuildRequires:	speex-devel
 %{?with_sqlite2:BuildRequires:	sqlite-devel}
 BuildRequires:	sqlite3-devel
 BuildRequires:	srtp-devel
+Requires(post,preun,postun):	systemd-units >= 38
+Requires:	systemd-units >= 0.38
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRequires:	uriparser-devel
 %{?with_ilbc:BuildRequires:	webrtc-libilbc-devel}
@@ -707,7 +710,7 @@ touch apps/app_voicemail.so
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}} \
-	$RPM_BUILD_ROOT{/usr/lib/tmpfiles.d,%{_mandir}/man1}
+	$RPM_BUILD_ROOT{%{systemdunitdir},%{systemdtmpfilesdir},%{_mandir}/man1}
 
 export ASTCFLAGS="%{rpmcflags}"
 
@@ -739,8 +742,9 @@ install -D -p apps/app_voicemail_plain.so $RPM_BUILD_ROOT%{_libdir}/asterisk/mod
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -a %{SOURCE2} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 cp -a %{SOURCE5} $RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install -p %{SOURCE6} $RPM_BUILD_ROOT%{systemdunitdir}/%{name}.service
 
-install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 # create some directories that need to be packaged
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/moh
@@ -835,17 +839,20 @@ if [ "$1" = 0 ]; then
 	%userremove asterisk
 	%groupremove asterisk
 fi
+%systemd_reload
 
 %post
 /sbin/chkconfig --add asterisk
 # use -n (NOOP) as restart would be breaking all current calls.
 %service -n asterisk restart "Asterisk daemon"
+%systemd_post %{name}.service
 
 %preun
 if [ "$1" = "0" ]; then
 	%service asterisk stop
 	/sbin/chkconfig --del asterisk
 fi
+%systemd_preun %{name}.service
 
 %triggerpostun -- %{name} < 1.6.1.12-0.1
 # chown to asterisk previously root owned files
@@ -853,6 +860,9 @@ fi
 # hair with file permission bits.
 chown -R asterisk:asterisk /var/spool/asterisk
 chown -R asterisk:asterisk /var/lib/asterisk
+
+%triggerpostun -- %{name} < 12.0.0
+%systemd_trigger %{name}.service
 
 %files
 %defattr(644,root,root,755)
@@ -875,6 +885,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
+%{systemdunitdir}/%{name}.service
 
 %attr(750,root,asterisk) %dir %{_sysconfdir}/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/adsi.conf
@@ -1139,7 +1150,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_statsd.so
-/usr/lib/tmpfiles.d/%{name}.conf
+%{systemdtmpfilesdir}/%{name}.conf
 
 %dir %{_datadir}/asterisk
 %dir %{_datadir}/asterisk/agi-bin
