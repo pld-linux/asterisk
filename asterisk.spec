@@ -1,10 +1,3 @@
-
-# NOTE:
-#  There is Asterisk 12 avaiable at the ASTERISK_12 branch, but it is not clear
-#  we are ready for it now.
-#  The ASTERISK_12 spec file is also cleaned up a lot, so think twice before
-#  making big changes here.
-
 # TODO:
 # - cgi-bin package - separate, because of suid-root
 # - use shared versions of LIBILBC:=ilbc/libilbc.a (ilbc not enabled currently)
