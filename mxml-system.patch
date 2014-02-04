@@ -1,6 +1,6 @@
-diff -urN asterisk-10.10.1.org/menuselect/Makefile asterisk-10.10.1/menuselect/Makefile
---- asterisk-10.10.1.org/menuselect/Makefile	2012-05-09 21:57:43.000000000 +0200
-+++ asterisk-10.10.1/menuselect/Makefile	2012-12-09 16:21:44.578265277 +0100
+diff -dur asterisk-12.0.0.orig/menuselect/Makefile asterisk-12.0.0/menuselect/Makefile
+--- asterisk-12.0.0.orig/menuselect/Makefile	2012-05-09 21:57:43.000000000 +0200
++++ asterisk-12.0.0/menuselect/Makefile	2014-01-08 12:23:16.000000000 +0100
 @@ -23,6 +23,7 @@
  # Basic set of sources and flags/libraries/includes
  OBJS:=menuselect.o strcompat.o
@@ -9,6 +9,22 @@ diff -urN asterisk-10.10.1.org/menuselect/Makefile asterisk-10.10.1/menuselect/M
  
  ifeq ($(MENUSELECT_DEBUG),yes)
    CFLAGS += -DMENUSELECT_DEBUG
+@@ -30,13 +31,13 @@
+ 
+ ifdef NCURSES_LIB
+   C_OBJS += menuselect_curses.o
+-  C_LIBS +=$(NCURSES_LIB)
++  C_LIBS += $(MXML_LIB) $(NCURSES_LIB)
+   C_INCLUDE += $(NCURSES_INCLUDE)
+   ALL_TGTS += cmenuselect
+ else
+   ifdef CURSES_LIB
+     C_OBJS += menuselect_curses.o
+-    C_LIBS +=$(CURSES_LIB)
++    C_LIBS += $(MXML_LIB) $(CURSES_LIB)
+     C_INCLUDE += $(CURSES_INCLUDE)
+     ALL_TGTS += cmenuselect
+   endif
 @@ -44,19 +45,20 @@
  
  ifdef GTK2_LIB
@@ -41,9 +57,9 @@ diff -urN asterisk-10.10.1.org/menuselect/Makefile asterisk-10.10.1/menuselect/M
  
  ifdef C_OBJS
  menuselect_curses.o: CFLAGS+=$(C_INCLUDE)
-diff -urN asterisk-10.10.1.org/menuselect/menuselect.c asterisk-10.10.1/menuselect/menuselect.c
---- asterisk-10.10.1.org/menuselect/menuselect.c	2011-11-09 23:22:13.000000000 +0100
-+++ asterisk-10.10.1/menuselect/menuselect.c	2012-12-09 16:22:51.341349575 +0100
+diff -dur asterisk-12.0.0.orig/menuselect/menuselect.c asterisk-12.0.0/menuselect/menuselect.c
+--- asterisk-12.0.0.orig/menuselect/menuselect.c	2011-11-09 23:22:13.000000000 +0100
++++ asterisk-12.0.0/menuselect/menuselect.c	2014-01-08 12:21:41.000000000 +0100
 @@ -32,7 +32,7 @@
  #include <getopt.h>
  
