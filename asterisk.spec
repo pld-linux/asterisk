@@ -25,12 +25,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	12.0.0
+Version:	12.1.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	1226dabeba5637e6114936ea9e916b88
+# Source0-md5:	87a7894f47d4420c4f4e1a3618a0259d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1106,6 +1106,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_device_states.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_endpoints.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_events.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_mailboxes.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_model.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_playbacks.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_recordings.so
@@ -1397,12 +1398,15 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi_body_generator.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_nat.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_notify.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_one_touch_record_info.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_authenticator_digest.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_registration.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_path.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_body_generator.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_eyebeam_body_supplement.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pubsub.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_refer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar.so
@@ -1412,6 +1416,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_xpidf_body_generator.so
 %endif
 
 %if %{with portaudio}
