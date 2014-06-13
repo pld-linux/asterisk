@@ -25,12 +25,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	12.1.0
+Version:	12.3.2
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	87a7894f47d4420c4f4e1a3618a0259d
+# Source0-md5:	e8b1c098abde79d1e6f90c1face8266a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1081,6 +1081,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sha1.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_shell.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_sorcery.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sprintf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_srv.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_strings.so
@@ -1381,8 +1382,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_notify.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/hep.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_endpoint.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_acl.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_authenticator_digest.so
@@ -1397,6 +1401,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_log_forwarder.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_multihomed.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi_body_generator.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_nat.so
@@ -1406,6 +1411,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_registration.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_path.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_body_generator.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_digium_body_supplement.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_eyebeam_body_supplement.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pubsub.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_refer.so
@@ -1413,6 +1419,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar_expire.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_rfc3326.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sdp_rtp.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_send_to_voicemail.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
@@ -1432,7 +1439,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_pgsql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_pgsql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pgsql.conf
-%doc contrib/realtime/postgresql/realtime.sql
+%doc contrib/realtime/postgresql/postgresql_cdr.sql
+%doc contrib/realtime/postgresql/postgresql_config.sql
+%doc contrib/realtime/postgresql//postgresql_voicemail.sql
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_pgsql.so
