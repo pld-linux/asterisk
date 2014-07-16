@@ -1,11 +1,12 @@
---- asterisk-1.6.2.10/configure.ac~	2010-06-08 00:13:04.000000000 +0200
-+++ asterisk-1.6.2.10/configure.ac	2010-07-24 11:23:03.842706054 +0200
-@@ -1559,12 +1559,12 @@
- 		[${PWLIB_INCLUDE}], [${PWLIB_LIB}])
+diff -dur asterisk-1.8.29.0.orig/configure.ac asterisk-1.8.29.0/configure.ac
+--- asterisk-1.8.29.0.orig/configure.ac	2014-05-13 01:08:09.000000000 +0200
++++ asterisk-1.8.29.0/configure.ac	2014-07-16 09:58:49.000000000 +0200
+@@ -1991,12 +1991,12 @@
+ 	fi
  fi
  
--AST_EXT_LIB_CHECK([LUA], [lua5.1], [luaL_newstate], [lua5.1/lua.h], [-lm]) 
-+AST_EXT_LIB_CHECK([LUA], [lua51], [luaL_newstate], [lua51/lua.h], [-lm]) 
+-AST_EXT_LIB_CHECK([LUA], [lua5.1], [luaL_newstate], [lua5.1/lua.h], [-lm])
++AST_EXT_LIB_CHECK([LUA], [lua51], [luaL_newstate], [lua51/lua.h], [-lm])
  if test "x${PBX_LUA}" = "x1" ; then
  	if test x"${LUA_DIR}" = x; then
 -		LUA_INCLUDE="${LUA_INCLUDE} -I/usr/include/lua5.1"
@@ -15,4 +16,4 @@
 +		LUA_INCLUDE="${LUA_INCLUDE} -I${LUA_DIR}/lua51"
  	fi
  fi
- 	
+ 
