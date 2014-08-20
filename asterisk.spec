@@ -25,12 +25,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	12.4.0
+Version:	12.5.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	96af38f9d11a1ba794cd520cef842d9c
+# Source0-md5:	7d39837d7498abebfca9a8b3ec618362
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1388,6 +1388,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_endpoint.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_pjsip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_rtcp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_acl.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_authenticator_digest.so
