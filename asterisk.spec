@@ -1,9 +1,7 @@
 # TODO:
-# - check/fix build with our h323. Does anybody still use H.323, anyway?
 # - make package for moh sound files
 #
 # Conditional build:
-%bcond_with	h323		# without h323 support
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
 %bcond_without	sqlite2		# build without old sqlite support
 %bcond_without	oss		# build without OSS audio support (SDL dependency)
@@ -25,12 +23,13 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	12.6.0
-Release:	1
+Version:	13.0.0
+%define	beta	beta2
+Release:	0.%{beta}.1
 License:	GPL v2
 Group:		Applications/System
-Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	bb5a1dec86f8d9c4ee4108942adb62a6
+Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}-%{beta}.tar.gz
+# Source0-md5:	ac6bbff37b3d2a3cf53209826075df66
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -39,14 +38,12 @@ Source5:	%{name}.service
 # menuselect.* -> make menuconfig; choose options; copy resulting files here
 Source6:	menuselect.makedeps
 Source7:	menuselect.makeopts
-Patch0:		mxml-system.patch
-Patch1:		lua51-path.patch
-Patch2:		%{name}-lib.patch
-Patch3:		%{name}-ppc.patch
-Patch4:		FHS-paths.patch
-Patch5:		pld-banner.patch
-Patch6:		lpc10-system.patch
-Patch7:		%{name}-histedit.patch
+Patch0:		lua51-path.patch
+Patch1:		%{name}-ppc.patch
+Patch2:		FHS-paths.patch
+Patch3:		pld-banner.patch
+Patch4:		lpc10-system.patch
+Patch5:		%{name}-histedit.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 %{?with_oss:BuildRequires:	SDL_image-devel}
@@ -80,15 +77,11 @@ BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel
-BuildRequires:	mxml-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	neon-devel
 BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
-%if %{with h323}
-BuildRequires:	h323plus-devel >= 1.24.0
-%endif
 %{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
@@ -97,9 +90,6 @@ BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 %{?with_portaudio:BuildRequires:	portaudio-devel >= 19}
 %{?with_pgsql:BuildRequires:	postgresql-devel}
-%if %{with h323}
-BuildRequires:	ptlib-devel
-%endif
 %{?with_radius:BuildRequires:	radiusclient-ng-devel}
 BuildRequires:	rpmbuild(macros) >= 1.671
 BuildRequires:	sed >= 4.0
@@ -188,6 +178,13 @@ Astman is a text mode Manager for Asterisk.
 Astman connects to Asterisk by TCP, so you can run Astman on a
 completely different computer than your Asterisk computer.
 
+%package utils
+Summary:	Various utilities for Asterisk
+Group:		Applications/Networking
+
+%description utils
+Various utilities built with Asterisk.
+
 %package bluetooth
 Summary:	chan_mobile – bluetooth mobile phone interface for Asterisk
 Group:		Applications/Networking
@@ -247,17 +244,6 @@ Requires:	%{name} = %{version}-%{release}
 
 %description gsm
 Support GSM audio encoding/decoding.
-
-%package h323
-Summary:	H.323 protocol support for Asterisk
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description h323
-This channel driver (chan_h323) provides support for the H.323
-protocol for Asterisk. This is an implementation originally
-contributed by NuFone and nowdays maintained and distributed by
-Digium, Inc. Hence, it is considered the official H.323 chanel driver.
 
 %package http
 Summary:	HTTP Server Support
@@ -540,22 +526,20 @@ BuildArch:	noarch
 API documentation for Asterisk.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}-%{beta}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
 %{__sed} -i -e 's/^install:.*$/install:/' sounds/Makefile
 
 # avoid using these
-rm -rf imap menuselect/mxml main/editline codecs/gsm codecs/lpc10
+rm -rf imap main/editline codecs/gsm codecs/lpc10
 
 %build
 rm -f pbx/.depend
@@ -585,7 +569,6 @@ cd ..
 	--without-gtk2 \
 	--with-imap=system \
 	--with-gsm=/usr \
-	%{__without h323 h323} \
 	%{__without oss oss} \
 	%{__without oss sdl} \
 	%{__without oss SDL_image} \
@@ -610,9 +593,6 @@ cp -f .cleancount .lastclean
 cp %{SOURCE6} .
 cp %{SOURCE7} .
 
-%if %{without h323}
-menuselect/menuselect --disable chan_ooh323 --disable chan_h323 menuselect.makeopts
-%endif
 %if %{without corosync}
 menuselect/menuselect --disable res_corosync menuselect.makeopts
 %endif
@@ -654,6 +634,9 @@ menuselect/menuselect --disable res_pjsip --disable chan_pjsip menuselect.makeop
 %endif
 
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=FILE_STORAGE/' menuselect.makeopts
+
+menuselect/menuselect --enable app_voicemail menuselect.makeopts
+
 %{__make} DEBUG= \
 	OPTIMIZE= \
 	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
@@ -783,15 +766,11 @@ find doc/api -name '*.map' -size 0 -delete
 %endif
 
 # remove configuration files for components never built
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{app_mysql,app_skel,cdr_mysql,config_test,misdn,test_sorcery}.conf
+rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{app_skel,config_test,misdn,ooh323,test_sorcery}.conf
 
 # remove configuration files for disabled optional components
 %if %{without corosync}
 rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_corosync.conf
-%endif
-%if %{without h323}
-# I don't even know which one can be fixed
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{h323,ooh323}.conf
 %endif
 %if %{without sqlite2}
 rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_config_sqlite.conf
@@ -938,6 +917,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/sla.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/smdi.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/sorcery.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ss7.timers
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/stasis.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/statsd.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/telcordia-1.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/udptl.conf
@@ -990,9 +971,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_read.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_readexten.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_record.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_saycounted.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sayunixtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_senddtmf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sendtext.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_setcallerid.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sms.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_softhangup.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_speech_utils.so
@@ -1075,6 +1058,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_math.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_md5.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_module.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_periodic_hook.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pitchshift.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_presencestate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_rand.so
@@ -1125,6 +1109,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_silk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_http_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_manager_devicestate.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_manager_presencestate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mutestream.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_musiconhold.so
@@ -1206,6 +1192,15 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %doc doc/api/*
 %endif
 
+%files utils
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_sbindir}/aelparse
+%attr(755,root,root) %{_sbindir}/conf2ael
+%attr(755,root,root) %{_sbindir}/muted
+%attr(755,root,root) %{_sbindir}/smsq
+%attr(755,root,root) %{_sbindir}/stereorize
+%attr(755,root,root) %{_sbindir}/streamplayer
+
 %files astman
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/astman
@@ -1245,6 +1240,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/meetme.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_dahdi.conf
+%{_datadir}/dahdi/span_config.d/40-asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiras.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_flash.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_meetme.so
@@ -1271,13 +1267,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_gsm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav_gsm.so
 
-%if %{with h323}
-%files h323
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_ooh323.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_ooh323.so
-%endif
-
 %files http
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/http.conf
@@ -1298,15 +1287,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files jabber
 %defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/gtalk.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/jabber.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/jingle.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/motif.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/xmpp.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_gtalk.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_jingle.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_motif.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_jabber.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_xmpp.so
 
 %if %{with jack}
@@ -1346,7 +1329,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %if %{with mysql}
 %files mysql
 %defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/app_mysql.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_mysql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_mysql.conf
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_mysql.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/cdr_mysql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_mysql.so
 %endif
 
@@ -1411,11 +1398,13 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_notify.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_one_touch_record_info.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_authenticator_digest.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_publish.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_registration.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_path.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_body_generator.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_digium_body_supplement.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_eyebeam_body_supplement.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_publish_asterisk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pubsub.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_refer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar.so
