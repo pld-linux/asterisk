@@ -23,13 +23,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.0.0
-%define	beta	beta2
-Release:	0.%{beta}.1
+Version:	13.0.1
+Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}-%{beta}.tar.gz
-# Source0-md5:	ac6bbff37b3d2a3cf53209826075df66
+Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	cd03788f7dfd86aacc3e62979a05f115
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -526,7 +525,7 @@ BuildArch:	noarch
 API documentation for Asterisk.
 
 %prep
-%setup -q -n %{name}-%{version}-%{beta}
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -1401,6 +1400,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_publish.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_registration.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_path.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_phoneprov_provider.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_body_generator.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_digium_body_supplement.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_eyebeam_body_supplement.so
