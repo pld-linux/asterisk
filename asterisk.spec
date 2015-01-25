@@ -94,6 +94,7 @@ BuildRequires:	rpmbuild(macros) >= 1.671
 BuildRequires:	sed >= 4.0
 BuildRequires:	spandsp-devel >= 0.0.5
 BuildRequires:	speex-devel
+BuildRequires:	speexdsp-devel
 %{?with_sqlite2:BuildRequires:	sqlite-devel}
 BuildRequires:	sqlite3-devel
 BuildRequires:	srtp-devel
