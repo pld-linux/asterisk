@@ -23,12 +23,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.1.0
+Version:	13.2.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	ccd29d0e6313aa5fb67757a2de826551
+# Source0-md5:	36033a5faa2f0f9ac3bc34b799e823a2
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -84,7 +84,7 @@ BuildRequires:	newt-devel
 %{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pam-devel
-%{?with_pjsip:BuildRequires:	pjproject-devel}
+%{?with_pjsip:BuildRequires:	pjproject-devel >= 2.3}
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 %{?with_portaudio:BuildRequires:	portaudio-devel >= 19}
@@ -1370,8 +1370,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_notify.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_wizard.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/hep.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_pjsip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_aor.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_contact.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_endpoint.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_pjsip.so
@@ -1380,6 +1383,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_acl.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_authenticator_digest.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_caller_id.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_config_wizard.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dialog_info_body_generator.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_diversion.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dtmf_info.so
@@ -1388,6 +1392,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_user.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_exten_state.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_header_funcs.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_keepalive.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_log_forwarder.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
@@ -1414,6 +1419,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sdp_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_send_to_voicemail.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_xpidf_body_generator.so
