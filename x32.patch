@@ -1,0 +1,34 @@
+--- asterisk-13.2.0/Makefile~	2014-10-31 16:50:53.000000000 +0000
++++ asterisk-13.2.0/Makefile	2015-04-05 09:40:53.896839072 +0000
+@@ -174,6 +174,11 @@
+   LDCONFIG_FLAGS=-n
+ endif
+ 
++ifeq ($(OSARCH),linux-gnux32)
++  # flag to tell 'ldconfig' to only process specified directories
++  LDCONFIG_FLAGS=-n
++endif
++
+ ifeq ($(findstring -save-temps,$(_ASTCFLAGS) $(ASTCFLAGS)),)
+   ifeq ($(findstring -pipe,$(_ASTCFLAGS) $(ASTCFLAGS)),)
+     _ASTCFLAGS+=-pipe
+@@ -790,7 +795,7 @@
+ 	rm -f contrib/scripts/asterisk.logrotate.tmp
+ 
+ config:
+-	@if [ "${OSARCH}" = "linux-gnu" -o "${OSARCH}" = "kfreebsd-gnu" ]; then \
++	@if [ "${OSARCH}" = "linux-gnu" -o "${OSARCH}" = "linux-gnux32" -o "${OSARCH}" = "kfreebsd-gnu" ]; then \
+ 		if [ -f /etc/redhat-release -o -f /etc/fedora-release ]; then \
+ 			./build_tools/install_subst contrib/init.d/rc.redhat.asterisk  "$(DESTDIR)/etc/rc.d/init.d/asterisk"; \
+ 			if [ ! -f "$(DESTDIR)/etc/sysconfig/asterisk" ] ; then \
+--- asterisk-13.2.0/main/Makefile~	2014-07-04 15:26:58.000000000 +0000
++++ asterisk-13.2.0/main/Makefile	2015-04-05 09:41:32.963507792 +0000
+@@ -41,7 +41,7 @@
+ AST_LIBS+=$(UUID_LIB)
+ AST_LIBS+=$(CRYPT_LIB)
+ 
+-ifneq ($(findstring $(OSARCH), linux-gnu uclinux linux-uclibc kfreebsd-gnu),)
++ifneq ($(findstring $(OSARCH), linux-gnu linux-gnux32 uclinux linux-uclibc kfreebsd-gnu),)
+   ifneq ($(findstring LOADABLE_MODULES,$(MENUSELECT_CFLAGS)),)
+   AST_LIBS+=-ldl
+   endif
