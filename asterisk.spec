@@ -1,5 +1,7 @@
 # TODO:
 # - make package for moh sound files
+# - build res_mwi_external, res_mwi_external_ami, res_ari_mailboxes, as
+#   an alternative for voicemail subpackages
 #
 # Conditional build:
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
@@ -1094,7 +1096,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_device_states.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_endpoints.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_events.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_mailboxes.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_model.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_playbacks.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_recordings.so
