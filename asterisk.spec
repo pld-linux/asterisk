@@ -39,12 +39,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	1.8.29.0
+Version:	1.8.32.3
 Release:	%{rel}%{?with_bristuff:.bristuff}
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	23778d7ebefdecd4c742d5de39f5e2c1
+# Source0-md5:	f13f126e7730710223f2fbbc8832966f
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -71,8 +71,9 @@ Patch15:	%{name}-bristuff-libpri.patch
 Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
 Patch18:	Fix-history-loading-when-using-external-libedit.patch
+Patch19:	asterisk-osptoolkit.patch
 URL:		http://www.asterisk.org/
-BuildRequires:	OSPToolkit-devel >= 3.6.1
+BuildRequires:	OSPToolkit-devel >= 4.0.0
 BuildRequires:	SDL_image-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf
@@ -558,6 +559,7 @@ cp %{SOURCE11} .
 %patch16 -p1
 %patch17 -p1
 %patch18 -p1
+%patch19 -p0
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
