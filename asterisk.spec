@@ -163,16 +163,20 @@ Header files for Asterisk development platform.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe platformy programistycznej Asterisk.
 
-%package alsa
-Summary:	Modules for Asterisk that use Alsa sound drivers
+%package utils
+Summary:	Various utilities for Asterisk
+Summary(pl.UTF-8):	Różne narzędzia dla Asteriska
 Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
 
-%description alsa
-Modules for Asterisk that use Alsa sound drivers.
+%description utils
+Various utilities built with Asterisk.
+
+%description utils -l pl.UTF-8
+Różne narzędzia budowane z Asteriskiem.
 
 %package astman
-Summary:	Astman is a text mode Manager for Asterisk
+Summary:	Astman - a text mode Manager for Asterisk
+Summary(pl.UTF-8):	Astman - tekstowy zarządca Asteriska
 Group:		Applications/Networking
 
 %description astman
@@ -181,39 +185,65 @@ Astman is a text mode Manager for Asterisk.
 Astman connects to Asterisk by TCP, so you can run Astman on a
 completely different computer than your Asterisk computer.
 
-%package utils
-Summary:	Various utilities for Asterisk
-Group:		Applications/Networking
+%description astman -l pl.UTF-8
+Astman to tekstowy zarządca dla Asteriska.
 
-%description utils
-Various utilities built with Asterisk.
+Łączy się z Asteriskiem po TCP, dzięki czemu można uruchamiać Astmana
+na innym komputerze, niż działa Asterisk.
+
+%package alsa
+Summary:	Module for Asterisk that uses ALSA sound drivers
+Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący sterowniki dźwięku ALSA
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description alsa
+Module for Asterisk that uses ALSA sound drivers.
+
+%description alsa -l pl.UTF-8
+Moduł Asteriska wykorzystujący sterowniki dźwięku ALSA.
 
 %package bluetooth
-Summary:	chan_mobile – bluetooth mobile phone interface for Asterisk
+Summary:	chan_mobile - Bluetooth mobile phone interface for Asterisk
+Summary(pl.UTF-8):	chan_mobile - interfejs telefonów komórkowych Bluetooth dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description bluetooth
-The chan_mobile Asterisk module allows one to pair a mobile phone with the Asterisk PBX.
+The chan_mobile Asterisk module allows one to pair a mobile phone with
+the Asterisk PBX via Bluetooth.
+
+%description bluetooth -l pl.UTF-8
+Moduł Asteriska chan_mobile pozwala na sparowanie telefonu komórkowego
+z centralką Asterisk poprzez Bluetooth.
 
 %package calendar
 Summary:	Calendar modules for Asterisk
+Summary(pl.UTF-8):	Moduły kalendarza dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description calendar
 Calendar modules for Asterisk.
 
+%description calendar -l pl.UTF-8
+Moduły kalendarza dla Asteriska.
+
 %package curl
-Summary:	Modules for Asterisk that use cURL
+Summary:	Modules for Asterisk that use cURL library
+Summary(pl.UTF-8):	Moduły Asteriska wykorzystujące bibliotekę cURL
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description curl
-Modules for Asterisk that use cURL.
+Modules for Asterisk that use cURL library.
+
+%description curl -l pl.UTF-8
+Moduły Asteriska wykorzystujące bibliotekę cURL.
 
 %package dahdi
 Summary:	Modules for Asterisk that use DAHDI
+Summary(pl.UTF-8):	Moduły Asteriska wykorzystujące DAHDI
 Group:		Applications/Networking
 Requires(pre):	/usr/sbin/usermod
 Requires:	%{name} = %{version}-%{release}
@@ -222,16 +252,24 @@ Requires:	dahdi-tools >= 2.0.0
 %description dahdi
 Modules for Asterisk that use DAHDI.
 
+%description dahdi -l pl.UTF-8
+Moduły Asteriska wykorzystujące DAHDI.
+
 %package fax
 Summary:	FAX applications for Asterisk
+Summary(pl.UTF-8):	Aplikacje faksowe dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description fax
-FAX applications for Asterisk
+FAX applications for Asterisk.
+
+%description fax -l pl.UTF-8
+Aplikacje faksowe dla Asteriska.
 
 %package festival
 Summary:	Festival application for Asterisk
+Summary(pl.UTF-8):	Aplikacja Festival dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Requires:	festival
@@ -240,24 +278,37 @@ Requires:	festival
 Application for the Asterisk PBX that uses Festival to convert text to
 speech.
 
+%description festival -l pl.UTF-8
+Aplikacja dla centralki Asterisk wykorzystująca bibliotekę Festival do
+przekształcenia tekstu na mowę.
+
 %package gsm
 Summary:	Support GSM audio encoding/decoding
+Summary(pl.UTF-8):	Obsługa kodowania/dekodowania dźwięku GSM
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description gsm
 Support GSM audio encoding/decoding.
 
+%description gsm -l pl.UTF-8
+Obsługa kodowania/dekodowania dźwięku GSM.
+
 %package http
 Summary:	HTTP Server Support
+Summary(pl.UTF-8):	Obsługa serwera HTTP
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description http
 HTTP Server Support.
 
+%description http -l pl.UTF-8
+Obsługa serwera HTTP.
+
 %package ices
 Summary:	Stream audio from Asterisk to an IceCast server
+Summary(pl.UTF-8):	Przesyłanie strumienia dźwięku z Asteriska do serwera IceCast
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Requires:	ices
@@ -267,48 +318,72 @@ Conflicts:	asterisk < 1.4.18-1
 %description ices
 Stream audio from Asterisk to an IceCast server.
 
+%description ices -l pl.UTF-8
+Przesyłanie strumienia dźwięku z Asteriska do serwera IceCast.
+
 %package ilbc
 Summary:	iLBC codec for Asterisk
+Summary(pl.UTF-8):	Kodek iLBC dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description ilbc
 Support iLBC audio encoding/decoding.
 
+%description ilbc -l pl.UTF-8
+Obsługa kodowania/dekodowania dźwięku iLBC.
+
 %package jabber
 Summary:	Jabber/XMPP resources for Asterisk
+Summary(pl.UTF-8):	Zasoby Jabbera/XMPP dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description jabber
 Jabber/XMPP resources for Asterisk.
 
+%description jabber -l pl.UTF-8
+Zasoby Jabbera/XMPP dla Asteriska.
+
 %package jack
 Summary:	JACK resources for Asterisk
+Summary(pl.UTF-8):	Zasoby JACK dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description jack
 JACK resources for Asterisk.
 
+%description jack -l pl.UTF-8
+Zasoby JACK dla Asteriska.
+
 %package lua
 Summary:	Lua resources for Asterisk
+Summary(pl.UTF-8):	Zasoby Lua dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description lua
 Lua resources for Asterisk.
 
+%description lua -l pl.UTF-8
+Zasoby Lua dla Asteriska.
+
 %package ldap
 Summary:	LDAP resources for Asterisk
+Summary(pl.UTF-8):	Zasoby LDAP dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description ldap
 LDAP resources for Asterisk.
 
+%description ldap -l pl.UTF-8
+Zasoby LDAP dla Asteriska.
+
 %package ldap-fds
 Summary:	LDAP resources for Asterisk and the Fedora Directory Server
+Summary(pl.UTF-8):	Zasoby LDAP dla Asteriska oraz serwera usług katalogowych Fedora Directory Server
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-ldap = %{version}-%{release}
@@ -317,106 +392,161 @@ Requires:	fedora-ds-base
 %description ldap-fds
 LDAP resources for Asterisk and the Fedora Directory Server.
 
+%description ldap-fds -l pl.UTF-8
+Zasoby LDAP dla Asteriska oraz serwera usług katalogowych Fedora
+Directory Server.
+
 %package lpc10
 Summary:	LPC-10 2400 bps Voice Codec support
+Summary(pl.UTF-8):	Obsługa kodeka głosu LPC-10 2400 bps
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description lpc10
 LPC-10 2400 bps Voice Codec support
 
+%description lpc10 -l pl.UTF-8
+Obsługa kodeka głosu LPC-10 2400 bps.
+
 %package minivm
-Summary:	MiniVM applicaton for Asterisk
+Summary:	MiniVM application for Asterisk
+Summary(pl.UTF-8):	Aplikacja MiniVM dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description minivm
 MiniVM application for Asterisk.
 
+%description minivm -l pl.UTF-8
+Aplikacja MiniVM dla Asteriska.
+
 %package mysql
 Summary:	Asterisk modules that use MySQL
+Summary(pl.UTF-8):	Moduły Asteriska wykorzystujące MySQL
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description mysql
 Asterisk modules that use MySQL.
 
+%description mysql -l pl.UTF-8
+Moduły Asteriska wykorzystujące MySQL.
+
 %package odbc
 Summary:	Applications for Asterisk that use ODBC (except voicemail)
+Summary(pl.UTF-8):	Aplikacje Asteriska wykorzystujące ODBC (z wyjątkiem voicemail)
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description odbc
-Applications for Asterisk that use ODBC (except voicemail)
+Applications for Asterisk that use ODBC (except voicemail).
+
+%description odbc -l pl.UTF-8
+Aplikacje Asteriska wykorzystujące ODBC (z wyjątkiem voicemail).
 
 %package osp
-Summary:	Modules for Asterisk that use Open Settlement Protocol (OSP) Applications
+Summary:	Module for Asterisk that uses Open Settlement Protocol (OSP) Applications
+Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący aplikacje OSP (Open Settlement Protocol)
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description osp
 Open Settlement Protocol (OSP) Applications.
 
+%description osp -l pl.UTF-8
+Aplikacje protokołu OSP (Open Settlement Protocol).
+
 %package oss
-Summary:	Modules for Asterisk that use OSS sound drivers
+Summary:	Module for Asterisk that uses OSS sound drivers
+Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący sterowniki dźwięku OSS
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description oss
-Modules for Asterisk that use OSS sound drivers.
+Module for Asterisk that uses OSS sound drivers.
+
+%description oss -l pl.UTF-8
+Moduł Asteriska wykorzystujący sterowniki dźwięku OSS.
 
 %package pjsip
 Summary:	PJSIP Asterisk modules
+Summary(pl.UTF-8):	Moduły Asteriska PJSIP
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description pjsip
-The chan_pjsip and res_pjsip* modules provided by this package provide the new
-SIP driver for Asterisk, based on the PJSIP stack, to replace the old, badly designed
-and quite buggy chan_sip module.
+The chan_pjsip and res_pjsip* modules provided by this package provide
+the new SIP driver for Asterisk, based on the PJSIP stack, to replace
+the old, badly designed and quite buggy chan_sip module.
+
+%description pjsip -l pl.UTF-8
+Moduły chan_pjsip oraz res_pjsip* zawarte w tym pakiecie dostarczają
+nowy sterownik SIP dla Asteriska, oparty na stosie PJSIP, który ma
+zastąpić stary, źle zaprojektowany i zawierający błędy moduł chan_sip.
 
 %package portaudio
-Summary:	Modules for Asterisk that use the portaudio library
+Summary:	Module for Asterisk that uses the PortAudio library
+Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący bibliotekę PortAudio
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description portaudio
-Modules for Asterisk that use the portaudio library.
+Module for Asterisk that uses the PortAudio library.
+
+%description portaudio -l pl.UTF-8
+Moduł Asteriska wykorzystującye bibliotekę PortAudio.
 
 %package postgresql
 Summary:	Applications for Asterisk that use PostgreSQL
+Summary(pl.UTF-8):	Aplikacje Asteriska wykorzystujące PostgreSQL
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description postgresql
 Applications for Asterisk that use PostgreSQL.
 
+%description postgresql -l pl.UTF-8
+Aplikacje Asteriska wykorzystujące PostgreSQL.
+
 %package radius
 Summary:	Applications for Asterisk that use RADIUS
+Summary(pl.UTF-8):	Aplikacje Asteriska wykorzystujące bibliotekę RADIUS
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description radius
 Applications for Asterisk that use RADIUS.
 
+%description radius -l pl.UTF-8
+Aplikacje Asteriska wykorzystujące bibliotekę RADIUS.
+
 %package resample
 Summary:	resample codec
+Summary(pl.UTF-8):	Kodek resample
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description resample
 resample codec.
 
+%description resample -l pl.UTF-8
+Kodek resample.
+
 %package skinny
-Summary:	Modules for Asterisk that support the SCCP/Skinny protocol
+Summary:	Module for Asterisk that supportsthe SCCP/Skinny protocol
+Summary(pl.UTF-8):	Moduł Asteriska obsługujący protokół SCCP/Skinny
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description skinny
-Modules for Asterisk that support the SCCP/Skinny protocol.
+Module for Asterisk that supports the SCCP/Skinny protocol.
+
+%description skinny -l pl.UTF-8
+Moduł Asteriska obsługujący protokół SCCP/Skinny.
 
 %package snmp
 Summary:	Module that enables SNMP monitoring of Asterisk
+Summary(pl.UTF-8):	Moduł pozwalający na monitorowanie Asteriska przez SNMP
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Requires:	mibs-dirs
@@ -424,49 +554,73 @@ Requires:	mibs-dirs
 %description snmp
 Module that enables SNMP monitoring of Asterisk.
 
+%description snmp -l pl.UTF-8
+Moduł pozwalający na monitorowanie Asteriska przez SNMP.
+
 %package speex
 Summary:	Speex codec support
+Summary(pl.UTF-8):	Obsługa kodeka Speex
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description speex
 Speex codec support.
 
+%description speex -l pl.UTF-8
+Obsługa kodeka Speex.
+
 %package sqlite2
-Summary:	Sqlite modules for Asterisk
+Summary:	SQLite 2 module for Asterisk
+Summary(pl.UTF-8):	Moduł SQLite 2 dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description sqlite2
-Sqlite modules for Asterisk.
+SQLite 2 module for Asterisk.
+
+%description sqlite2 -l pl.UTF-8
+Moduł SQLite 2 dla Asteriska.
 
 %package sqlite3
-Summary:	Sqlite3 modules for Asterisk
+Summary:	SQLite 3 modules for Asterisk
+Summary(pl.UTF-8):	Moduły SQLite 3 dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	asterisk-sqlite < 12.0.0
 
 %description sqlite3
-Sqlite3 modules for Asterisk.
+SQLite 3 modules for Asterisk.
+
+%description sqlite3 -l pl.UTF-8
+Moduły SQLite 3 dla Asteriska.
 
 %package tds
 Summary:	Modules for Asterisk that use FreeTDS
+Summary(pl.UTF-8):	Moduły Asteriska wykorzystujące FreeTDS
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description tds
 Modules for Asterisk that use FreeTDS.
 
+%description tds -l pl.UTF-8
+Moduły Asteriska wykorzystujące FreeTDS.
+
 %package unistim
 Summary:	Unistim channel for Asterisk
+Summary(pl.UTF-8):	Kanał Unistim dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description unistim
 Unistim channel for Asterisk
 
+%description unistim -l pl.UTF-8
+Kanał Unistim dla Asteriska.
+
 %package voicemail
 Summary:	Common Voicemail Modules for Asterisk
+Summary(pl.UTF-8):	Wspólne moduły Voicemail (poczty głosowej) dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-voicemail-implementation = %{version}-%{release}
@@ -476,8 +630,12 @@ Requires:	sox
 %description voicemail
 Common Voicemail Modules for Asterisk.
 
+%description voicemail -l pl.UTF-8
+Wspólne moduły Voicemail (poczty głosowej) dla Asteriska.
+
 %package voicemail-imap
 Summary:	Store voicemail on an IMAP server
+Summary(pl.UTF-8):	Przechowywanie poczty głosowej na serwerze IMAP
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-voicemail = %{version}-%{release}
@@ -487,8 +645,13 @@ Provides:	%{name}-voicemail-implementation = %{version}-%{release}
 Voicemail implementation for Asterisk that stores voicemail on an IMAP
 server.
 
+%description voicemail-imap -l pl.UTF-8
+Implementacja poczty głosowej (Voicemail) dla Asteriska przechowująca
+pocztę na serwerze IMAP.
+
 %package voicemail-odbc
 Summary:	Store voicemail in a database using ODBC
+Summary(pl.UTF-8):	Przechowywanie poczty głosowej w bazie danych poprzez ODBC
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-voicemail = %{version}-%{release}
@@ -498,8 +661,13 @@ Provides:	%{name}-voicemail-implementation = %{version}-%{release}
 Voicemail implementation for Asterisk that uses ODBC to store
 voicemail in a database.
 
+%description voicemail-odbc -l pl.UTF-8
+Implementacja poczty głosowej (Voicemail) dla Asteriska wykorzystująca
+ODBC do przechowywania poczty w bazie danych.
+
 %package voicemail-plain
 Summary:	Store voicemail on the local filesystem
+Summary(pl.UTF-8):	Przechowywanie poczty głosowej na lokalnym systemie plików
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-voicemail = %{version}-%{release}
@@ -509,17 +677,26 @@ Provides:	%{name}-voicemail-implementation = %{version}-%{release}
 Voicemail implementation for Asterisk that stores voicemail on the
 local filesystem.
 
+%description voicemail-plain -l pl.UTF-8
+Implementacja poczty głosowej (Voicemail) dla Asteriska przechowująca
+pocztę na lokalnym systemie plików.
+
 %package vorbis
 Summary:	Ogg Vorbis format support
+Summary(pl.UTF-8):	Obsługa formatu Ogg Vorbis
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description vorbis
 Ogg Vorbis format support.
 
+%description vorbis -l pl.UTF-8
+Obsługa formatu Ogg Vorbis.
+
 # define apidocs as last package, as it is the biggest one
 %package apidocs
 Summary:	API documentation for Asterisk
+Summary(pl.UTF-8):	Dokumentacja API Asteriska
 Group:		Documentation
 %if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
@@ -527,6 +704,9 @@ BuildArch:	noarch
 
 %description apidocs
 API documentation for Asterisk.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API Asteriska.
 
 %prep
 %setup -q
@@ -543,10 +723,10 @@ API documentation for Asterisk.
 %{__sed} -i -e 's/^install:.*$/install:/' sounds/Makefile
 
 # avoid using these
-rm -rf imap main/editline codecs/gsm codecs/lpc10
+%{__rm} -r imap main/editline codecs/gsm codecs/lpc10
 
 %build
-rm -f pbx/.depend
+%{__rm} pbx/.depend
 
 %{__aclocal} -I autoconf
 %{__autoheader}
@@ -563,10 +743,10 @@ cd menuselect
 %{__autoconf}
 # we need just plain cli for building
 %configure \
-  --without-newt \
-  --without-gtk2 \
-  --without-curses \
-  --without-ncurses
+	--without-newt \
+	--without-gtk2 \
+	--without-curses \
+	--without-ncurses
 cd ..
 
 %configure \
@@ -649,8 +829,8 @@ menuselect/menuselect --enable app_voicemail menuselect.makeopts
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
 
-rm apps/app_voicemail.o
-mv apps/app_voicemail.so apps/app_voicemail_plain.so
+%{__rm} apps/app_voicemail.o
+%{__mv} apps/app_voicemail.so apps/app_voicemail_plain.so
 
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=IMAP_STORAGE/' menuselect.makeopts
 %{__make} DEBUG= \
@@ -661,8 +841,8 @@ mv apps/app_voicemail.so apps/app_voicemail_plain.so
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
 
-rm apps/app_voicemail.o
-mv apps/app_voicemail.so apps/app_voicemail_imap.so
+%{__rm} apps/app_voicemail.o
+%{__mv} apps/app_voicemail.so apps/app_voicemail_imap.so
 
 %if %{with odbc}
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=ODBC_STORAGE/' menuselect.makeopts
@@ -674,8 +854,8 @@ mv apps/app_voicemail.so apps/app_voicemail_imap.so
 	ASTDBDIR=%{_localstatedir}/spool/asterisk \
 	%{?with_verbose:NOISY_BUILD=yes} \
 
-rm apps/app_voicemail.o
-mv apps/app_voicemail.so apps/app_voicemail_odbc.so
+%{__rm} apps/app_voicemail.o
+%{__mv} apps/app_voicemail.so apps/app_voicemail_odbc.so
 %endif
 
 # so that these modules don't get built again during the install phase
@@ -718,7 +898,7 @@ export ASTCFLAGS="%{rpmcflags}"
 	ASTVARLIBDIR=%{_datadir}/asterisk \
 	ASTDBDIR=%{_localstatedir}/spool/asterisk
 
-rm $RPM_BUILD_ROOT%{_libdir}/asterisk/modules/app_voicemail.so
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/asterisk/modules/app_voicemail.so
 install -D -p apps/app_voicemail_imap.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
 %if %{with odbc}
 install -D -p apps/app_voicemail_odbc.so $RPM_BUILD_ROOT%{_libdir}/asterisk/modules
@@ -747,67 +927,67 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/uploads
 install utils/astman.1 $RPM_BUILD_ROOT%{_mandir}/man1/astman.1
 
 # We're not going to package any of the sample AGI scripts
-rm -f $RPM_BUILD_ROOT%{_datadir}/asterisk/agi-bin/*
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/asterisk/agi-bin/*
 
 # Don't package the sample voicemail user
-rm -rf $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/voicemail/default
+%{__rm} -r $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/voicemail/default
 
 # Don't package example phone provision configs
-rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/phoneprov/*
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/asterisk/phoneprov/*
 
 # these are compiled with -O0 and thus include unfortified code.
-rm -rf $RPM_BUILD_ROOT%{_sbindir}/hashtest
-rm -rf $RPM_BUILD_ROOT%{_sbindir}/hashtest2
+%{__rm} -r $RPM_BUILD_ROOT%{_sbindir}/hashtest
+%{__rm} -r $RPM_BUILD_ROOT%{_sbindir}/hashtest2
 
 # we're not using safe_asterisk
-rm -f $RPM_BUILD_ROOT%{_sbindir}/safe_asterisk
-rm -f $RPM_BUILD_ROOT%{_mandir}/man8/safe_asterisk.8*
+%{__rm} $RPM_BUILD_ROOT%{_sbindir}/safe_asterisk
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man8/safe_asterisk.8*
 
-rm -rf $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
+%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 
 %if %{with apidocs}
 find doc/api -name '*.map' -size 0 -delete
 %endif
 
 # remove configuration files for components never built
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{app_skel,config_test,misdn,ooh323,test_sorcery}.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{app_skel,config_test,misdn,ooh323,test_sorcery}.conf
 
 # remove configuration files for disabled optional components
 %if %{without corosync}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_corosync.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_corosync.conf
 %endif
 %if %{without sqlite2}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_config_sqlite.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_config_sqlite.conf
 %endif
 %if %{without oss}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/oss.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/oss.conf
 %endif
 %if %{without tds}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr,cel}_tds.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr,cel}_tds.conf
 %endif
 %if %{without ldap}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_ldap.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_ldap.conf
 %endif
 %if %{without portaudio}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/console.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/console.conf
 %endif
 %if %{without bluetooth}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/chan_mobile.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/chan_mobile.conf
 %endif
 %if %{without mysql}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_config_mysql.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_config_mysql.conf
 %endif
 %if %{without pgsql}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr,cel,res}_pgsql.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr,cel,res}_pgsql.conf
 %endif
 %if %{without odbc}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr{,_adaptive},cel,func,res}_odbc.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr{,_adaptive},cel,func,res}_odbc.conf
 %endif
 %if %{without pjsip}
-rm $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/pjsip{,_notify}.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/pjsip{,_notify}.conf
 %endif
 
-rm -fr $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
+%{__rm} -r $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -1184,10 +1364,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libasteriskssl.so
 %dir %{_includedir}/asterisk
 %{_includedir}/asterisk/*.h
 %{_includedir}/asterisk.h
-%{_libdir}/libasteriskssl.so
 
 %if %{with apidocs}
 %files apidocs
@@ -1444,7 +1624,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pgsql.conf
 %doc contrib/realtime/postgresql/postgresql_cdr.sql
 %doc contrib/realtime/postgresql/postgresql_config.sql
-%doc contrib/realtime/postgresql//postgresql_voicemail.sql
+%doc contrib/realtime/postgresql/postgresql_voicemail.sql
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_pgsql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_pgsql.so
