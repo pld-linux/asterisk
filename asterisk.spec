@@ -46,6 +46,7 @@ Patch3:		pld-banner.patch
 Patch4:		lpc10-system.patch
 Patch5:		%{name}-histedit.patch
 Patch6:		x32.patch
+Patch7:		%{name}-ilbc.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 %{?with_oss:BuildRequires:	SDL_image-devel}
@@ -105,7 +106,7 @@ Requires(post,preun,postun):	systemd-units >= 38
 Requires:	systemd-units >= 0.38
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRequires:	uriparser-devel
-%{?with_ilbc:BuildRequires:	webrtc-libilbc-devel}
+%{?with_ilbc:BuildRequires:	webrtc-libilbc-devel >= 2}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
 BuildRequires:	libpri-devel >= 1.4.6
@@ -717,17 +718,16 @@ Dokumentacja API Asteriska.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
 %{__sed} -i -e 's/^install:.*$/install:/' sounds/Makefile
 
 # avoid using these
-%{__rm} -r imap main/editline codecs/gsm codecs/lpc10
+%{__rm} -r main/editline codecs/gsm codecs/lpc10
 
 %build
-%{__rm} pbx/.depend
-
 %{__aclocal} -I autoconf
 %{__autoheader}
 %{__autoconf}
