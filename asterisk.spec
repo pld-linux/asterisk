@@ -926,24 +926,15 @@ install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/uploads
 
 install utils/astman.1 $RPM_BUILD_ROOT%{_mandir}/man1/astman.1
 
-# We're not going to package any of the sample AGI scripts
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/asterisk/agi-bin/*
-
 # Don't package the sample voicemail user
 %{__rm} -r $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/voicemail/default
 
 # Don't package example phone provision configs
 %{__rm} -r $RPM_BUILD_ROOT%{_datadir}/asterisk/phoneprov/*
 
-# these are compiled with -O0 and thus include unfortified code.
-%{__rm} -r $RPM_BUILD_ROOT%{_sbindir}/hashtest
-%{__rm} -r $RPM_BUILD_ROOT%{_sbindir}/hashtest2
-
 # we're not using safe_asterisk
 %{__rm} $RPM_BUILD_ROOT%{_sbindir}/safe_asterisk
 %{__rm} $RPM_BUILD_ROOT%{_mandir}/man8/safe_asterisk.8*
-
-%{__rm} -r $RPM_BUILD_ROOT%{_datadir}/asterisk/firmware/iax/*
 
 %if %{with apidocs}
 find doc/api -name '*.map' -size 0 -delete
