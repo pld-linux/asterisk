@@ -1,4 +1,12 @@
 # TODO:
+# - chan_misdn (BR: mISDNuser-devel)
+# - ffmpeg: sws_getContext now in libswscale, not avcodec
+# - gmime: reverse version check order, use gmime-2.6 by default
+# - nbs (libnbs, nbs.h)
+# - ss7 >= 2.0 (libss7, libssh.h)
+# - openr2 (libopenr2, libopenr2.h)
+# - pwlib+openh323
+# - vpb (libvpb, vpbapi.h)
 # - make package for moh sound files
 # - build res_mwi_external, res_mwi_external_ami, res_ari_mailboxes, as
 #   an alternative for voicemail subpackages
@@ -49,20 +57,25 @@ Patch6:		x32.patch
 Patch7:		%{name}-ilbc.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
+%{?with_oss:BuildRequires:	SDL-devel}
 %{?with_oss:BuildRequires:	SDL_image-devel}
 BuildRequires:	alsa-lib-devel
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
-BuildRequires:	bison
+# libbfd (used only for debug builds?)
+#BuildRequires:	binutils-devel
+BuildRequires:	bison >= 2
 %{?with_bluetooth:BuildRequires:	bluez-libs-devel}
 %{?with_corosync:BuildRequires:	corosync-devel >= 2.0.0}
-BuildRequires:	curl-devel
+BuildRequires:	curl-devel >= 7.10.1
 BuildRequires:	dahdi-linux-devel
 BuildRequires:	dahdi-tools-devel >= 2.0.0
 BuildRequires:	doxygen
+BuildRequires:	flex
 %{?with_tds:BuildRequires:	freetds-devel >= 0.63}
 BuildRequires:	gawk
 BuildRequires:	gcc >= 5:3.4
+# TODO: switch to 2.6
 BuildRequires:	gmime22-devel
 BuildRequires:	iksemel-devel
 BuildRequires:	imap-devel
@@ -73,13 +86,16 @@ BuildRequires:	libedit-devel
 BuildRequires:	libgsm-devel
 BuildRequires:	libical-devel
 BuildRequires:	libogg-devel
+BuildRequires:	libpri-devel >= 1.4.6
 BuildRequires:	libresample-devel
+BuildRequires:	libtiff-devel
 BuildRequires:	libuuid-devel
 BuildRequires:	libvorbis-devel
-BuildRequires:	libxml2-devel
+BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	libxslt-devel
 BuildRequires:	lpc10-devel
-BuildRequires:	lua51-devel
+BuildRequires:	lua51-devel >= 5.1
+#BuildRequires:	mISDNuser-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	neon-devel
@@ -87,6 +103,7 @@ BuildRequires:	net-snmp-devel
 BuildRequires:	newt-devel
 %{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
+BuildRequires:	opus-devel
 BuildRequires:	pam-devel
 %{?with_pjsip:BuildRequires:	pjproject-devel >= 2.3}
 BuildRequires:	pkgconfig
@@ -99,7 +116,7 @@ BuildRequires:	sed >= 4.0
 BuildRequires:	spandsp-devel >= 0.0.5
 BuildRequires:	speex-devel
 BuildRequires:	speexdsp-devel
-%{?with_sqlite2:BuildRequires:	sqlite-devel}
+%{?with_sqlite2:BuildRequires:	sqlite-devel >= 2}
 BuildRequires:	sqlite3-devel
 BuildRequires:	srtp-devel
 Requires(post,preun,postun):	systemd-units >= 38
@@ -109,7 +126,6 @@ BuildRequires:	uriparser-devel
 %{?with_ilbc:BuildRequires:	webrtc-libilbc-devel >= 2}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
-BuildRequires:	libpri-devel >= 1.4.6
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -750,24 +766,25 @@ cd menuselect
 cd ..
 
 %configure \
-	--without-gtk2 \
-	--with-imap=system \
-	--with-gsm=/usr \
-	%{__without oss oss} \
-	%{__without oss sdl} \
 	%{__without oss SDL_image} \
-	%{__without tds tds} \
-	%{__without ilbc ilbc} \
-	%{__without ldap ldap} \
-	%{__without portaudio portaudio} \
 	%{__without bluetooth bluetooth} \
+	--without-gtk2 \
+	--with-gnu-ld \
+	--with-gsm=/usr \
+	%{__without ilbc ilbc} \
+	--with-imap=system \
 	%{__without jack jack} \
+	%{__without ldap ldap} \
+	--with-lpc10=/usr \
 	%{__without mysql mysqlclient} \
-	%{__without pgsql postgres} \
-	%{__without odbc unixodbc} \
-	%{__without radius radius} \
+	%{__without oss oss} \
 	%{__without pjsip pjproject} \
-	--with-lpc10=/usr
+	%{__without portaudio portaudio} \
+	%{__without pgsql postgres} \
+	%{__without radius radius} \
+	%{__without oss sdl} \
+	%{__without tds tds} \
+	%{__without odbc unixodbc}
 
 cp -f .cleancount .lastclean
 
