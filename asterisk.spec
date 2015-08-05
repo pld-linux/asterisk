@@ -1,5 +1,5 @@
 # TODO:
-# - chan_misdn (BR: mISDNuser-devel)
+# - chan_misdn (BR: mISDNuser-devel 1.x, needs update for 2.0)
 # - ffmpeg: sws_getContext now in libswscale, not avcodec
 # - gmime: reverse version check order, use gmime-2.6 by default
 # - nbs (libnbs, nbs.h)
@@ -95,7 +95,7 @@ BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	libxslt-devel
 BuildRequires:	lpc10-devel
 BuildRequires:	lua51-devel >= 5.1
-#BuildRequires:	mISDNuser-devel
+#BuildRequires:	mISDNuser-devel < 2
 %{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel
 BuildRequires:	neon-devel
