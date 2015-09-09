@@ -1317,6 +1317,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_astdb.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_config.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_memory.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_memory_cache.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_speech.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_srtp.so
