@@ -10,6 +10,8 @@
 # - make package for moh sound files
 # - build res_mwi_external, res_mwi_external_ami, res_ari_mailboxes, as
 #   an alternative for voicemail subpackages
+# - +x missing:
+#   ldd: warning: you do not have execution permission for `/usr/lib/libasteriskssl.so.1'
 #
 # Conditional build:
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
