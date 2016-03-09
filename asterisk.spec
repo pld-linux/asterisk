@@ -28,15 +28,18 @@
 %bcond_without	odbc		# build without ODBC support
 %bcond_without	radius		# build without Radius support
 %bcond_without	pjsip		# build without PJSIP stack
+%bcond_without	opus_vp8	# build without Opus codec and VP8 passthrough
 
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
+
+%define	opus_commit	058319d6ad464c79bbea71cf589883af62a18548
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	13.7.2
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -49,6 +52,9 @@ Source5:	%{name}.service
 # menuselect.* -> make menuconfig; choose options; copy resulting files here
 Source6:	menuselect.makedeps
 Source7:	menuselect.makeopts
+# https://github.com/seanbright/asterisk-opus/
+Source8:	https://github.com/seanbright/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
+# Source8-md5:	2cc55d2036ee4b7e5a44ea5e2d7280f3
 Patch0:		lua51-path.patch
 Patch1:		%{name}-ppc.patch
 Patch2:		FHS-paths.patch
@@ -57,6 +63,7 @@ Patch4:		lpc10-system.patch
 Patch5:		%{name}-histedit.patch
 Patch6:		x32.patch
 Patch7:		%{name}-ilbc.patch
+Patch8:		asterisk-opus.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 %{?with_oss:BuildRequires:	SDL-devel}
@@ -728,7 +735,7 @@ API documentation for Asterisk.
 Dokumentacja API Asteriska.
 
 %prep
-%setup -q
+%setup -q -a 8
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -737,6 +744,13 @@ Dokumentacja API Asteriska.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+
+%if %{with opus_vp8}
+%patch8 -p1
+
+cp -a asterisk-opus-%{opus_commit}/codecs/* codecs
+cp -a asterisk-opus-%{opus_commit}/formats/* formats
+%endif
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
@@ -1210,6 +1224,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
+%if %{with opus_vp8}
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_opus.so
+%endif
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g719.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g723.so
@@ -1223,6 +1240,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_siren7.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_sln.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_vox.so
+%if %{with opus_vp8}
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_vp8.so
+%endif
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_aes.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_audiohookinherit.so
@@ -1300,6 +1320,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_h264.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_opus.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_silk.so
+%if %{with opus_vp8}
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_vp8.so
+%endif
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_http_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_manager_devicestate.so
