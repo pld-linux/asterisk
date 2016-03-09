@@ -1060,6 +1060,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_sbindir}/astdb2sqlite3
 %attr(755,root,root) %{_sbindir}/asterisk
 %attr(755,root,root) %{_sbindir}/astgenkey
+%attr(755,root,root) %{_sbindir}/astversion
 %attr(755,root,root) %{_sbindir}/autosupport
 %attr(755,root,root) %{_sbindir}/rasterisk
 %{_mandir}/man8/astdb2bdb.8*
@@ -1265,6 +1266,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_global.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_groupcount.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_hangupcause.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_holdintercept.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_iconv.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_jitterbuffer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_lock.so
@@ -1315,6 +1317,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_endpoint_stats.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_celt.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_h263.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_h264.so
