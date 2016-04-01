@@ -8,8 +8,7 @@
 # - pwlib+openh323
 # - vpb (libvpb, vpbapi.h)
 # - make package for moh sound files
-# - build res_mwi_external, res_mwi_external_ami, res_ari_mailboxes, as
-#   an alternative for voicemail subpackages
+# - build res_ari_mailboxes as an alternative for voicemail subpackages
 # - +x missing:
 #   ldd: warning: you do not have execution permission for `/usr/lib/libasteriskssl.so.1'
 #
@@ -38,12 +37,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.7.2
-Release:	2
+Version:	13.8.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	6c0321fa62f78fd89a5a5c9309850ef9
+# Source0-md5:	ad48eb4a01df72c8e30d3aec524b1a02
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1333,6 +1332,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mutestream.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_musiconhold.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_mwi_external.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_mwi_external_ami.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_parking.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_phoneprov.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pktccops.so
@@ -1571,6 +1572,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc_transaction.so
 %endif
 
 %files osp
@@ -1588,6 +1590,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %if %{with pjsip}
 %files pjsip
 %defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjproject.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_notify.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_wizard.conf
@@ -1599,7 +1602,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_rtcp.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjproject.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_acl.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_authenticator_digest.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_caller_id.so
@@ -1613,13 +1616,13 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_user.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_exten_state.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_header_funcs.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_history.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_keepalive.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_log_forwarder.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_multihomed.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi_body_generator.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_nat.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_notify.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_one_touch_record_info.so
@@ -1634,13 +1637,14 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_publish_asterisk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pubsub.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_refer.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar_expire.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_rfc3326.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sdp_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_send_to_voicemail.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_xpidf_body_generator.so

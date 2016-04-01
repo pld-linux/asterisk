@@ -49,15 +49,4 @@ diff -dur asterisk-13.7.2.orig/main/Makefile asterisk-13.7.2/main/Makefile
  
  ifneq ($(findstring ENABLE_UPLOADS,$(MENUSELECT_CFLAGS)),)
  http.o: _ASTCFLAGS+=$(GMIME_INCLUDE)
-diff -dur asterisk-13.7.2.orig/main/Makefile.orig asterisk-13.7.2/main/Makefile.orig
---- asterisk-13.7.2.orig/main/Makefile.orig	2016-02-05 21:32:40.000000000 +0100
-+++ asterisk-13.7.2/main/Makefile.orig	2016-03-09 11:53:45.000000000 +0100
-@@ -42,7 +42,7 @@
- AST_LIBS+=$(CRYPT_LIB)
- AST_LIBS+=$(AST_CLANG_BLOCKS_LIBS)
- 
--ifneq ($(findstring $(OSARCH), linux-gnu uclinux linux-uclibc kfreebsd-gnu),)
-+ifneq ($(findstring $(OSARCH), linux-gnu linux-gnux32 uclinux linux-uclibc kfreebsd-gnu),)
-   ifneq ($(findstring LOADABLE_MODULES,$(MENUSELECT_CFLAGS)),)
-   AST_LIBS+=-ldl
-   endif
+
