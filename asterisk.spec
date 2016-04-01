@@ -853,6 +853,9 @@ menuselect/menuselect --disable res_pjsip --disable chan_pjsip menuselect.makeop
 
 menuselect/menuselect --enable app_voicemail menuselect.makeopts
 
+# workaround for build failing with asterisk-devel not installed
+ln -s libasteriskssl.so.1 ./main/libasteriskssl.so
+
 %{__make} DEBUG= \
 	OPTIMIZE= \
 	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
