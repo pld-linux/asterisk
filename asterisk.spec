@@ -853,7 +853,7 @@ menuselect/menuselect --disable res_pjsip --disable chan_pjsip menuselect.makeop
 
 menuselect/menuselect --enable app_voicemail menuselect.makeopts
 
-%{__make} -j1 DEBUG= \
+%{__make} DEBUG= \
 	OPTIMIZE= \
 	ASTVARRUNDIR=%{_localstatedir}/run/asterisk \
 	ASTDATADIR=%{_datadir}/asterisk \
