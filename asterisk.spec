@@ -37,12 +37,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.8.0
+Version:	13.8.1
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	ad48eb4a01df72c8e30d3aec524b1a02
+# Source0-md5:	b7b3c3eff90ffd6da6dceb7766552daf
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1620,7 +1620,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_exten_state.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_header_funcs.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_history.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_keepalive.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_multihomed.so
@@ -1649,6 +1648,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_management.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_xpidf_body_generator.so
 %endif
