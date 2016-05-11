@@ -37,12 +37,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.8.2
+Version:	13.9.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	89d5947e863c58237a2161fef994e06f
+# Source0-md5:	2478b1fcd43bcb4be44e270d55eb40d0
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -759,7 +759,7 @@ cp -a asterisk-opus-%{opus_commit}/formats/* formats
 %{__rm} -r main/editline codecs/gsm codecs/lpc10
 
 %build
-%{__aclocal} -I autoconf
+%{__aclocal} -I autoconf $(find third-party/ -maxdepth 1 -type d -printf "-I %p ")
 %{__autoheader}
 %{__autoconf}
 
