@@ -9,8 +9,8 @@ Type=forking
 Environment=AST_CONFIG=/etc/asterisk/asterisk.conf AST_USER=asterisk ASTERISK_OPTS=
 EnvironmentFile=-/etc/sysconfig/asterisk
 ExecStart=/usr/sbin/asterisk -U ${AST_USER} -C ${AST_CONFIG} $ASTERISK_OPTS
-ExecStop=/usr/bin/asterisk -rx 'core stop now'
-ExecReload=/usr/bin/asterisk -rx 'core reload'
+ExecStop=/usr/sbin/asterisk -rx 'core stop now'
+ExecReload=/usr/sbin/asterisk -rx 'core reload'
 Restart=always
 
 [Install]
