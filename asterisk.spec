@@ -38,7 +38,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	13.9.1
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -1030,6 +1030,7 @@ fi
 %systemd_reload
 
 %post
+/sbin/ldconfig
 /sbin/chkconfig --add asterisk
 # use -n (NOOP) as restart would be breaking all current calls.
 %service -n asterisk restart "Asterisk daemon"
