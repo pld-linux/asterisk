@@ -37,12 +37,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.9.1
-Release:	3
+Version:	13.10.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	76c42992a79f41ec467ed20500e8b249
+# Source0-md5:	d980162e8a7be13fd85dbab81e7d0bfe
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1222,6 +1222,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_multicast_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_phone.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_sip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_adpcm.so
@@ -1615,6 +1616,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_diversion.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dlg_options.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dtmf_info.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_empty_info.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_anonymous.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_ip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_user.so
