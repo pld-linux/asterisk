@@ -4,6 +4,7 @@
 /var/log/asterisk/messages
 /var/log/asterisk/full
 {
+	olddir /var/log/archive/asterisk
 	su root asterisk
 	create 640 asterisk asterisk
 	daily
