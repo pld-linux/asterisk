@@ -1,4 +1,5 @@
 /var/log/asterisk/* /var/log/asterisk/*/* {
+	olddir /var/log/archive/asterisk
 	create 640 root logs	
         daily
         missingok
