@@ -1327,6 +1327,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_h264.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_opus.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_silk.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_siren14.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_siren7.so
 %if %{with opus_vp8}
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_vp8.so
 %endif
