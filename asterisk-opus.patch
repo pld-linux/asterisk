@@ -1,52 +1,46 @@
-diff -dur asterisk-13.7.2.orig/main/codec_builtin.c asterisk-13.7.2/main/codec_builtin.c
---- asterisk-13.7.2.orig/main/codec_builtin.c	2016-02-05 21:32:40.000000000 +0100
-+++ asterisk-13.7.2/main/codec_builtin.c	2016-03-09 11:55:44.000000000 +0100
-@@ -38,6 +38,8 @@
- #include "asterisk/format_cache.h"
- #include "asterisk/frame.h"
+--- a/build_tools/menuselect-deps.in
++++ b/build_tools/menuselect-deps.in
+@@ -45,6 +45,7 @@ NEON29=@PBX_NEON29@
+ OGG=@PBX_OGG@
+ OPENH323=@PBX_OPENH323@
+ OPUS=@PBX_OPUS@
++OPUSFILE=@PBX_OPUSFILE@
+ OSPTK=@PBX_OSPTK@
+ OSS=@PBX_OSS@
+ PGSQL=@PBX_PGSQL@
+--- a/configure.ac
++++ b/configure.ac
+@@ -468,6 +468,7 @@ AST_EXT_LIB_SETUP([NEWT], [newt], [newt])
+ AST_EXT_LIB_SETUP([OGG], [OGG], [ogg])
+ AST_EXT_LIB_SETUP([OPENR2], [MFR2], [openr2])
+ AST_EXT_LIB_SETUP([OPUS], [Opus], [opus])
++AST_EXT_LIB_SETUP([OPUSFILE], [Opusfile], [opusfile])
+ AST_EXT_LIB_SETUP([OSPTK], [OSP Toolkit], [osptk])
+ AST_EXT_LIB_SETUP([OSS], [Open Sound System], [oss])
+ AST_EXT_LIB_SETUP([PGSQL], [PostgreSQL], [postgres])
+@@ -2293,6 +2294,13 @@ AST_EXT_LIB_CHECK([SS7], [ss7], [ss7_set_isup_timer], [libss7.h])
+ AST_EXT_LIB_CHECK([OPENR2], [openr2], [openr2_chan_new], [openr2.h])
  
-+#include <opus/opus.h>
+ AST_EXT_LIB_CHECK([OPUS], [opus], [opus_encoder_create], [opus/opus.h])
++# opusfile.h includes <opus_multistream.h> so we need to make sure that
++# either $OPUS_INCLUDE or /usr/include/opus is added to the search path.
++__opus_include=${OPUS_INCLUDE}
++if test -z "$__opus_include" -o x"$__opus_include" = x" " ; then
++	__opus_include=-I/usr/include/opus
++fi
++AST_EXT_LIB_CHECK([OPUSFILE], [opusfile], [op_open_callbacks], [opus/opusfile.h], [], [$__opus_include])
+ 
+ if test "${USE_PWLIB}" != "no"; then
+ 	if test -n "${PWLIB_DIR}"; then
+--- a/makeopts.in
++++ b/makeopts.in
+@@ -223,6 +223,9 @@ OGG_LIB=@OGG_LIB@
+ OPUS_INCLUDE=@OPUS_INCLUDE@
+ OPUS_LIB=@OPUS_LIB@
+ 
++OPUSFILE_INCLUDE=@OPUSFILE_INCLUDE@
++OPUSFILE_LIB=@OPUSFILE_LIB@
 +
- enum frame_type {
- 	TYPE_HIGH,     /* 0x0 */
- 	TYPE_LOW,      /* 0x1 */
-@@ -698,6 +700,11 @@
- 	.get_length = g719_length,
- };
+ OSPTK_INCLUDE=@OSPTK_INCLUDE@
+ OSPTK_LIB=@OSPTK_LIB@
  
-+static int opus_samples(struct ast_frame *frame)
-+{
-+	return opus_packet_get_nb_samples(frame->data.ptr, frame->datalen, 48000);
-+}
-+
- static struct ast_codec opus = {
- 	.name = "opus",
- 	.description = "Opus Codec",
-@@ -707,6 +714,7 @@
- 	.maximum_ms = 60,
- 	.default_ms = 20,
- 	.minimum_bytes = 10,
-+	.samples_count = opus_samples,
- };
- 
- static struct ast_codec jpeg = {
-diff -dur asterisk-13.7.2.orig/main/Makefile asterisk-13.7.2/main/Makefile
---- asterisk-13.7.2.orig/main/Makefile	2016-03-09 11:53:45.000000000 +0100
-+++ asterisk-13.7.2/main/Makefile	2016-03-09 11:55:44.000000000 +0100
-@@ -40,6 +40,7 @@
- AST_LIBS+=$(URIPARSER_LIB)
- AST_LIBS+=$(UUID_LIB)
- AST_LIBS+=$(CRYPT_LIB)
-+AST_LIBS+=$(OPUS_LIB)
- AST_LIBS+=$(AST_CLANG_BLOCKS_LIBS)
- 
- ifneq ($(findstring $(OSARCH), linux-gnu linux-gnux32 uclinux linux-uclibc kfreebsd-gnu),)
-@@ -160,6 +161,7 @@
- bucket.o: _ASTCFLAGS+=$(URIPARSER_INCLUDE)
- crypt.o: _ASTCFLAGS+=$(CRYPT_INCLUDE)
- uuid.o: _ASTCFLAGS+=$(UUID_INCLUDE)
-+codec_builtin.o: _ASTCFLAGS+=$(OPUS_INCLUDE)
- 
- ifneq ($(findstring ENABLE_UPLOADS,$(MENUSELECT_CFLAGS)),)
- http.o: _ASTCFLAGS+=$(GMIME_INCLUDE)
-

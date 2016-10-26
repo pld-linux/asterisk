@@ -32,17 +32,17 @@
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
 
-%define	opus_commit	058319d6ad464c79bbea71cf589883af62a18548
+%define	opus_commit	a6b9521f10817c1f39f21f90fecd3f00bbb164d0
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.11.2
+Version:	13.12.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	6162f342bb434098fb8c559e25802576
+# Source0-md5:	b4083016753c26a7440bdca5351ab9fe
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -51,9 +51,9 @@ Source5:	%{name}.service
 # menuselect.* -> make menuconfig; choose options; copy resulting files here
 Source6:	menuselect.makedeps
 Source7:	menuselect.makeopts
-# https://github.com/seanbright/asterisk-opus/
+# https://github.com/traud/asterisk-opus
 Source8:	https://github.com/seanbright/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
-# Source8-md5:	2cc55d2036ee4b7e5a44ea5e2d7280f3
+# Source8-md5:	d2deae1095b6b42331d3060700c25493
 Patch0:		lua51-path.patch
 Patch1:		%{name}-ppc.patch
 Patch2:		FHS-paths.patch
@@ -112,6 +112,7 @@ BuildRequires:	newt-devel
 %{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	opus-devel
+%{?with_opus:BuildRequires:	opusfile-devel}
 BuildRequires:	pam-devel
 %{?with_pjsip:BuildRequires:	pjproject-devel >= 2.3}
 BuildRequires:	pkgconfig
@@ -749,6 +750,8 @@ Dokumentacja API Asteriska.
 
 cp -a asterisk-opus-%{opus_commit}/codecs/* codecs
 cp -a asterisk-opus-%{opus_commit}/formats/* formats
+cp -a asterisk-opus-%{opus_commit}/res/* rest
+cp -a asterisk-opus-%{opus_commit}/include/asterisk/* include/asterisk
 %endif
 
 # Fixup makefile so sound archives aren't downloaded/installed
@@ -847,6 +850,9 @@ menuselect/menuselect --disable cdr_radius --disable cel_radius menuselect.makeo
 %endif
 %if %{without pjsip}
 menuselect/menuselect --disable res_pjsip --disable chan_pjsip menuselect.makeopts
+%endif
+%if %{without opus_vp8}
+menuselect/menuselect --disable codec_opus_open_source --disable format_ogg_opus_open_source
 %endif
 
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=FILE_STORAGE/' menuselect.makeopts
@@ -1230,7 +1236,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
 %if %{with opus_vp8}
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_opus.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_opus_open_source.so
 %endif
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g719.so
