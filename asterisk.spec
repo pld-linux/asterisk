@@ -112,7 +112,7 @@ BuildRequires:	newt-devel
 %{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	opus-devel
-%{?with_opus:BuildRequires:	opusfile-devel}
+%{?with_opus_vp8:BuildRequires:	opusfile-devel}
 BuildRequires:	pam-devel
 %{?with_pjsip:BuildRequires:	pjproject-devel >= 2.3}
 BuildRequires:	pkgconfig
