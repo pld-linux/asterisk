@@ -719,6 +719,18 @@ Ogg Vorbis format support.
 %description vorbis -l pl.UTF-8
 Obsługa formatu Ogg Vorbis.
 
+%package opus
+Summary:	Opus codec and file format support
+Summary(pl.UTF-8):	Obsługa kodeka i formatu plików Opus
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description opus
+Opus codec and file format support.
+
+%description opus -l pl.UTF-8
+Obsługa kodeka i formatu plików Opus.
+
 # define apidocs as last package, as it is the biggest one
 %package apidocs
 Summary:	API documentation for Asterisk
@@ -1235,9 +1247,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
-%if %{with opus_vp8}
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_opus_open_source.so
-%endif
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g719.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g723.so
@@ -1586,6 +1595,13 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_odbc_transaction.so
+%endif
+
+%if %{with opus_vp8}
+%files opus
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_ogg_opus_open_source.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_opus_open_source.so
 %endif
 
 %files osp
