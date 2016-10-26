@@ -1338,6 +1338,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_endpoint_stats.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_celt.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_g729.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_h263.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_h264.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_opus.so
