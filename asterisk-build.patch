@@ -1,0 +1,36 @@
+--- asterisk-1.8.32.3/channels/chan_sip.c~	2014-10-30 02:57:11.000000000 +0100
++++ asterisk-1.8.32.3/channels/chan_sip.c	2016-12-21 11:27:11.044170760 +0100
+@@ -13667,11 +13667,12 @@ static int sip_reg_timeout(const void *d
+ 
+ static const char *sip_sanitized_host(const char *host)
+ {
+-	struct ast_sockaddr addr = { { 0, 0, }, };
++	struct ast_sockaddr addr;
+ 
+ 	/* peer/sip_pvt->tohost and sip_registry->hostname should never have a port
+ 	 * in them, so we use PARSE_PORT_FORBID here. If this lookup fails, we return
+ 	 * the original host which is most likely a host name and not an IP. */
++	memset(&addr, 0, sizeof(addr));
+ 	if (!ast_sockaddr_parse(&addr, host, PARSE_PORT_FORBID)) {
+ 		return host;
+ 	}
+--- asterisk-1.8.32.3/include/asterisk/inline_api.h~	2006-02-14 20:14:15.000000000 +0100
++++ asterisk-1.8.32.3/include/asterisk/inline_api.h	2016-12-21 11:31:38.490596742 +0100
+@@ -43,11 +43,15 @@
+   including the header file
+  */
+ 
+-#if !defined(LOW_MEMORY)
++#if !defined(LOW_MEMORY) && !defined(DISABLE_INLINE)
+ 
+ #if !defined(AST_API_MODULE)
++#if defined(__clang__) || defined(__GNUC_STDC_INLINE__)
++#define AST_INLINE_API(hdr, body) static hdr; static inline hdr body
++#else /* if defined(__clang__) */
+ #define AST_INLINE_API(hdr, body) hdr; extern inline hdr body
+-#else
++#endif
++#else /* if !defined(AST_API_MODULE) */
+ #define AST_INLINE_API(hdr, body) hdr; hdr body
+ #endif
+ 

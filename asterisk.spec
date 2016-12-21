@@ -72,6 +72,7 @@ Patch16:	lpc10-system.patch
 Patch17:	gsm-libpoison.patch
 Patch18:	Fix-history-loading-when-using-external-libedit.patch
 Patch19:	asterisk-osptoolkit.patch
+Patch20:	%{name}-build.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 BuildRequires:	SDL_image-devel
@@ -560,6 +561,7 @@ cp %{SOURCE11} .
 %patch17 -p1
 %patch18 -p1
 %patch19 -p0
+%patch20 -p1
 
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
