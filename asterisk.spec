@@ -38,7 +38,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	13.13.1
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -63,6 +63,7 @@ Patch5:		%{name}-histedit.patch
 Patch6:		x32.patch
 Patch7:		%{name}-ilbc.patch
 Patch8:		asterisk-opus.patch
+Patch9:		ASTERISK-26679.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 %{?with_oss:BuildRequires:	SDL-devel}
@@ -756,6 +757,7 @@ Dokumentacja API Asteriska.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch9 -p1
 
 %if %{with opus_vp8}
 %patch8 -p1

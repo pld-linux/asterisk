@@ -1,0 +1,76 @@
+From e371e13b9eb6ce1f60bf31a8d25c7d4bdcd01d8d Mon Sep 17 00:00:00 2001
+From: Joshua Colp <jcolp@digium.com>
+Date: Tue, 31 Jan 2017 17:17:50 +0000
+Subject: [PATCH] res_pjsip: Handle invocation of callback on outgoing request when error occurs.
+
+There are some error cases in PJSIP when sending a request that will
+result in the callback for the request being invoked.  The code did not
+handle this case and assumed on every error case that the callback was not
+invoked.
+
+The code has been changed to check whether the callback has been invoked
+and if so to absorb the error and treat it as a success.
+
+ASTERISK-26679
+ASTERISK-26699
+
+Change-Id: I563982ba204da5aa1428989a11c06dd9087fea91
+---
+
+diff --git a/res/res_pjsip.c b/res/res_pjsip.c
+index 12c3baa..c35b782 100644
+--- a/res/res_pjsip.c
++++ b/res/res_pjsip.c
+@@ -3402,6 +3402,8 @@
+ 	void (*callback)(void *token, pjsip_event *e);
+ 	/*! Non-zero when the callback is called. */
+ 	unsigned int cb_called;
++	/*! Non-zero if endpt_send_request_cb() was called. */
++	unsigned int send_cb_called;
+ 	/*! Timeout timer. */
+ 	pj_timer_entry *timeout_timer;
+ 	/*! Original timeout. */
+@@ -3418,6 +3420,12 @@
+ {
+ 	struct send_request_wrapper *req_wrapper = token;
+ 	unsigned int cb_called;
++
++	/*
++	 * Needed because we cannot otherwise tell if this callback was
++	 * called when pjsip_endpt_send_request() returns error.
++	 */
++	req_wrapper->send_cb_called = 1;
+ 
+ 	if (e->body.tsx_state.type == PJSIP_EVENT_TIMER) {
+ 		ast_debug(2, "%p: PJSIP tsx timer expired\n", req_wrapper);
+@@ -3602,12 +3610,10 @@
+ 	if (ret_val != PJ_SUCCESS) {
+ 		char errmsg[PJ_ERR_MSG_SIZE];
+ 
+-		/*
+-		 * endpt_send_request_cb is not expected to ever be called
+-		 * because the request didn't get far enough to attempt
+-		 * sending.
+-		 */
+-		ao2_ref(req_wrapper, -1);
++		if (!req_wrapper->send_cb_called) {
++			/* endpt_send_request_cb is not expected to ever be called now. */
++			ao2_ref(req_wrapper, -1);
++		}
+ 
+ 		/* Complain of failure to send the request. */
+ 		pj_strerror(ret_val, errmsg, sizeof(errmsg));
+@@ -3644,6 +3650,13 @@
+ 				req_wrapper->cb_called = 1;
+ 			}
+ 			ao2_unlock(req_wrapper);
++		} else if (req_wrapper->cb_called) {
++			/*
++			 * We cannot report any error.  The callback has
++			 * already freed any resources associated with
++			 * token.
++			 */
++			ret_val = PJ_SUCCESS;
+ 		}
+ 	}
+ 
