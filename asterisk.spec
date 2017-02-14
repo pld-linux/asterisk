@@ -37,12 +37,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.13.1
-Release:	2
+Version:	13.14.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	a246f52661eec538a8af95a1e93a706e
+# Source0-md5:	ca82856c60b629edd6226559233b8a6d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -63,7 +63,6 @@ Patch5:		%{name}-histedit.patch
 Patch6:		x32.patch
 Patch7:		%{name}-ilbc.patch
 Patch8:		asterisk-opus.patch
-Patch9:		ASTERISK-26679.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 %{?with_oss:BuildRequires:	SDL-devel}
@@ -732,6 +731,14 @@ Opus codec and file format support.
 %description opus -l pl.UTF-8
 Obsługa kodeka i formatu plików Opus.
 
+%package debug-tools
+Summary:	Debugging scripts for Asterisk
+Group:		Applications/Networking
+Requires:	%{name} = %{version}-%{release}
+
+%description debug-tools
+Debugging scripts for Asterisk.
+
 # define apidocs as last package, as it is the biggest one
 %package apidocs
 Summary:	API documentation for Asterisk
@@ -757,7 +764,6 @@ Dokumentacja API Asteriska.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch9 -p1
 
 %if %{with opus_vp8}
 %patch8 -p1
@@ -1034,6 +1040,10 @@ find doc/api -name '*.map' -size 0 -delete
 %endif
 
 %{__rm} -r $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
+
+# fix script interpreters
+%{__sed} -i -e '1s,^#!.*python,#!%{__python},' $RPM_BUILD_ROOT%{_datadir}/asterisk/scripts/*
+%{__sed} -i -e '1s,^#!.*bash,#!/bin/bash,' $RPM_BUILD_ROOT%{_datadir}/asterisk/scripts/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -1409,6 +1419,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %dir %{_datadir}/asterisk/rest-api
 %{_datadir}/asterisk/rest-api/*.json
 
+%dir %{_datadir}/asterisk/scripts
+
 %attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
 %dir %attr(750,root,asterisk) %{_localstatedir}/lib/asterisk/licenses
 
@@ -1782,3 +1794,11 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files vorbis
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_ogg_vorbis.so
+
+%files debug-tools
+%defattr(644,root,root,755)
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ast_debug_tools.conf
+%attr(755,root,root) %{_datadir}/asterisk/scripts/ast_coredumper
+%attr(755,root,root) %{_datadir}/asterisk/scripts/ast_logescalator
+%attr(755,root,root) %{_datadir}/asterisk/scripts/ast_loggrabber
+%attr(755,root,root) %{_datadir}/asterisk/scripts/refcounter.py
