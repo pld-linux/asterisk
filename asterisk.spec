@@ -875,14 +875,13 @@ menuselect/menuselect --disable res_pjsip --disable chan_pjsip menuselect.makeop
 %if %{without opus_vp8}
 menuselect/menuselect --disable codec_opus_open_source --disable format_ogg_opus_open_source
 %endif
+%if %{without malloc_debug}
+menuselect/menuselect --disable MALLOC_DEBUG
+%endif
 
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=FILE_STORAGE/' menuselect.makeopts
 
 menuselect/menuselect --enable app_voicemail menuselect.makeopts
-
-%if %{with malloc_debug}
-menuselect/menuselect --enable MALLOC_DEBUG
-%endif
 
 # workaround for build failing with asterisk-devel not installed
 ln -s libasteriskssl.so.1 ./main/libasteriskssl.so
