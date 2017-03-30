@@ -28,6 +28,7 @@
 %bcond_without	radius		# build without Radius support
 %bcond_without	pjsip		# build without PJSIP stack
 %bcond_without	opus_vp8	# build without Opus codec and VP8 passthrough
+%bcond_with	malloc_debug	# build with MALLOC_DEBUG
 
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
@@ -878,6 +879,10 @@ menuselect/menuselect --disable codec_opus_open_source --disable format_ogg_opus
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=FILE_STORAGE/' menuselect.makeopts
 
 menuselect/menuselect --enable app_voicemail menuselect.makeopts
+
+%if %{with malloc_debug}
+menuselect/menuselect --enable MALLOC_DEBUG
+%endif
 
 # workaround for build failing with asterisk-devel not installed
 ln -s libasteriskssl.so.1 ./main/libasteriskssl.so
