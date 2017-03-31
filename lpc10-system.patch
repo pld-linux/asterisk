@@ -1,5 +1,17 @@
---- asterisk-1.6.1.12/codecs/codec_lpc10.c	2009-12-31 13:37:17.453275676 +0200
-+++ asterisk-1.6.1.12/codecs/codec_lpc10.c	2009-12-31 13:18:26.630953709 +0200
+diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/build_tools/menuselect-deps.in asterisk-13.14.0/build_tools/menuselect-deps.in
+--- asterisk-13.14.0.orig/build_tools/menuselect-deps.in	2017-02-13 20:51:51.000000000 +0100
++++ asterisk-13.14.0/build_tools/menuselect-deps.in	2017-03-31 10:30:17.000000000 +0200
+@@ -12,6 +12,7 @@
+ GENERIC_ODBC=@PBX_GENERIC_ODBC@
+ GMIME=@PBX_GMIME@
+ GNU_LD=@GNU_LD@
++LPC10=@PBX_LPC10@
+ GSM=@PBX_GSM@
+ ILBC=@PBX_ILBC@
+ GTK2=@PBX_GTK2@
+diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/codecs/codec_lpc10.c asterisk-13.14.0/codecs/codec_lpc10.c
+--- asterisk-13.14.0.orig/codecs/codec_lpc10.c	2017-02-13 20:51:51.000000000 +0100
++++ asterisk-13.14.0/codecs/codec_lpc10.c	2017-03-31 10:30:17.000000000 +0200
 @@ -26,6 +26,9 @@
   *
   * \ingroup codecs
@@ -8,63 +20,52 @@
 +	<depend>lpc10</depend>
 + ***/
  
- #include "asterisk.h"
- 
-@@ -33,7 +36,7 @@
- #include "asterisk/module.h"
+ /*** MODULEINFO
+ 	<support_level>core</support_level>
+@@ -41,7 +44,7 @@
  #include "asterisk/utils.h"
+ #include "asterisk/linkedlists.h"
  
 -#include "lpc10/lpc10.h"
 +#include <lpc10.h>
  
  /* Sample frame data */
- #include "slin_lpc10_ex.h"
---- asterisk-1.6.1.12/build_tools/menuselect-deps.in~	2009-12-31 13:39:17.000000000 +0200
-+++ asterisk-1.6.1.12/build_tools/menuselect-deps.in	2009-12-31 14:19:55.440132344 +0200
-@@ -5,6 +5,7 @@
- FREETDS=@PBX_FREETDS@
- GMIME=@PBX_GMIME@
- GNU_LD=@GNU_LD@
-+LPC10=@PBX_LPC10@
- GSM=@PBX_GSM@
- GTK2=@PBX_GTK2@
- GTK=@PBX_GTK@
---- asterisk-1.6.1.12/codecs/Makefile~	2009-07-21 16:48:38.000000000 +0300
-+++ asterisk-1.6.1.12/codecs/Makefile	2009-12-31 13:11:04.977664417 +0200
-@@ -42,7 +42,9 @@
- $(LIBLPC10):
- 	@$(MAKE) -C lpc10 all
+ #include "asterisk/slin.h"
+diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/codecs/Makefile asterisk-13.14.0/codecs/Makefile
+--- asterisk-13.14.0.orig/codecs/Makefile	2017-02-13 20:51:51.000000000 +0100
++++ asterisk-13.14.0/codecs/Makefile	2017-03-31 10:31:15.000000000 +0200
+@@ -27,8 +27,7 @@
+ 
+ SUB_DIRS := \
+ 	$(SUB_GSM) \
+-	$(SUB_ILBC) \
+-	$(SUB_LPC10) \
++	$(SUB_ILBC)
+ 
+ all: _all
+ 
+@@ -59,7 +58,9 @@
+ .PHONY: $(SUB_DIRS)
+ 
  
 +ifneq ($(LPC10_INTERNAL),no)
  $(if $(filter codec_lpc10,$(EMBEDDED_MODS)),modules.link,codec_lpc10.so): $(LIBLPC10)
 +endif
  
- $(LIBILBC):
- 	@$(MAKE) -C ilbc all _ASTCFLAGS="$(filter-out -Wmissing-prototypes -Wmissing-declarations -Wshadow,$(_ASTCFLAGS)) $(AST_NO_STRICT_OVERFLOW)"
---- asterisk-1.8.0/makeopts.in.orig	2010-10-23 13:03:13.000000000 +0300
-+++ asterisk-1.8.0/makeopts.in	2010-10-23 13:10:09.850817002 +0300
-@@ -131,6 +131,10 @@
- GSM_INCLUDE=@GSM_INCLUDE@
- GSM_LIB=@GSM_LIB@
- 
-+LPC10_INTERNAL=@LPC10_INTERNAL@
-+LPC10_INCLUDE=@LPC10_INCLUDE@
-+LPC10_LIB=@LPC10_LIB@
-+
- GTK2_INCLUDE=@GTK2_INCLUDE@
- GTK2_LIB=@GTK2_LIB@
- 
---- asterisk-1.8.0/configure.ac.orig	2010-10-23 13:03:13.547483666 +0300
-+++ asterisk-1.8.0/configure.ac	2010-10-23 13:07:06.384150337 +0300
-@@ -373,6 +373,7 @@
- AST_EXT_LIB_SETUP([BKTR], [Stack Backtrace], [execinfo])
+ # Don't run the implicit rules for this target.
+ $(LIBLPC10): $(SUB_LPC10) ;
+diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/configure.ac asterisk-13.14.0/configure.ac
+--- asterisk-13.14.0.orig/configure.ac	2017-03-31 10:30:01.000000000 +0200
++++ asterisk-13.14.0/configure.ac	2017-03-31 10:30:17.000000000 +0200
+@@ -468,6 +468,7 @@
  AST_EXT_LIB_SETUP([GSM], [External GSM], [gsm], [, use 'internal' GSM otherwise])
+ AST_EXT_LIB_SETUP([ILBC], [System iLBC], [ilbc], [, use 'internal' iLBC otherwise])
  AST_EXT_LIB_SETUP([GTK2], [gtk2], [gtk2])
 +AST_EXT_LIB_SETUP([LPC10], [External lpc10 library], [lpc10], [, use 'internal' lpc10 otherwise])
  AST_EXT_LIB_SETUP([GMIME], [GMime], [gmime])
  AST_EXT_LIB_SETUP([OPENH323], [OpenH323], [h323])
  AST_EXT_LIB_SETUP([HOARD], [Hoard Memory Allocator], [hoard])
-@@ -1095,6 +1096,72 @@
+@@ -1542,6 +1543,72 @@
     fi
  fi
  
@@ -135,5 +136,19 @@
 +fi
 +
  AST_EXT_LIB_CHECK([ICONV], [iconv], [iconv_open], [iconv.h])
- # Some versions of Linux package iconv in glibc
- AST_EXT_LIB_CHECK([ICONV], [c], [iconv_close], [iconv.h])
+ # GNU libiconv #define's iconv_open to libiconv_open, so we need to search for that symbol
+ AST_EXT_LIB_CHECK([ICONV], [iconv], [libiconv_open], [iconv.h])
+diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/makeopts.in asterisk-13.14.0/makeopts.in
+--- asterisk-13.14.0.orig/makeopts.in	2017-02-13 20:51:51.000000000 +0100
++++ asterisk-13.14.0/makeopts.in	2017-03-31 10:30:17.000000000 +0200
+@@ -163,6 +163,10 @@
+ ILBC_INCLUDE=@ILBC_INCLUDE@
+ ILBC_LIB=@ILBC_LIB@
+ 
++LPC10_INTERNAL=@LPC10_INTERNAL@
++LPC10_INCLUDE=@LPC10_INCLUDE@
++LPC10_LIB=@LPC10_LIB@
++
+ GTK2_INCLUDE=@GTK2_INCLUDE@
+ GTK2_LIB=@GTK2_LIB@
+ 
