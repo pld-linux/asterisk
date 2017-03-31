@@ -873,10 +873,11 @@ menuselect/menuselect --disable cdr_radius --disable cel_radius menuselect.makeo
 menuselect/menuselect --disable res_pjsip --disable chan_pjsip menuselect.makeopts
 %endif
 %if %{without opus_vp8}
-menuselect/menuselect --disable codec_opus_open_source --disable format_ogg_opus_open_source
+menuselect/menuselect --disable codec_opus_open_source --disable format_ogg_opus_open_source menuselect.makeopts
 %endif
+
 %if %{without malloc_debug}
-menuselect/menuselect --disable MALLOC_DEBUG
+menuselect/menuselect --disable MALLOC_DEBUG menuselect.makeopts
 %endif
 
 %{__sed} -i -e 's/^MENUSELECT_OPTS_app_voicemail=.*$/MENUSELECT_OPTS_app_voicemail=FILE_STORAGE/' menuselect.makeopts
