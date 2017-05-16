@@ -39,7 +39,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	13.15.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -734,11 +734,15 @@ Obsługa kodeka i formatu plików Opus.
 
 %package debug-tools
 Summary:	Debugging scripts for Asterisk
+Summary(pl.UTF-8):	Skrypty diagnostyczne dla Asteriska
 Group:		Applications/Networking
 Requires:	%{name} = %{version}-%{release}
 
 %description debug-tools
 Debugging scripts for Asterisk.
+
+%description debug-tools -l pl.UTF-8
+Skrypty diagnostyczne dla Asteriska.
 
 # define apidocs as last package, as it is the biggest one
 %package apidocs
