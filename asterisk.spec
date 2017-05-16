@@ -148,6 +148,7 @@ Provides:	group(asterisk)
 Provides:	user(asterisk)
 #Obsoletes:	asterisk-ais # should be in -corosync package (when built)?
 Obsoletes:	asterisk-examples
+Obsoletes:	asterisk-h323 < 13
 #Obsoletes:	asterisk-misdn # what is the status of this plugin?
 Obsoletes:	asterisk-usbradio < 10.4.0
 Conflicts:	logrotate < 3.8.0
