@@ -146,13 +146,17 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	rc-scripts
 Provides:	group(asterisk)
 Provides:	user(asterisk)
+#Obsoletes:	asterisk-ais # should be in -corosync package (when built)?
+Obsoletes:	asterisk-examples
+#Obsoletes:	asterisk-misdn # what is the status of this plugin?
+Obsoletes:	asterisk-usbradio < 10.4.0
 Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # references symbols in the asterisk binary
 %define		skip_post_check_so	libasteriskssl.so.*
 
-%define _noautoprovfiles %{_libdir}/asterisk/modules/.*
+%define		_noautoprovfiles	%{_libdir}/asterisk/modules/.*
 
 %description
 Asterisk is an Open Source PBX and telephony development platform that
