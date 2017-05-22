@@ -38,12 +38,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.15.0
-Release:	2
+Version:	13.15.1
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	9f72e200b01e7ccc7e8d44bb5d9ff3c7
+# Source0-md5:	c9cbd1917702ce6db16b245e4a357332
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -115,7 +115,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	opus-devel
 %{?with_opus_vp8:BuildRequires:	opusfile-devel}
 BuildRequires:	pam-devel
-%{?with_pjsip:BuildRequires:	pjproject-devel >= 2.3}
+%{?with_pjsip:BuildRequires:	pjproject-devel >= 2.6-1}
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 %{?with_portaudio:BuildRequires:	portaudio-devel >= 19}
