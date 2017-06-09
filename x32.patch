@@ -1,19 +1,19 @@
-diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/main/Makefile asterisk-13.16.0/main/Makefile
---- asterisk-13.16.0.orig/main/Makefile	2017-05-30 19:44:16.000000000 +0200
-+++ asterisk-13.16.0/main/Makefile	2017-06-09 14:17:11.000000000 +0200
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-14.5.0.orig/main/Makefile asterisk-14.5.0/main/Makefile
+--- asterisk-14.5.0.orig/main/Makefile	2017-05-30 19:50:46.000000000 +0200
++++ asterisk-14.5.0/main/Makefile	2017-06-09 14:43:16.000000000 +0200
 @@ -47,7 +47,7 @@
  AST_LIBS+=$(RT_LIB)
  AST_LIBS+=$(SYSTEMD_LIB)
  
--ifneq ($(findstring $(OSARCH), linux-gnu uclinux linux-uclibc kfreebsd-gnu),)
-+ifneq ($(findstring $(OSARCH), linux-gnu linux-gnux32 uclinux linux-uclibc kfreebsd-gnu),)
+-ifneq ($(findstring $(OSARCH), linux-gnu uclinux linux-uclibc linux-musl kfreebsd-gnu),)
++ifneq ($(findstring $(OSARCH), linux-gnu linux-gnux32 uclinux linux-uclibc linux-musl kfreebsd-gnu),)
    AST_LIBS+=-ldl
    ifneq (x$(CAP_LIB),x)
      AST_LIBS+=$(CAP_LIB)
-diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/Makefile asterisk-13.16.0/Makefile
---- asterisk-13.16.0.orig/Makefile	2017-05-30 19:44:16.000000000 +0200
-+++ asterisk-13.16.0/Makefile	2017-06-09 14:16:48.000000000 +0200
-@@ -183,6 +183,11 @@
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-14.5.0.orig/Makefile asterisk-14.5.0/Makefile
+--- asterisk-14.5.0.orig/Makefile	2017-05-30 19:50:46.000000000 +0200
++++ asterisk-14.5.0/Makefile	2017-06-09 14:42:55.000000000 +0200
+@@ -182,6 +182,11 @@
  # Create OPTIONS variable, but probably we can assign directly to ASTCFLAGS
  OPTIONS=
  

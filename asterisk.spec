@@ -38,12 +38,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	13.16.0
-Release:	1
+Version:	14.5.0
+Release:	0.1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	97e55bae49878882fc41f4b95d63f18a
+# Source0-md5:	d9ac67d98a565f338d412ef678bd4c56
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -129,13 +129,14 @@ BuildRequires:	speexdsp-devel
 %{?with_sqlite2:BuildRequires:	sqlite-devel >= 2}
 BuildRequires:	sqlite3-devel
 BuildRequires:	srtp-devel
-Requires(post,preun,postun):	systemd-units >= 38
-Requires:	systemd-units >= 0.38
+BuildRequires:	unbound-devel
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRequires:	uriparser-devel
 %{?with_ilbc:BuildRequires:	webrtc-libilbc-devel >= 2}
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	zlib-devel
+Requires(post,preun,postun):	systemd-units >= 38
+Requires:	systemd-units >= 0.38
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -814,6 +815,7 @@ cd menuselect
 cd ..
 
 %configure \
+	--with-unbound \
 	%{__without oss SDL_image} \
 	%{__without bluetooth bluetooth} \
 	--without-gtk2 \
@@ -1168,6 +1170,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phoneprov.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queuerules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/resolver_unbound.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_parking.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pktccops.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_stun_monitor.conf
@@ -1195,6 +1198,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_alarmreceiver.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_amd.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_authenticate.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_bridgeaddchan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_bridgewait.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_cdr.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_celgenuserevent.so
@@ -1241,6 +1245,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_speech_utils.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_stack.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_stasis.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_statsd.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_system.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_talkdetect.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_test.so
@@ -1268,7 +1273,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge_media.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_multicast_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_phone.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_sip.so
@@ -1378,6 +1382,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %if %{with opus_vp8}
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_vp8.so
 %endif
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_http_media_cache.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_http_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_manager_devicestate.so
@@ -1391,6 +1396,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_phoneprov.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pktccops.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_realtime.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_resolver_unbound.so
 # res_rtp_asterisk.so pulls some pjproject libs, but it still looks like a core module
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_asterisk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_multicast.so
@@ -1559,6 +1565,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ilbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_ilbc.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_ilbc.so
 %endif
 
 %files jabber
@@ -1757,6 +1764,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files speex
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_speex.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/format_ogg_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_speex.so
 
 %if %{with sqlite2}
