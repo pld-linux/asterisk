@@ -1,8 +1,21 @@
---- asterisk-13.2.0/Makefile~	2014-10-31 16:50:53.000000000 +0000
-+++ asterisk-13.2.0/Makefile	2015-04-05 09:40:53.896839072 +0000
-@@ -174,6 +174,11 @@
-   LDCONFIG_FLAGS=-n
- endif
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/main/Makefile asterisk-13.16.0/main/Makefile
+--- asterisk-13.16.0.orig/main/Makefile	2017-05-30 19:44:16.000000000 +0200
++++ asterisk-13.16.0/main/Makefile	2017-06-09 14:17:11.000000000 +0200
+@@ -47,7 +47,7 @@
+ AST_LIBS+=$(RT_LIB)
+ AST_LIBS+=$(SYSTEMD_LIB)
+ 
+-ifneq ($(findstring $(OSARCH), linux-gnu uclinux linux-uclibc kfreebsd-gnu),)
++ifneq ($(findstring $(OSARCH), linux-gnu linux-gnux32 uclinux linux-uclibc kfreebsd-gnu),)
+   AST_LIBS+=-ldl
+   ifneq (x$(CAP_LIB),x)
+     AST_LIBS+=$(CAP_LIB)
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/Makefile asterisk-13.16.0/Makefile
+--- asterisk-13.16.0.orig/Makefile	2017-05-30 19:44:16.000000000 +0200
++++ asterisk-13.16.0/Makefile	2017-06-09 14:16:48.000000000 +0200
+@@ -183,6 +183,11 @@
+ # Create OPTIONS variable, but probably we can assign directly to ASTCFLAGS
+ OPTIONS=
  
 +ifeq ($(OSARCH),linux-gnux32)
 +  # flag to tell 'ldconfig' to only process specified directories
@@ -12,14 +25,3 @@
  ifeq ($(findstring -save-temps,$(_ASTCFLAGS) $(ASTCFLAGS)),)
    ifeq ($(findstring -pipe,$(_ASTCFLAGS) $(ASTCFLAGS)),)
      _ASTCFLAGS+=-pipe
---- asterisk-13.2.0/main/Makefile~	2014-07-04 15:26:58.000000000 +0000
-+++ asterisk-13.2.0/main/Makefile	2015-04-05 09:41:32.963507792 +0000
-@@ -41,7 +41,7 @@
- AST_LIBS+=$(UUID_LIB)
- AST_LIBS+=$(CRYPT_LIB)
- 
--ifneq ($(findstring $(OSARCH), linux-gnu uclinux linux-uclibc kfreebsd-gnu),)
-+ifneq ($(findstring $(OSARCH), linux-gnu linux-gnux32 uclinux linux-uclibc kfreebsd-gnu),)
-   ifneq ($(findstring LOADABLE_MODULES,$(MENUSELECT_CFLAGS)),)
-   AST_LIBS+=-ldl
-   endif

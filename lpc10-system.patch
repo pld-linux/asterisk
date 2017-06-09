@@ -1,6 +1,6 @@
-diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/build_tools/menuselect-deps.in asterisk-13.14.0/build_tools/menuselect-deps.in
---- asterisk-13.14.0.orig/build_tools/menuselect-deps.in	2017-02-13 20:51:51.000000000 +0100
-+++ asterisk-13.14.0/build_tools/menuselect-deps.in	2017-03-31 10:30:17.000000000 +0200
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/build_tools/menuselect-deps.in asterisk-13.16.0/build_tools/menuselect-deps.in
+--- asterisk-13.16.0.orig/build_tools/menuselect-deps.in	2017-05-30 19:44:16.000000000 +0200
++++ asterisk-13.16.0/build_tools/menuselect-deps.in	2017-06-09 14:11:13.000000000 +0200
 @@ -12,6 +12,7 @@
  GENERIC_ODBC=@PBX_GENERIC_ODBC@
  GMIME=@PBX_GMIME@
@@ -9,9 +9,9 @@ diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/build_tools/menuselect-deps.
  GSM=@PBX_GSM@
  ILBC=@PBX_ILBC@
  GTK2=@PBX_GTK2@
-diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/codecs/codec_lpc10.c asterisk-13.14.0/codecs/codec_lpc10.c
---- asterisk-13.14.0.orig/codecs/codec_lpc10.c	2017-02-13 20:51:51.000000000 +0100
-+++ asterisk-13.14.0/codecs/codec_lpc10.c	2017-03-31 10:30:17.000000000 +0200
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/codecs/codec_lpc10.c asterisk-13.16.0/codecs/codec_lpc10.c
+--- asterisk-13.16.0.orig/codecs/codec_lpc10.c	2017-05-30 19:44:16.000000000 +0200
++++ asterisk-13.16.0/codecs/codec_lpc10.c	2017-06-09 14:11:13.000000000 +0200
 @@ -26,6 +26,9 @@
   *
   * \ingroup codecs
@@ -31,9 +31,9 @@ diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/codecs/codec_lpc10.c asteris
  
  /* Sample frame data */
  #include "asterisk/slin.h"
-diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/codecs/Makefile asterisk-13.14.0/codecs/Makefile
---- asterisk-13.14.0.orig/codecs/Makefile	2017-02-13 20:51:51.000000000 +0100
-+++ asterisk-13.14.0/codecs/Makefile	2017-03-31 10:31:15.000000000 +0200
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/codecs/Makefile asterisk-13.16.0/codecs/Makefile
+--- asterisk-13.16.0.orig/codecs/Makefile	2017-05-30 19:44:16.000000000 +0200
++++ asterisk-13.16.0/codecs/Makefile	2017-06-09 14:14:38.000000000 +0200
 @@ -27,8 +27,7 @@
  
  SUB_DIRS := \
@@ -49,14 +49,14 @@ diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/codecs/Makefile asterisk-13.
  
  
 +ifneq ($(LPC10_INTERNAL),no)
- $(if $(filter codec_lpc10,$(EMBEDDED_MODS)),modules.link,codec_lpc10.so): $(LIBLPC10)
+ codec_lpc10.so: $(LIBLPC10)
 +endif
  
  # Don't run the implicit rules for this target.
  $(LIBLPC10): $(SUB_LPC10) ;
-diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/configure.ac asterisk-13.14.0/configure.ac
---- asterisk-13.14.0.orig/configure.ac	2017-03-31 10:30:01.000000000 +0200
-+++ asterisk-13.14.0/configure.ac	2017-03-31 10:30:17.000000000 +0200
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/configure.ac asterisk-13.16.0/configure.ac
+--- asterisk-13.16.0.orig/configure.ac	2017-06-09 14:10:32.000000000 +0200
++++ asterisk-13.16.0/configure.ac	2017-06-09 14:11:14.000000000 +0200
 @@ -468,6 +468,7 @@
  AST_EXT_LIB_SETUP([GSM], [External GSM], [gsm], [, use 'internal' GSM otherwise])
  AST_EXT_LIB_SETUP([ILBC], [System iLBC], [ilbc], [, use 'internal' iLBC otherwise])
@@ -65,7 +65,7 @@ diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/configure.ac asterisk-13.14.
  AST_EXT_LIB_SETUP([GMIME], [GMime], [gmime])
  AST_EXT_LIB_SETUP([OPENH323], [OpenH323], [h323])
  AST_EXT_LIB_SETUP([HOARD], [Hoard Memory Allocator], [hoard])
-@@ -1542,6 +1543,72 @@
+@@ -1530,6 +1531,72 @@
     fi
  fi
  
@@ -138,10 +138,10 @@ diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/configure.ac asterisk-13.14.
  AST_EXT_LIB_CHECK([ICONV], [iconv], [iconv_open], [iconv.h])
  # GNU libiconv #define's iconv_open to libiconv_open, so we need to search for that symbol
  AST_EXT_LIB_CHECK([ICONV], [iconv], [libiconv_open], [iconv.h])
-diff -dur -x '*~' -x '*.orig' asterisk-13.14.0.orig/makeopts.in asterisk-13.14.0/makeopts.in
---- asterisk-13.14.0.orig/makeopts.in	2017-02-13 20:51:51.000000000 +0100
-+++ asterisk-13.14.0/makeopts.in	2017-03-31 10:30:17.000000000 +0200
-@@ -163,6 +163,10 @@
+diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-13.16.0.orig/makeopts.in asterisk-13.16.0/makeopts.in
+--- asterisk-13.16.0.orig/makeopts.in	2017-05-30 19:44:16.000000000 +0200
++++ asterisk-13.16.0/makeopts.in	2017-06-09 14:11:14.000000000 +0200
+@@ -160,6 +160,10 @@
  ILBC_INCLUDE=@ILBC_INCLUDE@
  ILBC_LIB=@ILBC_LIB@
  
