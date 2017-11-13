@@ -38,12 +38,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	14.6.2
-Release:	2
+Version:	14.7.2
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	e501319f287715a68848c16a753f6ad4
+# Source0-md5:	46d69ddb80f1ebf5fa2df8f413080131
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -115,7 +115,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	opus-devel
 %{?with_opus_vp8:BuildRequires:	opusfile-devel}
 BuildRequires:	pam-devel
-%{?with_pjsip:BuildRequires:	pjproject-devel >= 2.6-2}
+%{?with_pjsip:BuildRequires:	pjproject-devel >= 2.6-4}
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 %{?with_portaudio:BuildRequires:	portaudio-devel >= 19}
@@ -505,6 +505,7 @@ Moduł Asteriska wykorzystujący sterowniki dźwięku OSS.
 Summary:	PJSIP Asterisk modules
 Summary(pl.UTF-8):	Moduły Asteriska PJSIP
 Group:		Applications/Networking
+Requires:	pjproject >= 2.6-4
 Requires:	%{name} = %{version}-%{release}
 
 %description pjsip
