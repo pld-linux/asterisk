@@ -38,12 +38,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	14.7.5
+Version:	14.7.6
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	dcd5848b3ee7a56e2e2b76ae32961aa5
+# Source0-md5:	4b5f8c04c93902b7a0c7c49b41881783
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1715,7 +1715,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_management.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_xpidf_body_generator.so
 %endif
