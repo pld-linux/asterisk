@@ -9,8 +9,6 @@
 # - vpb (libvpb, vpbapi.h)
 # - make package for moh sound files
 # - build res_ari_mailboxes as an alternative for voicemail subpackages
-# - +x missing:
-#   ldd: warning: you do not have execution permission for `/usr/lib/libasteriskssl.so.1'
 #
 # Conditional build:
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
@@ -29,21 +27,36 @@
 %bcond_without	pjsip		# build without PJSIP stack
 %bcond_without	opus_vp8	# build without Opus codec and VP8 passthrough
 %bcond_with	malloc_debug	# build with MALLOC_DEBUG
+%bcond_with	system_pjproject # build with system pjproject (see below)
 
 %bcond_without	apidocs		# disable apidocs building
 %bcond_without	verbose		# verbose build
+
+# NOTE:
+#   Building with system pjproject may be not a good idea. pjproject comes
+#   optimized for client usage and asterisk is a SIP server. Asterisk requries
+#   pjproject properly patched and configured and keeping our pjproject in sync
+#   with Asterisk requirements may be tricky. Also, Asterisk is the only
+#   package using pjproject in PLD, so there is little gain with using system
+#   one.
+#
+#   Before switching the 'system_pjproject' bcond make sure the pjproject
+#   package is updated to the version used by Asterisk, with all Asterisk
+#   patches applied and with configuration synced.
+
+%define pjproject_version	2.7.1
 
 %define	opus_commit	a6b9521f10817c1f39f21f90fecd3f00bbb164d0
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	14.7.6
-Release:	2
+Version:	15.2.2
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	4b5f8c04c93902b7a0c7c49b41881783
+# Source0-md5:	aadc45419967e71b652f4a8ba75e12e7
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -55,6 +68,8 @@ Source7:	menuselect.makeopts
 # https://github.com/traud/asterisk-opus
 Source8:	https://github.com/seanbright/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
 # Source8-md5:	d2deae1095b6b42331d3060700c25493
+Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
+# Source9-md5:	99a64110fa5c2debff40e0e8d4676380
 Patch0:		lua51-path.patch
 Patch1:		%{name}-ppc.patch
 Patch2:		FHS-paths.patch
@@ -63,7 +78,7 @@ Patch4:		lpc10-system.patch
 Patch5:		%{name}-histedit.patch
 Patch6:		x32.patch
 Patch7:		%{name}-ilbc.patch
-Patch8:		asterisk-opus.patch
+Patch8:		bundled_pjproject_libs.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 %{?with_oss:BuildRequires:	SDL-devel}
@@ -71,6 +86,9 @@ BuildRequires:	OSPToolkit-devel >= 4.0.0
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
+%if %{without system_pjproject} && %{with pjsip}
+BuildRequires:	bcg729-devel >= 1.0.2
+%endif
 # libbfd (used only for debug builds?)
 #BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2
@@ -115,7 +133,9 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	opus-devel
 %{?with_opus_vp8:BuildRequires:	opusfile-devel}
 BuildRequires:	pam-devel
-%{?with_pjsip:BuildRequires:	pjproject-devel >= 2.6-4}
+%if %{with system_pjproject} && %{with pjsip}
+BuildRequires:	pjproject-devel >= 2.6-4
+%endif
 BuildRequires:	pkgconfig
 BuildRequires:	popt-devel
 %{?with_portaudio:BuildRequires:	portaudio-devel >= 19}
@@ -156,7 +176,7 @@ Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # references symbols in the asterisk binary
-%define		skip_post_check_so	libasteriskssl.so.*
+%define		skip_post_check_so	libasteriskssl.so.* libasteriskpj.so.*
 
 %define		_noautoprovfiles	%{_libdir}/asterisk/modules/.*
 
@@ -776,14 +796,20 @@ Dokumentacja API Asteriska.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 %if %{with opus_vp8}
-%patch8 -p1
 
 cp -a asterisk-opus-%{opus_commit}/codecs/* codecs
 cp -a asterisk-opus-%{opus_commit}/formats/* formats
 cp -a asterisk-opus-%{opus_commit}/res/* rest
 cp -a asterisk-opus-%{opus_commit}/include/asterisk/* include/asterisk
+%endif
+
+%if %{without system_pjproject} && %{with pjsip}
+mkdir externals
+ln -s %{SOURCE9} externals
+md5sum %{SOURCE9} > externals/pjproject-%{pjproject_version}.md5
 %endif
 
 # Fixup makefile so sound archives aren't downloaded/installed
@@ -802,6 +828,10 @@ export ASTCFLAGS="%{rpmcflags}"
 export ASTLDFLAGS="%{rpmldflags}"
 export WGET="/bin/true"
 
+%if %{without system_pjproject} && %{with pjsip}
+export EXTERNALS_CACHE_DIR="$PWD/externals"
+%endif
+
 # be sure to invoke ./configure with our flags
 cd menuselect
 %{__aclocal} -I ../autoconf
@@ -816,6 +846,7 @@ cd menuselect
 cd ..
 
 %configure \
+	%{__without_if system_pjproject pjproject-bundled} \
 	--with-unbound \
 	%{__without oss SDL_image} \
 	%{__without bluetooth bluetooth} \
@@ -1106,7 +1137,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files
 %defattr(644,root,root,755)
-%doc README *.txt ChangeLog BUGS CREDITS configs
+%doc README*.md *.txt ChangeLog CHANGES BUGS CREDITS configs LICENSE
 %doc doc/asterisk.sgml
 
 %attr(755,root,root) %{_sbindir}/astcanary
@@ -1189,7 +1220,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/users.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/vpb.conf
 
-%{_libdir}/libasteriskssl.so.1
+%attr(755,root,root) %{_libdir}/libasteriskssl.so.1
+%if %{without system_pjproject} && %{with pjsip}
+%attr(755,root,root) %{_libdir}/libasteriskpj.so.2
+%endif
 
 %dir %{_libdir}/asterisk
 %dir %{_libdir}/asterisk/modules
@@ -1247,6 +1281,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_stack.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_stasis.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_statsd.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_stream_echo.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_system.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_talkdetect.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_test.so
@@ -1401,6 +1436,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 # res_rtp_asterisk.so pulls some pjproject libs, but it still looks like a core module
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_asterisk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_multicast.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_sdp_translator_pjmedia.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_security_log.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_smdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_astdb.so
@@ -1465,6 +1501,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libasteriskssl.so
+%if %{without system_pjproject} && %{with pjsip}
+%attr(755,root,root) %{_libdir}/libasteriskpj.so
+%endif
 %dir %{_includedir}/asterisk
 %{_includedir}/asterisk/*.h
 %{_includedir}/asterisk.h
