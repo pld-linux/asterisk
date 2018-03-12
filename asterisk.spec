@@ -78,7 +78,6 @@ Patch4:		lpc10-system.patch
 Patch5:		%{name}-histedit.patch
 Patch6:		x32.patch
 Patch7:		%{name}-ilbc.patch
-Patch8:		bundled_pjproject_libs.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 %{?with_oss:BuildRequires:	SDL-devel}
@@ -86,9 +85,6 @@ BuildRequires:	OSPToolkit-devel >= 4.0.0
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
-%if %{without system_pjproject} && %{with pjsip}
-BuildRequires:	bcg729-devel >= 1.0.2
-%endif
 # libbfd (used only for debug builds?)
 #BuildRequires:	binutils-devel
 BuildRequires:	bison >= 2
@@ -796,7 +792,6 @@ Dokumentacja API Asteriska.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
 
 %if %{with opus_vp8}
 
@@ -830,6 +825,7 @@ export WGET="/bin/true"
 
 %if %{without system_pjproject} && %{with pjsip}
 export EXTERNALS_CACHE_DIR="$PWD/externals"
+export PJPROJECT_CONFIGURE_OPTS="--disable-bcg729"
 %endif
 
 # be sure to invoke ./configure with our flags
