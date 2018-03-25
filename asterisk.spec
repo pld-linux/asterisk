@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	15.2.2
+Version:	15.3.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	aadc45419967e71b652f4a8ba75e12e7
+# Source0-md5:	18c9d26355225c0499a499ef5869156a
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -77,7 +77,7 @@ Patch3:		pld-banner.patch
 Patch4:		lpc10-system.patch
 Patch5:		%{name}-histedit.patch
 Patch6:		x32.patch
-Patch7:		%{name}-ilbc.patch
+#Patch7:		%{name}-ilbc.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
 %{?with_oss:BuildRequires:	SDL-devel}
@@ -791,7 +791,6 @@ Dokumentacja API Asteriska.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 
 %if %{with opus_vp8}
 
@@ -1432,7 +1431,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 # res_rtp_asterisk.so pulls some pjproject libs, but it still looks like a core module
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_asterisk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_multicast.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_sdp_translator_pjmedia.so
+#%attr(755,root,root) %{_libdir}/asterisk/modules/res_sdp_translator_pjmedia.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_security_log.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_smdi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_astdb.so
