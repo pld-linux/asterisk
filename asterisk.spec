@@ -44,19 +44,19 @@
 #   package is updated to the version used by Asterisk, with all Asterisk
 #   patches applied and with configuration synced.
 
-%define pjproject_version	2.7.1
+%define pjproject_version	2.7.2
 
 %define	opus_commit	a6b9521f10817c1f39f21f90fecd3f00bbb164d0
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	15.3.0
+Version:	15.4.1
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	18c9d26355225c0499a499ef5869156a
+# Source0-md5:	bf75531a00db8d565c981cf9b24f6f72
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -69,8 +69,8 @@ Source7:	menuselect.makeopts
 Source8:	https://github.com/seanbright/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
 # Source8-md5:	d2deae1095b6b42331d3060700c25493
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
-# Source9-md5:	99a64110fa5c2debff40e0e8d4676380
-Patch0:		lua51-path.patch
+# Source9-md5:	fa3f0bc098c4bff48ddd92db1c016a7a
+Patch0:		lua_versions.patch
 Patch1:		%{name}-ppc.patch
 Patch2:		FHS-paths.patch
 Patch3:		pld-banner.patch
@@ -104,6 +104,7 @@ BuildRequires:	iksemel-devel
 BuildRequires:	imap-devel
 %{?with_jack:BuildRequires:	jack-audio-connection-kit-devel}
 BuildRequires:	jansson-devel
+BuildRequires:	libatomic-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libgsm-devel
@@ -117,7 +118,7 @@ BuildRequires:	libvorbis-devel
 BuildRequires:	libxml2-devel >= 2.0
 BuildRequires:	libxslt-devel
 BuildRequires:	lpc10-devel
-BuildRequires:	lua51-devel >= 5.1
+BuildRequires:	lua53-devel >= 5.3
 #BuildRequires:	mISDNuser-devel < 2
 %{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel

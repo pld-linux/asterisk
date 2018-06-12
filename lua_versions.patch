@@ -1,0 +1,12 @@
+diff -dur asterisk-15.4.1.orig/configure.ac asterisk-15.4.1/configure.ac
+--- asterisk-15.4.1.orig/configure.ac	2018-06-11 23:21:37.000000000 +0200
++++ asterisk-15.4.1/configure.ac	2018-06-12 10:34:15.000000000 +0200
+@@ -2388,7 +2388,7 @@
+ fi
+ AST_EXT_LIB_CHECK([OPUSFILE], [opusfile], [op_open_callbacks], [opus/opusfile.h], [], [$__opus_include])
+ 
+-for ver in 5.3 5.2 5.1; do
++for ver in 53 52 51 5.3 5.2 5.1; do
+ 	AST_EXT_LIB_CHECK([LUA], lua${ver}, [luaL_newstate], lua${ver}/lua.h, [-lm])
+ 	if test "x${PBX_LUA}" = "x1" ; then
+ 		if test x"${LUA_DIR}" = x; then
