@@ -1306,7 +1306,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge_media.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_phone.so
+#%attr(755,root,root) %{_libdir}/asterisk/modules/chan_phone.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_sip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
