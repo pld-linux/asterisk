@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	15.4.1
+Version:	15.6.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	bf75531a00db8d565c981cf9b24f6f72
+# Source0-md5:	195f02b0c6118852525e027a1a610ea5
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -101,9 +101,9 @@ BuildRequires:	gcc >= 5:3.4
 # TODO: switch to 2.6
 BuildRequires:	gmime22-devel
 BuildRequires:	iksemel-devel
-BuildRequires:	imap-devel
+BuildRequires:	imap-devel >= 1:2007f-5
 %{?with_jack:BuildRequires:	jack-audio-connection-kit-devel}
-BuildRequires:	jansson-devel
+BuildRequires:	jansson-devel >= 2.11-2
 BuildRequires:	libatomic-devel
 BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
@@ -843,6 +843,7 @@ cd ..
 
 %configure \
 	%{__without_if system_pjproject pjproject-bundled} \
+	--without-jansson-bundled \
 	--with-unbound \
 	%{__without oss SDL_image} \
 	%{__without bluetooth bluetooth} \
