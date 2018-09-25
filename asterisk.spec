@@ -52,7 +52,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	15.6.0
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -145,7 +145,7 @@ BuildRequires:	speex-devel
 BuildRequires:	speexdsp-devel
 %{?with_sqlite2:BuildRequires:	sqlite-devel >= 2}
 BuildRequires:	sqlite3-devel
-BuildRequires:	srtp-devel
+BuildRequires:	libsrtp2-devel
 BuildRequires:	unbound-devel
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRequires:	uriparser-devel
