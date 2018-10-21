@@ -52,7 +52,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	15.6.0
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -522,7 +522,9 @@ Moduł Asteriska wykorzystujący sterowniki dźwięku OSS.
 Summary:	PJSIP Asterisk modules
 Summary(pl.UTF-8):	Moduły Asteriska PJSIP
 Group:		Applications/Networking
+%if %{with system_pjproject} && %{with pjsip}
 Requires:	pjproject >= 2.6-4
+%endif
 Requires:	%{name} = %{version}-%{release}
 
 %description pjsip
