@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	15.6.0
-Release:	5
+Version:	16.0.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	195f02b0c6118852525e027a1a610ea5
+# Source0-md5:	438589d5baf8e8a38a5bd08671bf6ccc
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -75,8 +75,7 @@ Patch1:		%{name}-ppc.patch
 Patch2:		FHS-paths.patch
 Patch3:		pld-banner.patch
 Patch4:		lpc10-system.patch
-Patch5:		%{name}-histedit.patch
-Patch6:		x32.patch
+Patch5:		x32.patch
 #Patch7:		%{name}-ilbc.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
@@ -793,7 +792,6 @@ Dokumentacja API Asteriska.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 %if %{with opus_vp8}
 
@@ -812,9 +810,6 @@ md5sum %{SOURCE9} > externals/pjproject-%{pjproject_version}.md5
 # Fixup makefile so sound archives aren't downloaded/installed
 %{__sed} -i -e 's/^all:.*$/all:/' sounds/Makefile
 %{__sed} -i -e 's/^install:.*$/install:/' sounds/Makefile
-
-# avoid using these
-%{__rm} -r main/editline codecs/gsm codecs/lpc10
 
 %build
 %{__aclocal} -I autoconf $(find third-party/ -maxdepth 1 -type d -printf "-I %p ")
@@ -1273,7 +1268,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sayunixtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_senddtmf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sendtext.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_setcallerid.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sms.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_softhangup.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_speech_utils.so
@@ -1323,7 +1317,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_g729.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_h263.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_h264.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/format_jpeg.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_pcm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_siren14.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_siren7.so
@@ -1334,7 +1327,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %endif
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_wav.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_aes.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/func_audiohookinherit.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_base64.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_blacklist.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_callcompletion.so
@@ -1744,7 +1736,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_publish_asterisk.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pubsub.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_refer.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar_expire.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_rfc3326.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sdp_rtp.so
