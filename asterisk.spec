@@ -44,19 +44,19 @@
 #   package is updated to the version used by Asterisk, with all Asterisk
 #   patches applied and with configuration synced.
 
-%define pjproject_version	2.7.2
+%define pjproject_version	2.8
 
 %define	opus_commit	a6b9521f10817c1f39f21f90fecd3f00bbb164d0
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	15.6.2
+Version:	15.7.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	ac4107188cc869c2776d42cb89fdf33d
+# Source0-md5:	675f47a90998f31a885e206d7e6caf49
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -69,7 +69,7 @@ Source7:	menuselect.makeopts
 Source8:	https://github.com/seanbright/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
 # Source8-md5:	d2deae1095b6b42331d3060700c25493
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
-# Source9-md5:	fa3f0bc098c4bff48ddd92db1c016a7a
+# Source9-md5:	6487d54213f270d307eaa60efc9f56f3
 Patch0:		lua_versions.patch
 Patch1:		%{name}-ppc.patch
 Patch2:		FHS-paths.patch
@@ -1431,6 +1431,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_phoneprov.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pktccops.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_realtime.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_remb_modifier.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_resolver_unbound.so
 # res_rtp_asterisk.so pulls some pjproject libs, but it still looks like a core module
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_rtp_asterisk.so
