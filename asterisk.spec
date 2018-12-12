@@ -167,6 +167,7 @@ Provides:	user(asterisk)
 Obsoletes:	asterisk-examples
 Obsoletes:	asterisk-h323 < 13
 #Obsoletes:	asterisk-misdn # what is the status of this plugin?
+Obsoletes:	asterisk-pjsip
 Obsoletes:	asterisk-usbradio < 10.4.0
 Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -516,25 +517,6 @@ Module for Asterisk that uses OSS sound drivers.
 
 %description oss -l pl.UTF-8
 Moduł Asteriska wykorzystujący sterowniki dźwięku OSS.
-
-%package pjsip
-Summary:	PJSIP Asterisk modules
-Summary(pl.UTF-8):	Moduły Asteriska PJSIP
-Group:		Applications/Networking
-%if %{with system_pjproject} && %{with pjsip}
-Requires:	pjproject >= 2.6-4
-%endif
-Requires:	%{name} = %{version}-%{release}
-
-%description pjsip
-The chan_pjsip and res_pjsip* modules provided by this package provide
-the new SIP driver for Asterisk, based on the PJSIP stack, to replace
-the old, badly designed and quite buggy chan_sip module.
-
-%description pjsip -l pl.UTF-8
-Moduły chan_pjsip oraz res_pjsip* zawarte w tym pakiecie dostarczają
-nowy sterownik SIP dla Asteriska, oparty na stosie PJSIP, który ma
-zastąpić stary, źle zaprojektowany i zawierający błędy moduł chan_sip.
 
 %package portaudio
 Summary:	Module for Asterisk that uses the PortAudio library
@@ -1185,6 +1167,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/features.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/followme.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/hep.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/iax.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/iaxprov.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/indications.conf
@@ -1196,6 +1179,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/muted.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phone.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phoneprov.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjproject.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_notify.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_wizard.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queuerules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/resolver_unbound.conf
@@ -1305,6 +1292,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
 #%attr(755,root,root) %{_libdir}/asterisk/modules/chan_phone.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_sip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
@@ -1358,6 +1346,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_module.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_periodic_hook.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pitchshift.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_aor.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_contact.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_endpoint.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_presencestate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_rand.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_realtime.so
@@ -1411,6 +1402,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %if %{with opus_vp8}
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_vp8.so
 %endif
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_pjsip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_rtcp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_http_media_cache.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_http_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_limit.so
@@ -1423,6 +1417,50 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mwi_external_ami.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_parking.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_phoneprov.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjproject.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_acl.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_authenticator_digest.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_caller_id.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_config_wizard.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dialog_info_body_generator.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_diversion.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dlg_options.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dtmf_info.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_empty_info.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_anonymous.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_ip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_user.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_exten_state.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_header_funcs.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_history.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi_body_generator.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_nat.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_notify.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_one_touch_record_info.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_authenticator_digest.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_publish.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_registration.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_path.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_phoneprov_provider.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_body_generator.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_digium_body_supplement.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_eyebeam_body_supplement.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_publish_asterisk.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pubsub.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_refer.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_rfc3326.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sdp_rtp.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_send_to_voicemail.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_xpidf_body_generator.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pktccops.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_remb_modifier.so
@@ -1690,67 +1728,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_oss.so
 %endif
 
-%if %{with pjsip}
-%files pjsip
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjproject.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_notify.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_wizard.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/hep.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_pjsip.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_aor.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_contact.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_endpoint.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_pjsip.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_rtcp.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjproject.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_acl.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_authenticator_digest.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_caller_id.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_config_wizard.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dialog_info_body_generator.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_diversion.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dlg_options.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_dtmf_info.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_empty_info.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_anonymous.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_ip.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_user.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_exten_state.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_header_funcs.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_history.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi_body_generator.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_nat.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_notify.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_one_touch_record_info.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_authenticator_digest.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_publish.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_outbound_registration.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_path.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_phoneprov_provider.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_body_generator.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_digium_body_supplement.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pidf_eyebeam_body_supplement.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_publish_asterisk.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_pubsub.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_refer.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_registrar.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_rfc3326.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sdp_rtp.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_send_to_voicemail.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_xpidf_body_generator.so
-%endif
-
 %if %{with portaudio}
 %files portaudio
 %defattr(644,root,root,755)
@@ -1828,7 +1805,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/unistim.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_unistim.so
-
 
 %files voicemail
 %defattr(644,root,root,755)
