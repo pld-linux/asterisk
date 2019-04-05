@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	16.2.1
+Version:	16.3.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	d9ef5aed942872475154aa351e714c99
+# Source0-md5:	9a31b697a54eb84c49eff57d2ba2723c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1413,6 +1413,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mutestream.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_musiconhold.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_mwi_devstate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mwi_external.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_mwi_external_ami.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_parking.so
