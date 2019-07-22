@@ -527,18 +527,6 @@ diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-14.5.0.orig/pbx/ael/ael-test/r
  exten => 761,3,Goto(s,loopback)
  exten => 762,1,agi(tts-riddle.agi)
  exten => 762,2,Background(gsm/what-time-it-is2)
-diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-14.5.0.orig/UPGRADE-1.4.txt asterisk-14.5.0/UPGRADE-1.4.txt
---- asterisk-14.5.0.orig/UPGRADE-1.4.txt	2017-05-30 19:50:46.000000000 +0200
-+++ asterisk-14.5.0/UPGRADE-1.4.txt	2017-06-09 14:40:59.000000000 +0200
-@@ -92,7 +92,7 @@
- WARNING: Asterisk 1.4 supports a new layout for sound files in multiple languages;
- instead of the alternate-language files being stored in subdirectories underneath
- the existing files (for French, that would be digits/fr, letters/fr, phonetic/fr,
--etc.) the new layout creates one directory under /var/lib/asterisk/sounds for the
-+etc.) the new layout creates one directory under /usr/share/asterisk/sounds for the
- language itself, then places all the sound files for that language under that
- directory and its subdirectories. This is the layout that will be created if you
- select non-English languages to be installed via menuselect, HOWEVER Asterisk does
 diff -dur -x '*~' -x '*.orig' -x '*.rej' asterisk-14.5.0.orig/utils/ael_main.c asterisk-14.5.0/utils/ael_main.c
 --- asterisk-14.5.0.orig/utils/ael_main.c	2017-05-30 19:50:46.000000000 +0200
 +++ asterisk-14.5.0/utils/ael_main.c	2017-06-09 14:41:43.000000000 +0200
