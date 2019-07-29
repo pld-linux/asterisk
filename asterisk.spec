@@ -44,19 +44,19 @@
 #   package is updated to the version used by Asterisk, with all Asterisk
 #   patches applied and with configuration synced.
 
-%define pjproject_version	2.8
+%define pjproject_version	2.9
 
 %define	opus_commit	a6b9521f10817c1f39f21f90fecd3f00bbb164d0
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	16.4.0
+Version:	16.5.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	b1bb968fd3b51d420982f5d82a32890f
+# Source0-md5:	6ee7b77ff819daae0e9ead589f0b2e46
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -69,7 +69,7 @@ Source7:	menuselect.makeopts
 Source8:	https://github.com/seanbright/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
 # Source8-md5:	d2deae1095b6b42331d3060700c25493
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
-# Source9-md5:	6487d54213f270d307eaa60efc9f56f3
+# Source9-md5:	66757078e7bd7cf316acb0425c2fdd6f
 Patch0:		lua_versions.patch
 Patch1:		%{name}-ppc.patch
 Patch2:		FHS-paths.patch
