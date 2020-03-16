@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	16.5.0
-Release:	2
+Version:	16.9.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	6ee7b77ff819daae0e9ead589f0b2e46
+# Source0-md5:	f50a3073061c5b72cd06cc0059e15804
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1215,7 +1215,9 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_agent_pool.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_alarmreceiver.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_amd.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_attended_transfer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_authenticate.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_blind_transfer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_bridgeaddchan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_bridgewait.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_cdr.so
@@ -1298,6 +1300,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_adpcm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_codec2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
