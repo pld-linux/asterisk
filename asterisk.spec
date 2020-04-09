@@ -46,7 +46,7 @@
 
 %define pjproject_version	2.9
 
-%define	opus_commit	a6b9521f10817c1f39f21f90fecd3f00bbb164d0
+%define	opus_commit	83e1b458c77e0e287adeca494eeb79edb077b0ff
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
@@ -66,8 +66,8 @@ Source5:	%{name}.service
 Source6:	menuselect.makedeps
 Source7:	menuselect.makeopts
 # https://github.com/traud/asterisk-opus
-Source8:	https://github.com/seanbright/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
-# Source8-md5:	d2deae1095b6b42331d3060700c25493
+Source8:	https://github.com/traud/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
+# Source8-md5:	368cc32e6af1841e1422077b6838d1e6
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
 # Source9-md5:	66757078e7bd7cf316acb0425c2fdd6f
 Patch0:		lua_versions.patch
