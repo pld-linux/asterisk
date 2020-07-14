@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	16.10.0
-Release:	2
+Version:	16.11.1
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	b9b349e02473178d4cf2dde6ebdf14dd
+# Source0-md5:	a02a3bc635979902273399e41e07d872
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
