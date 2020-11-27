@@ -1,6 +1,6 @@
---- asterisk-1.6.1.12/main/asterisk.c~	2009-12-31 00:57:41.000000000 +0200
-+++ asterisk-1.6.1.12/main/asterisk.c	2009-12-31 00:59:34.041012391 +0200
-@@ -139,6 +139,9 @@
+--- asterisk-16.15.0.org/main/asterisk.c	2020-11-19 13:34:40.000000000 +0100
++++ asterisk-16.15.0/main/asterisk.c	2020-11-27 12:45:55.346693848 +0100
+@@ -304,6 +304,9 @@ int daemon(int, int);  /* defined in lib
                  "This is free software, with components licensed under the GNU General Public\n" \
                  "License version 2 and other licenses; you are welcome to redistribute it under\n" \
                  "certain conditions. Type 'core show license' for details.\n" \
@@ -9,4 +9,4 @@
 +                "Please report all bugs to http://bugs.pld-linux.org/\n" \
                  "=========================================================================\n", ast_get_version()) \
  
- /*! \defgroup main_options Main Configuration Options
+ static int ast_socket = -1;		/*!< UNIX Socket for allowing remote control */

@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	16.13.0
-Release:	2
+Version:	16.15.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	e084339d4d3ce1efce415150d7447c0a
+# Source0-md5:	2f03204a38e8ed49e58474961d43f363
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -71,7 +71,7 @@ Source8:	https://github.com/traud/asterisk-opus/archive/%{opus_commit}/asterisk-
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
 # Source9-md5:	4fffc49b461133f0a4143b05a22fb30e
 Patch0:		lua_versions.patch
-Patch1:		%{name}-ppc.patch
+
 Patch2:		FHS-paths.patch
 Patch3:		pld-banner.patch
 Patch4:		lpc10-system.patch
@@ -769,7 +769,7 @@ Dokumentacja API Asteriska.
 %prep
 %setup -q -a 8
 %patch0 -p1
-%patch1 -p1
+
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -1198,6 +1198,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/ss7.timers
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/stasis.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/statsd.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/stir_shaken.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/telcordia-1.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/udptl.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/users.conf
@@ -1461,6 +1462,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_send_to_voicemail.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_stir_shaken.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
@@ -1488,6 +1490,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_playback.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_recording.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_snoop.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stir_shaken.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stun_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
