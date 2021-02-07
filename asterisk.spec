@@ -52,7 +52,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	16.15.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
@@ -821,6 +821,7 @@ cd menuselect
 cd ..
 
 %configure \
+	ac_cv_header_stdc=yes \
 	%{__without_if system_pjproject pjproject-bundled} \
 	--without-jansson-bundled \
 	--with-unbound \
