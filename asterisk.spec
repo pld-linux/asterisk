@@ -756,9 +756,7 @@ Skrypty diagnostyczne dla Asteriska.
 Summary:	API documentation for Asterisk
 Summary(pl.UTF-8):	Dokumentacja API Asteriska
 Group:		Documentation
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 API documentation for Asterisk.
