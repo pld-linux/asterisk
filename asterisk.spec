@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	16.18.0
+Version:	18.4.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	5f2fb0f91f00769aad61730a47d8efbb
+# Source0-md5:	0819762b1e3693efc2efc3e9cd65685d
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -968,7 +968,7 @@ install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/e
 
 export ASTCFLAGS="%{rpmcflags}"
 
-%{__make} -j1 install \
+%{__make} -j1 install install-headers \
 	DEBUG= \
 	OPTIMIZE= \
 	DESTDIR=$RPM_BUILD_ROOT \
@@ -1184,6 +1184,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip_wizard.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queuerules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/prometheus.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/resolver_unbound.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_parking.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pktccops.conf
@@ -1216,6 +1217,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_alarmreceiver.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_amd.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_attended_transfer.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_audiosocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_authenticate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_blind_transfer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_bridgeaddchan.so
@@ -1290,6 +1292,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_syslog.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_manager.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_audiosocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_bridge_media.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_mgcp.so
@@ -1388,6 +1391,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_playbacks.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_recordings.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_sounds.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_audiosocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_chan_stats.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
@@ -1467,6 +1471,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_xpidf_body_generator.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pktccops.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_prometheus.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_remb_modifier.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_resolver_unbound.so
