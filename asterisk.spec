@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	18.4.0
+Version:	18.6.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	0819762b1e3693efc2efc3e9cd65685d
+# Source0-md5:	2d78f9c0a2243e2abb6b9a4290e2b940
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1235,6 +1235,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_directed_pickup.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_directory.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_disa.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_dtmfstore.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_dumpchan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_echo.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_exec.so
@@ -1257,6 +1258,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_read.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_readexten.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_record.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_reload.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_saycounted.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sayunixtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_senddtmf.so
@@ -1275,6 +1277,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_url.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_userevent.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_verbose.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_waitforcond.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_waitforring.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_waitforsilence.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_waituntil.so
