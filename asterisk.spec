@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	18.6.0
-Release:	2
+Version:	18.9.0
+Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	2d78f9c0a2243e2abb6b9a4290e2b940
+# Source0-md5:	a1af3a153efa741b28d00f1744cbf45c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1006,6 +1006,7 @@ install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/sounds
 ln -s %{_localstatedir}/lib/asterisk/licenses $RPM_BUILD_ROOT%{_datadir}/asterisk/licenses
 
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/asterisk/licenses
+install -d $RPM_BUILD_ROOT%{_localstatedir}/log/archive/asterisk
 install -d $RPM_BUILD_ROOT%{_localstatedir}/log/asterisk/cdr-custom
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/festival
 install -d $RPM_BUILD_ROOT%{_localstatedir}/spool/asterisk/monitor
@@ -1247,6 +1248,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_macro.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_milliwatt.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_mixmonitor.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_mf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_morsecode.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_mp3.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_nbscat.so
@@ -1306,7 +1308,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_adpcm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/codec_codec2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
@@ -1341,6 +1342,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_enum.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_env.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_extstate.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_frame_drop.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_frame_trace.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_global.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_groupcount.so
@@ -1361,6 +1363,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_presencestate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_rand.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_realtime.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_sayfiles.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_scramble.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sha1.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_shell.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_sorcery.so
@@ -1502,6 +1506,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_statsd.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_tonedetect.so
 %{systemdtmpfilesdir}/%{name}.conf
 
 %dir %{_datadir}/asterisk
@@ -1531,6 +1536,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
 %dir %attr(750,root,asterisk) %{_localstatedir}/lib/asterisk/licenses
 
+%attr(750,root,logs) %dir %{_localstatedir}/log/archive/asterisk
 %attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk
 %attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk/cdr-csv
 %attr(770,root,asterisk) %dir %{_localstatedir}/log/asterisk/cdr-custom
