@@ -44,19 +44,19 @@
 #   package is updated to the version used by Asterisk, with all Asterisk
 #   patches applied and with configuration synced.
 
-%define pjproject_version	2.10
+%define pjproject_version	2.12
 
-%define	opus_commit	83e1b458c77e0e287adeca494eeb79edb077b0ff
+%define	opus_commit	a959f072d3f364be983dd27e6e250b038aaef747
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	18.9.0
+Version:	18.12.1
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	a1af3a153efa741b28d00f1744cbf45c
+# Source0-md5:	4000b565a28558012aefd8deeb54e5b8
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -67,9 +67,9 @@ Source6:	menuselect.makedeps
 Source7:	menuselect.makeopts
 # https://github.com/traud/asterisk-opus
 Source8:	https://github.com/traud/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
-# Source8-md5:	368cc32e6af1841e1422077b6838d1e6
+# Source8-md5:	6543f01b5d56051d6c9becc4089c0042
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
-# Source9-md5:	4fffc49b461133f0a4143b05a22fb30e
+# Source9-md5:	ad796d38f5f0357cb5b2fe1b4460b581
 Patch0:		lua_versions.patch
 
 Patch2:		FHS-paths.patch
@@ -1138,6 +1138,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(750,root,asterisk) %dir %{_sysconfdir}/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/acl.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/adsi.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/aeap.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/agents.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/alarmreceiver.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/amd.conf
@@ -1265,6 +1266,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sayunixtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_senddtmf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sendtext.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_sf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sms.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_softhangup.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_speech_utils.so
@@ -1341,6 +1343,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_dialplan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_enum.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_env.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_evalexten.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_extstate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_frame_drop.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_frame_trace.so
@@ -1350,6 +1353,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_holdintercept.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_iconv.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_jitterbuffer.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_json.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_lock.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_logic.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_math.so
@@ -1384,6 +1388,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/pbx_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/pbx_spool.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_adsi.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_aeap.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ael_share.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_agi.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari.so
@@ -1494,6 +1499,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_memory_cache.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_sorcery_realtime.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_speech.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_speech_aeap.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_srtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_answer.so

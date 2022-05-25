@@ -70,7 +70,7 @@ diff -urN asterisk-16.15.0.org/configs/samples/http.conf.sample asterisk-16.15.0
 diff -urN asterisk-16.15.0.org/configs/samples/iax.conf.sample asterisk-16.15.0/configs/samples/iax.conf.sample
 --- asterisk-16.15.0.org/configs/samples/iax.conf.sample	2020-11-19 13:34:40.000000000 +0100
 +++ asterisk-16.15.0/configs/samples/iax.conf.sample	2020-11-27 12:44:43.374449817 +0100
-@@ -531,8 +531,8 @@
+@@ -541,8 +541,8 @@ inkeys=freeworlddialup
  ; authentication is used, "inkeys" is a list of acceptable public keys on the
  ; local system that can be used to authenticate the remote peer, separated by
  ; the ":" character.  "outkey" is a single, private key to use to authenticate
@@ -78,8 +78,8 @@ diff -urN asterisk-16.15.0.org/configs/samples/iax.conf.sample asterisk-16.15.0/
 -; while private keys are named /var/lib/asterisk/keys/<name>.key.  Private
 +; to the other side.  Public keys are named /usr/share/asterisk/keys/<name>.pub
 +; while private keys are named /usr/share/asterisk/keys/<name>.key.  Private
- ; keys should always be 3DES encrypted.
- ;
+ ; keys should always be 3DES encrypted. If encryption is used (applicable to
+ ; md5 and rsa only), a secret must be provided.
  ;
 diff -urN asterisk-16.15.0.org/configs/samples/musiconhold.conf.sample asterisk-16.15.0/configs/samples/musiconhold.conf.sample
 --- asterisk-16.15.0.org/configs/samples/musiconhold.conf.sample	2020-11-19 13:34:40.000000000 +0100
