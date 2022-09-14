@@ -44,19 +44,19 @@
 #   package is updated to the version used by Asterisk, with all Asterisk
 #   patches applied and with configuration synced.
 
-%define pjproject_version	2.12
+%define pjproject_version	2.12.1
 
 %define	opus_commit	a959f072d3f364be983dd27e6e250b038aaef747
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	18.13.0
+Version:	18.14.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	826a6f07447d1a0023d24f7b6a32c833
+# Source0-md5:	0dfaed3c2031fbe4852879663ac21e9c
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -69,7 +69,7 @@ Source7:	menuselect.makeopts
 Source8:	https://github.com/traud/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
 # Source8-md5:	6543f01b5d56051d6c9becc4089c0042
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
-# Source9-md5:	ad796d38f5f0357cb5b2fe1b4460b581
+# Source9-md5:	7f80ba8e1540853f959be6be7912a150
 Patch0:		lua_versions.patch
 
 Patch2:		FHS-paths.patch
@@ -1168,6 +1168,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/extensions.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/features.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/followme.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/geolocation.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/hep.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/iax.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/iaxprov.conf
@@ -1406,6 +1407,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_audiosocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_chan_stats.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_cliexec.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clioriginate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_convert.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_crypto.so
@@ -1421,6 +1423,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %if %{with opus_vp8}
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_format_attr_vp8.so
 %endif
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_geolocation.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_hep_rtcp.so
@@ -1451,6 +1454,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_ip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_endpoint_identifier_user.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_exten_state.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_geolocation.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_header_funcs.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_history.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
