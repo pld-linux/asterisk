@@ -12,8 +12,6 @@
 #
 # Conditional build:
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
-%bcond_without	sqlite2		# build without old sqlite support
-%bcond_without	oss		# build without OSS audio support (SDL dependency)
 %bcond_without	tds		# build without TDS support
 %bcond_without	ilbc		# build without iLBC codec support
 %bcond_without	ldap		# build without LDAP support
@@ -51,12 +49,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	18.14.0
+Version:	20.0.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	0dfaed3c2031fbe4852879663ac21e9c
+# Source0-md5:	16ff1875ad80cda444d9fd49c53e15ec
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -79,8 +77,6 @@ Patch5:		x32.patch
 #Patch7:		%{name}-ilbc.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
-%{?with_oss:BuildRequires:	SDL-devel}
-%{?with_oss:BuildRequires:	SDL_image-devel}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
@@ -142,7 +138,6 @@ BuildRequires:	sed >= 4.0
 BuildRequires:	spandsp-devel >= 0.0.5
 BuildRequires:	speex-devel
 BuildRequires:	speexdsp-devel
-%{?with_sqlite2:BuildRequires:	sqlite-devel >= 2}
 BuildRequires:	sqlite3-devel
 BuildRequires:	libsrtp2-devel
 BuildRequires:	unbound-devel
@@ -356,21 +351,6 @@ HTTP Server Support.
 %description http -l pl.UTF-8
 Obsługa serwera HTTP.
 
-%package ices
-Summary:	Stream audio from Asterisk to an IceCast server
-Summary(pl.UTF-8):	Przesyłanie strumienia dźwięku z Asteriska do serwera IceCast
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-Requires:	ices
-Obsoletes:	asterisk < 1.4.18-1
-Conflicts:	asterisk < 1.4.18-1
-
-%description ices
-Stream audio from Asterisk to an IceCast server.
-
-%description ices -l pl.UTF-8
-Przesyłanie strumienia dźwięku z Asteriska do serwera IceCast.
-
 %package ilbc
 Summary:	iLBC codec for Asterisk
 Summary(pl.UTF-8):	Kodek iLBC dla Asteriska
@@ -506,18 +486,6 @@ Open Settlement Protocol (OSP) Applications.
 %description osp -l pl.UTF-8
 Aplikacje protokołu OSP (Open Settlement Protocol).
 
-%package oss
-Summary:	Module for Asterisk that uses OSS sound drivers
-Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący sterowniki dźwięku OSS
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description oss
-Module for Asterisk that uses OSS sound drivers.
-
-%description oss -l pl.UTF-8
-Moduł Asteriska wykorzystujący sterowniki dźwięku OSS.
-
 %package portaudio
 Summary:	Module for Asterisk that uses the PortAudio library
 Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący bibliotekę PortAudio
@@ -602,18 +570,6 @@ Speex codec support.
 
 %description speex -l pl.UTF-8
 Obsługa kodeka Speex.
-
-%package sqlite2
-Summary:	SQLite 2 module for Asterisk
-Summary(pl.UTF-8):	Moduł SQLite 2 dla Asteriska
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description sqlite2
-SQLite 2 module for Asterisk.
-
-%description sqlite2 -l pl.UTF-8
-Moduł SQLite 2 dla Asteriska.
 
 %package sqlite3
 Summary:	SQLite 3 modules for Asterisk
@@ -823,7 +779,6 @@ cd ..
 	%{__without_if system_pjproject pjproject-bundled} \
 	--without-jansson-bundled \
 	--with-unbound \
-	%{__without oss SDL_image} \
 	%{__without bluetooth bluetooth} \
 	--without-gtk2 \
 	--with-gnu-ld \
@@ -834,12 +789,10 @@ cd ..
 	%{__without ldap ldap} \
 	--with-lpc10=/usr \
 	%{__without mysql mysqlclient} \
-	%{__without oss oss} \
 	%{__without pjsip pjproject} \
 	%{__without portaudio portaudio} \
 	%{__without pgsql postgres} \
 	%{__without radius radius} \
-	%{__without oss sdl} \
 	%{__without tds tds} \
 	%{__without odbc unixodbc}
 
@@ -853,12 +806,6 @@ cp %{SOURCE7} .
 
 %if %{without corosync}
 menuselect/menuselect --disable res_corosync menuselect.makeopts
-%endif
-%if %{without sqlite2}
-menuselect/menuselect --disable res_config_sqlite menuselect.makeopts
-%endif
-%if %{without oss}
-menuselect/menuselect --disable chan_oss menuselect.makeopts
 %endif
 %if %{without tds}
 menuselect/menuselect --disable cdr_tds --disable cel_tds menuselect.makeopts
@@ -1030,17 +977,11 @@ find doc/api -name '*.map' -size 0 -delete
 %endif
 
 # remove configuration files for components never built
-%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{app_skel,config_test,misdn,ooh323,test_sorcery}.conf
+%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{app_skel,config_test,ooh323,test_sorcery}.conf
 
 # remove configuration files for disabled optional components
 %if %{without corosync}
 %{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_corosync.conf
-%endif
-%if %{without sqlite2}
-%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/res_config_sqlite.conf
-%endif
-%if %{without oss}
-%{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/oss.conf
 %endif
 %if %{without tds}
 %{__rm} $RPM_BUILD_ROOT%{_sysconfdir}/asterisk/{cdr,cel}_tds.conf
@@ -1150,7 +1091,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_custom.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_beanstalkd.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_manager.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_syslog.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_beanstalkd.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_custom.conf
@@ -1178,8 +1118,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/mgcp.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/modules.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/musiconhold.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/muted.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phone.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/phoneprov.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjproject.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/pjsip.conf
@@ -1205,7 +1143,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/telcordia-1.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/udptl.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/users.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/vpb.conf
 
 %attr(755,root,root) %{_libdir}/libasteriskssl.so.1
 %if %{without system_pjproject} && %{with pjsip}
@@ -1246,14 +1183,12 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_followme.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_forkcdr.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_getcpeid.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_image.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_macro.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_milliwatt.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_mixmonitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_mf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_morsecode.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_mp3.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_nbscat.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_originate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_playback.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_playtones.so
@@ -1279,7 +1214,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_talkdetect.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_test.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_transfer.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_url.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_userevent.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_verbose.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_waitforcond.so
@@ -1297,7 +1231,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_csv.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_manager.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/cdr_syslog.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cel_manager.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_audiosocket.so
@@ -1579,8 +1512,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %files utils
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/aelparse
-%attr(755,root,root) %{_sbindir}/conf2ael
-%attr(755,root,root) %{_sbindir}/muted
 %attr(755,root,root) %{_sbindir}/smsq
 %attr(755,root,root) %{_sbindir}/stereorize
 %attr(755,root,root) %{_sbindir}/streamplayer
@@ -1625,7 +1556,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/meetme.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_dahdi.conf
 %{_datadir}/dahdi/span_config.d/40-asterisk
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_dahdiras.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_flash.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_meetme.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_page.so
@@ -1656,11 +1586,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/http.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_http_post.so
 %{_datadir}/asterisk/static-http
-
-%files ices
-%defattr(644,root,root,755)
-%doc contrib/asterisk-ices.xml
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_ices.so
 
 %if %{with ilbc}
 %files ilbc
@@ -1714,11 +1639,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %if %{with mysql}
 %files mysql
 %defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/app_mysql.conf
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_mysql.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_mysql.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/app_mysql.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/cdr_mysql.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_config_mysql.so
 %endif
 
@@ -1750,13 +1671,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %defattr(644,root,root,755)
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/osp.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_osplookup.so
-
-%if %{with oss}
-%files oss
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/oss.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/chan_oss.so
-%endif
 
 %if %{with portaudio}
 %files portaudio
@@ -1805,13 +1719,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/format_ogg_speex.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_speex.so
-
-%if %{with sqlite2}
-%files sqlite2
-%defattr(644,root,root,755)
-%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_sqlite.conf
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_config_sqlite.so
-%endif
 
 %files sqlite3
 %defattr(644,root,root,755)

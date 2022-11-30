@@ -137,18 +137,24 @@ diff -urN asterisk-16.15.0.org/configs/samples/phoneprov.conf.sample asterisk-16
  
  ;snom 300, 320, 360, 370, 820, 821, 870 support
  snom-${MAC}.xml => snom-mac.xml
-diff -urN asterisk-16.15.0.org/configs/samples/res_config_sqlite.conf.sample asterisk-16.15.0/configs/samples/res_config_sqlite.conf.sample
---- asterisk-16.15.0.org/configs/samples/res_config_sqlite.conf.sample	2020-11-19 13:34:40.000000000 +0100
-+++ asterisk-16.15.0/configs/samples/res_config_sqlite.conf.sample	2020-11-27 12:44:43.377783255 +0100
+--- a/configs/samples/res_config_sqlite3.conf.sample~	2022-10-19 16:31:39.000000000 +0200
++++ b/configs/samples/res_config_sqlite3.conf.sample	2022-11-30 07:44:04.009791957 +0100
 @@ -1,7 +1,7 @@
- [general]
- 
- ; The database file.
--dbfile => /var/lib/asterisk/sqlite.db
-+dbfile => /var/spool/asterisk/sqlite.db
- 
- ; Both config_table and cdr_table are optional. If config_table is omitted,
- ; you must specify it in extconfig.conf. If it is both provided here and in
+ ; Define a realtime database name to use in extconfig.conf
+ ;
+ ;[asterisk]
+-;dbfile => /var/lib/asterisk/realtime.sqlite3
++;dbfile => /var/spool/asterisk/realtime.sqlite3
+ ;
+ ; debug - Turn on debugging information
+ ;debug=yes
+@@ -32,4 +32,4 @@
+ ; busy timeout - timeout in miliseconds to stop waiting for locked database.
+ ;   More info at https://www.sqlite.org/c3ref/busy_timeout.html
+ ;
+-;busy_timeout=1000
+\ No newline at end of file
++;busy_timeout=1000
 diff -urN asterisk-16.15.0.org/contrib/scripts/astgenkey asterisk-16.15.0/contrib/scripts/astgenkey
 --- asterisk-16.15.0.org/contrib/scripts/astgenkey	2020-11-19 13:34:40.000000000 +0100
 +++ asterisk-16.15.0/contrib/scripts/astgenkey	2020-11-27 12:44:43.377783255 +0100
