@@ -51,12 +51,12 @@
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	18.14.0
+Version:	18.16.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	0dfaed3c2031fbe4852879663ac21e9c
+# Source0-md5:	e8e49c5bd1b2c3e8793bd078ed457174
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -1246,6 +1246,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_followme.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_forkcdr.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_getcpeid.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_if.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_image.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_macro.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_milliwatt.so
@@ -1311,6 +1312,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_adpcm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/codec_codec2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g722.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_g726.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_ulaw.so
@@ -1345,6 +1347,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_enum.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_env.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_evalexten.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_export.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_extstate.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_frame_drop.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_frame_trace.so
@@ -1362,6 +1365,8 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_module.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_periodic_hook.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pitchshift.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_aoc.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_rfc3329.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_aor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_contact.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_pjsip_endpoint.so
