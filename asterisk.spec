@@ -9,6 +9,7 @@
 # - vpb (libvpb, vpbapi.h)
 # - make package for moh sound files
 # - build res_ari_mailboxes as an alternative for voicemail subpackages
+# - fix build with libupnp installed (202405)
 #
 # Conditional build:
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
