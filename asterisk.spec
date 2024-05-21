@@ -55,7 +55,7 @@ Version:	18.23.1
 Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
+Source0:	https://downloads.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
 # Source0-md5:	7b6812192469b2aa3d56aab802f84b99
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
