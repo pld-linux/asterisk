@@ -44,19 +44,19 @@
 #   package is updated to the version used by Asterisk, with all Asterisk
 #   patches applied and with configuration synced.
 
-%define pjproject_version	2.12.1
+%define pjproject_version	2.14.1
 
 %define	opus_commit	a959f072d3f364be983dd27e6e250b038aaef747
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	18.16.0
+Version:	18.23.1
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.digium.com/pub/asterisk/releases/%{name}-%{version}.tar.gz
-# Source0-md5:	e8e49c5bd1b2c3e8793bd078ed457174
+# Source0-md5:	7b6812192469b2aa3d56aab802f84b99
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -69,7 +69,7 @@ Source7:	menuselect.makeopts
 Source8:	https://github.com/traud/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
 # Source8-md5:	6543f01b5d56051d6c9becc4089c0042
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
-# Source9-md5:	7f80ba8e1540853f959be6be7912a150
+# Source9-md5:	de9feca3e4816b1535f63f9d23c7b45b
 Patch0:		lua_versions.patch
 
 Patch2:		FHS-paths.patch
@@ -1113,7 +1113,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %files
 %defattr(644,root,root,755)
-%doc README*.md *.txt ChangeLog CHANGES BUGS CREDITS configs LICENSE
+%doc README*.md *.txt ChangeLogs/*-%{version}.md CHANGES.md BUGS CREDITS configs LICENSE
 %doc doc/asterisk.sgml
 
 %attr(755,root,root) %{_sbindir}/astcanary
@@ -1189,6 +1189,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/queues.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/prometheus.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/resolver_unbound.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_http_media_cache.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_parking.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_pktccops.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_stun_monitor.conf
@@ -1225,6 +1226,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_blind_transfer.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_bridgeaddchan.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_bridgewait.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_broadcast.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_cdr.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_celgenuserevent.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_chanisavail.so
@@ -1269,6 +1271,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_senddtmf.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sendtext.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sf.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_signal.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_sms.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_softhangup.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_speech_utils.so
@@ -1486,7 +1489,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_send_to_voicemail.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_stir_shaken.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_transport_websocket.so
@@ -1516,7 +1518,6 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_playback.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_recording.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_snoop.so
-%attr(755,root,root) %{_libdir}/asterisk/modules/res_stir_shaken.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stun_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
@@ -1734,6 +1735,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cdr_odbc.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_odbc.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/func_odbc.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_config_odbc.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/res_odbc.conf
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_adaptive_odbc.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/cdr_odbc.so
