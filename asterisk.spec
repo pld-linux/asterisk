@@ -1042,14 +1042,12 @@ if [ "$1" = "0" ]; then
 fi
 %systemd_preun %{name}.service
 
-%triggerpostun -- %{name} < 1.6.1.12-0.1
+%triggerpostun -- %{name} < 12.0.0
 # chown to asterisk previously root owned files
 # loose one (not one that cames from rpm), as we're not trying to split the
 # hair with file permission bits.
 chown -R asterisk:asterisk /var/spool/asterisk
 chown -R asterisk:asterisk /var/lib/asterisk
-
-%triggerpostun -- %{name} < 12.0.0
 %systemd_trigger %{name}.service
 
 %files
