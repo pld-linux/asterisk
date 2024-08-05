@@ -50,7 +50,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	21.4.1
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
@@ -162,10 +162,13 @@ Provides:	user(asterisk)
 Obsoletes:	asterisk-alsa < 21.4.1
 Obsoletes:	asterisk-examples
 Obsoletes:	asterisk-h323 < 13
+Obsoletes:	asterisk-ices < 21.4.1
 #Obsoletes:	asterisk-misdn # what is the status of this plugin?
 Obsoletes:	asterisk-osp < 21.4.1
+Obsoletes:	asterisk-oss < 21.4.1
 Obsoletes:	asterisk-pjsip
 Obsoletes:	asterisk-skinny < 21.4.1
+Obsoletes:	asterisk-sqlite2 < 21.4.1
 Obsoletes:	asterisk-usbradio < 10.4.0
 Conflicts:	logrotate < 3.8.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
