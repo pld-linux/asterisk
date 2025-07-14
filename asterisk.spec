@@ -728,12 +728,12 @@ Dokumentacja API Asteriska.
 
 %prep
 %setup -q -a 8
-%patch0 -p1
+%patch -P0 -p1
 
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
 
 %if %{with opus_vp8}
 
