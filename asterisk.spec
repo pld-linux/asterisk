@@ -50,7 +50,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	21.4.1
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://downloads.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
