@@ -45,19 +45,19 @@
 #   package is updated to the version used by Asterisk, with all Asterisk
 #   patches applied and with configuration synced.
 
-%define pjproject_version	2.14.1
+%define pjproject_version	2.15.1
 
 %define	opus_commit	a959f072d3f364be983dd27e6e250b038aaef747
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	18.23.1
+Version:	18.26.4
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://downloads.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	7b6812192469b2aa3d56aab802f84b99
+# Source0-md5:	19f1a2e3a9446d261205c5e48e5f47fe
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -70,7 +70,7 @@ Source7:	menuselect.makeopts
 Source8:	https://github.com/traud/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
 # Source8-md5:	6543f01b5d56051d6c9becc4089c0042
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
-# Source9-md5:	de9feca3e4816b1535f63f9d23c7b45b
+# Source9-md5:	6b4b34c14d39224d3342d368f5abbad4
 Patch0:		lua_versions.patch
 
 Patch2:		FHS-paths.patch
@@ -767,12 +767,12 @@ Dokumentacja API Asteriska.
 
 %prep
 %setup -q -a 8
-%patch0 -p1
+%patch -P0 -p1
 
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
 
 %if %{with opus_vp8}
 
@@ -1101,13 +1101,6 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del asterisk
 fi
 %systemd_preun %{name}.service
-
-%triggerpostun -- %{name} < 1.6.1.12-0.1
-# chown to asterisk previously root owned files
-# loose one (not one that cames from rpm), as we're not trying to split the
-# hair with file permission bits.
-chown -R asterisk:asterisk /var/spool/asterisk
-chown -R asterisk:asterisk /var/lib/asterisk
 
 %triggerpostun -- %{name} < 12.0.0
 %systemd_trigger %{name}.service
