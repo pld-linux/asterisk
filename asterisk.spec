@@ -9,7 +9,6 @@
 # - vpb (libvpb, vpbapi.h)
 # - make package for moh sound files
 # - build res_ari_mailboxes as an alternative for voicemail subpackages
-# - fix build with libupnp installed (202405)
 #
 # Conditional build:
 %bcond_with	corosync	# res_corosync module (broken in 12.0.0)
@@ -53,10 +52,10 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	18.26.4
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
-Source0:	https://downloads.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
+Source0:	https://downloads.asterisk.org/pub/telephony/asterisk/releases/%{name}-%{version}.tar.gz
 # Source0-md5:	19f1a2e3a9446d261205c5e48e5f47fe
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
@@ -77,6 +76,8 @@ Patch2:		FHS-paths.patch
 Patch3:		pld-banner.patch
 Patch4:		lpc10-system.patch
 Patch5:		x32.patch
+# backport from 6ac1bb93afed, never released for the EOL 18 branch
+Patch6:		libical4.patch
 #Patch7:		%{name}-ilbc.patch
 URL:		http://www.asterisk.org/
 BuildRequires:	OSPToolkit-devel >= 4.0.0
@@ -773,13 +774,13 @@ Dokumentacja API Asteriska.
 %patch -P3 -p1
 %patch -P4 -p1
 %patch -P5 -p1
+%patch -P6 -p1
 
 %if %{with opus_vp8}
-
+# take only the modules Asterisk itself lacks; its own res_format_attr_opus.c
+# and opus.h are newer than the ones in this snapshot
 cp -a asterisk-opus-%{opus_commit}/codecs/* codecs
 cp -a asterisk-opus-%{opus_commit}/formats/* formats
-cp -a asterisk-opus-%{opus_commit}/res/* rest
-cp -a asterisk-opus-%{opus_commit}/include/asterisk/* include/asterisk
 %endif
 
 %if %{without system_pjproject} && %{with pjsip}
@@ -797,7 +798,7 @@ md5sum %{SOURCE9} > externals/pjproject-%{pjproject_version}.md5
 %{__autoheader}
 %{__autoconf}
 
-export ASTCFLAGS="%{rpmcflags}"
+export ASTCFLAGS="%{rpmcflags} %{rpmcppflags}"
 export ASTLDFLAGS="%{rpmldflags}"
 export WGET="/bin/true"
 
@@ -967,7 +968,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}} \
 	$RPM_BUILD_ROOT{%{systemdunitdir},%{systemdtmpfilesdir},%{_mandir}/man1}
 
-export ASTCFLAGS="%{rpmcflags}"
+export ASTCFLAGS="%{rpmcflags} %{rpmcppflags}"
 
 %{__make} -j1 install install-headers \
 	DEBUG= \
@@ -1071,7 +1072,7 @@ find doc/api -name '*.map' -size 0 -delete
 %{__rm} -r $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
 
 # fix script interpreters
-%{__sed} -i -e '1s,^#!.*python,#!%{__python},' $RPM_BUILD_ROOT%{_datadir}/asterisk/scripts/*
+%{__sed} -i -e '1s,^#!.*python,#!%{__python3},' $RPM_BUILD_ROOT%{_datadir}/asterisk/scripts/*
 %{__sed} -i -e '1s,^#!.*bash,#!/bin/bash,' $RPM_BUILD_ROOT%{_datadir}/asterisk/scripts/*
 
 %clean
