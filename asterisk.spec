@@ -42,19 +42,19 @@
 #   package is updated to the version used by Asterisk, with all Asterisk
 #   patches applied and with configuration synced.
 
-%define pjproject_version	2.14.1
+%define pjproject_version	2.17
 
 %define	opus_commit	a959f072d3f364be983dd27e6e250b038aaef747
 
 Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
-Version:	21.4.1
-Release:	6
+Version:	22.10.1
+Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	http://downloads.asterisk.org/pub/telephony/asterisk/%{name}-%{version}.tar.gz
-# Source0-md5:	2ef378474ac8e9171a419f263121f307
+Source0:	https://downloads.asterisk.org/pub/telephony/asterisk/releases/%{name}-%{version}.tar.gz
+# Source0-md5:	c16bbf94fd02a23ed06d00996dbab659
 Source1:	%{name}.init
 Source2:	%{name}.sysconfig
 Source3:	%{name}.tmpfiles
@@ -67,7 +67,7 @@ Source7:	menuselect.makeopts
 Source8:	https://github.com/traud/asterisk-opus/archive/%{opus_commit}/asterisk-opus-%{opus_commit}.tar.gz
 # Source8-md5:	6543f01b5d56051d6c9becc4089c0042
 Source9:	https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/%{pjproject_version}/pjproject-%{pjproject_version}.tar.bz2
-# Source9-md5:	de9feca3e4816b1535f63f9d23c7b45b
+# Source9-md5:	baacc87418a95107657039269bc71538
 Patch0:		lua_versions.patch
 
 Patch2:		FHS-paths.patch
@@ -76,8 +76,6 @@ Patch4:		lpc10-system.patch
 Patch5:		x32.patch
 #Patch7:		%{name}-ilbc.patch
 URL:		http://www.asterisk.org/
-BuildRequires:	OSPToolkit-devel >= 4.0.0
-BuildRequires:	alsa-lib-devel
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake
 # libbfd (used only for debug builds?)
@@ -104,6 +102,7 @@ BuildRequires:	libcap-devel
 BuildRequires:	libedit-devel
 BuildRequires:	libgsm-devel
 BuildRequires:	libical-devel
+BuildRequires:	libjwt1-devel >= 1.15.3
 BuildRequires:	libogg-devel
 BuildRequires:	libpri-devel >= 1.4.6
 BuildRequires:	libresample-devel
@@ -241,18 +240,6 @@ Astman to tekstowy zarządca dla Asteriska.
 
 Łączy się z Asteriskiem po TCP, dzięki czemu można uruchamiać Astmana
 na innym komputerze, niż działa Asterisk.
-
-%package alsa
-Summary:	Module for Asterisk that uses ALSA sound drivers
-Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący sterowniki dźwięku ALSA
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description alsa
-Module for Asterisk that uses ALSA sound drivers.
-
-%description alsa -l pl.UTF-8
-Moduł Asteriska wykorzystujący sterowniki dźwięku ALSA.
 
 %package bluetooth
 Summary:	chan_mobile - Bluetooth mobile phone interface for Asterisk
@@ -480,18 +467,6 @@ Applications for Asterisk that use ODBC (except voicemail).
 %description odbc -l pl.UTF-8
 Aplikacje Asteriska wykorzystujące ODBC (z wyjątkiem voicemail).
 
-%package osp
-Summary:	Module for Asterisk that uses Open Settlement Protocol (OSP) Applications
-Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący aplikacje OSP (Open Settlement Protocol)
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description osp
-Open Settlement Protocol (OSP) Applications.
-
-%description osp -l pl.UTF-8
-Aplikacje protokołu OSP (Open Settlement Protocol).
-
 %package portaudio
 Summary:	Module for Asterisk that uses the PortAudio library
 Summary(pl.UTF-8):	Moduł Asteriska wykorzystujący bibliotekę PortAudio
@@ -539,18 +514,6 @@ resample codec.
 
 %description resample -l pl.UTF-8
 Kodek resample.
-
-%package skinny
-Summary:	Module for Asterisk that supportsthe SCCP/Skinny protocol
-Summary(pl.UTF-8):	Moduł Asteriska obsługujący protokół SCCP/Skinny
-Group:		Applications/Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description skinny
-Module for Asterisk that supports the SCCP/Skinny protocol.
-
-%description skinny -l pl.UTF-8
-Moduł Asteriska obsługujący protokół SCCP/Skinny.
 
 %package snmp
 Summary:	Module that enables SNMP monitoring of Asterisk
@@ -736,11 +699,10 @@ Dokumentacja API Asteriska.
 %patch -P5 -p1
 
 %if %{with opus_vp8}
-
+# take only the modules Asterisk itself lacks; its own res_format_attr_opus.c
+# and opus.h are newer than the ones in this snapshot
 cp -a asterisk-opus-%{opus_commit}/codecs/* codecs
 cp -a asterisk-opus-%{opus_commit}/formats/* formats
-cp -a asterisk-opus-%{opus_commit}/res/* rest
-cp -a asterisk-opus-%{opus_commit}/include/asterisk/* include/asterisk
 %endif
 
 %if %{without system_pjproject} && %{with pjsip}
@@ -758,7 +720,7 @@ md5sum %{SOURCE9} > externals/pjproject-%{pjproject_version}.md5
 %{__autoheader}
 %{__autoconf}
 
-export ASTCFLAGS="%{rpmcflags}"
+export ASTCFLAGS="%{rpmcflags} %{rpmcppflags}"
 export ASTLDFLAGS="%{rpmldflags}"
 export WGET="/bin/true"
 
@@ -919,7 +881,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/{log/asterisk/cdr-csv,spool/asterisk/monitor},/etc/{rc.d/init.d,sysconfig,logrotate.d}} \
 	$RPM_BUILD_ROOT{%{systemdunitdir},%{systemdtmpfilesdir},%{_mandir}/man1}
 
-export ASTCFLAGS="%{rpmcflags}"
+export ASTCFLAGS="%{rpmcflags} %{rpmcppflags}"
 
 %{__make} -j1 install install-headers \
 	DEBUG= \
@@ -1017,7 +979,7 @@ find doc/api -name '*.map' -size 0 -delete
 %{__rm} -r $RPM_BUILD_ROOT/usr/include/asterisk/doxygen
 
 # fix script interpreters
-%{__sed} -i -e '1s,^#!.*python,#!%{__python},' $RPM_BUILD_ROOT%{_datadir}/asterisk/scripts/*
+%{__sed} -i -e '1s,^#!.*python,#!%{__python3},' $RPM_BUILD_ROOT%{_datadir}/asterisk/scripts/*
 %{__sed} -i -e '1s,^#!.*bash,#!/bin/bash,' $RPM_BUILD_ROOT%{_datadir}/asterisk/scripts/*
 
 %clean
@@ -1098,6 +1060,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_beanstalkd.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cel_custom.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/chan_websocket.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_aliases.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/cli_permissions.conf
@@ -1146,6 +1109,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/telcordia-1.adsi
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/udptl.conf
 %attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/users.conf
+%attr(640,root,asterisk) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/asterisk/websocket_client.conf
 
 %attr(755,root,root) %{_libdir}/libasteriskssl.so.1
 %if %{without system_pjproject} && %{with pjsip}
@@ -1214,6 +1178,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_speech_utils.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_stack.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_stasis.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/app_stasis_broadcast.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_statsd.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_stream_echo.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/app_system.so
@@ -1244,6 +1209,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_iax2.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/chan_rtp.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/chan_websocket.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_adpcm.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_alaw.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/codec_a_mu.so
@@ -1318,6 +1284,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_talkdetect.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_timeout.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_uri.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/func_uuid.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_version.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/func_volume.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/pbx_ael.so
@@ -1343,6 +1310,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_ari_sounds.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_audiosocket.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_cdrel_custom.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_chan_stats.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_clialiases.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_cliexec.so
@@ -1396,6 +1364,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_header_funcs.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_history.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_logger.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_maintenance.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_messaging.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi_body_generator.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_mwi.so
@@ -1419,6 +1388,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sdp_rtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_send_to_voicemail.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_session.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_stir_shaken.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_sips_contact.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_pjsip_t38.so
@@ -1444,6 +1414,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_srtp.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_answer.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_broadcast.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_device_state.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_playback.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stasis_recording.so
@@ -1451,8 +1422,10 @@ chown -R asterisk:asterisk /var/lib/asterisk
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_stun_monitor.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_pthread.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_timing_timerfd.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_stir_shaken.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_statsd.so
 %attr(755,root,root) %{_libdir}/asterisk/modules/res_tonedetect.so
+%attr(755,root,root) %{_libdir}/asterisk/modules/res_websocket_client.so
 %{systemdtmpfilesdir}/%{name}.conf
 
 %dir %{_datadir}/asterisk

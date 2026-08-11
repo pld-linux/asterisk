@@ -58,7 +58,7 @@ diff -urN asterisk-16.15.0.org/configs/samples/http.conf.sample asterisk-16.15.0
  ;   HTTP server is enabled in this file by setting the "enabled", "bindaddr",
  ;   and "bindport" options, then you should be able to view the documentation
  ;   remotely by browsing to:
-@@ -127,6 +127,6 @@
+@@ -127,8 +127,8 @@
  ; config permission to POST files.
  ;
  ; In this example, if the prefix option is set to "asterisk", then using the
@@ -67,6 +67,8 @@ diff -urN asterisk-16.15.0.org/configs/samples/http.conf.sample asterisk-16.15.0
 +; POST URL: /asterisk/uploads will put files in /var/spool/asterisk/uploads/.
 +;uploads = /var/spool/asterisk/uploads/
  ;
+ 
+ ;[uripath]
 diff -urN asterisk-16.15.0.org/configs/samples/iax.conf.sample asterisk-16.15.0/configs/samples/iax.conf.sample
 --- asterisk-16.15.0.org/configs/samples/iax.conf.sample	2020-11-19 13:34:40.000000000 +0100
 +++ asterisk-16.15.0/configs/samples/iax.conf.sample	2020-11-27 12:44:43.374449817 +0100
