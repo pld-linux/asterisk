@@ -955,6 +955,7 @@ install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/moh
 install -d $RPM_BUILD_ROOT%{_datadir}/asterisk/sounds
 ln -s %{_localstatedir}/lib/asterisk/licenses $RPM_BUILD_ROOT%{_datadir}/asterisk/licenses
 
+install -d $RPM_BUILD_ROOT%{_localstatedir}/cache/asterisk
 install -d $RPM_BUILD_ROOT%{_localstatedir}/lib/asterisk/licenses
 install -d $RPM_BUILD_ROOT%{_localstatedir}/log/archive/asterisk
 install -d $RPM_BUILD_ROOT%{_localstatedir}/log/asterisk/cdr-custom
@@ -1494,6 +1495,7 @@ chown -R asterisk:asterisk /var/lib/asterisk
 
 %dir %{_datadir}/asterisk/scripts
 
+%attr(770,root,asterisk) %dir %{_localstatedir}/cache/asterisk
 %attr(770,root,asterisk) %dir %{_localstatedir}/lib/asterisk
 %dir %attr(750,root,asterisk) %{_localstatedir}/lib/asterisk/licenses
 
