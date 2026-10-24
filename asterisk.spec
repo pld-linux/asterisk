@@ -50,7 +50,7 @@ Summary:	Asterisk PBX
 Summary(pl.UTF-8):	Centralka (PBX) Asterisk
 Name:		asterisk
 Version:	22.10.1
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	https://downloads.asterisk.org/pub/telephony/asterisk/releases/%{name}-%{version}.tar.gz
@@ -206,6 +206,7 @@ obsługiwanego sprzętu można znaleźć pod http://www.asterisk.org/.
 Summary:	Header files for Asterisk platform
 Summary(pl.UTF-8):	Pliki nagłówkowe platformy Asterisk
 Group:		Development
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Header files for Asterisk development platform.
